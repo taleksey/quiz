@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeInterface;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * @ORM\Entity
@@ -59,6 +60,11 @@ class Quiz
      * @ORM\OneToMany(targetEntity="Question", mappedBy="quiz")
      */
     private Collection $questions;
+
+    /**
+     * @ORM\Column(type="integer", options={"default" : 1})
+     */
+    private int $queue;
 
     public function __construct()
     {
@@ -162,9 +168,9 @@ class Quiz
     }
 
     /**
-     * @return ArrayCollection
+     * @return PersistentCollection
      */
-    public function getQuestions(): ArrayCollection
+    public function getQuestions(): PersistentCollection
     {
         return $this->questions;
     }
@@ -177,4 +183,19 @@ class Quiz
         $this->questions->add($question);
     }
 
+    /**
+     * @return int
+     */
+    public function getQueue(): int
+    {
+        return $this->queue;
+    }
+
+    /**
+     * @param int $queue
+     */
+    public function setQueue(int $queue): void
+    {
+        $this->queue = $queue;
+    }
 }

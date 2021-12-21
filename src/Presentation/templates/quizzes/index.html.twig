@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% block title %} Page Quizzes{% endblock %}
+
+{% block header %}
+    {{ include('base/header.html.twig', {isMainPage: true}) }}
+{% endblock %}
+{% block body %}
+    <!-- Begin page content -->
+    <main class="flex-shrink-0 main">
+        <div class="container mt-5">
+            <h1>There are list quizzes.</h1>
+            <p>You can select any quizzes for testing.</p>
+
+            <table class="table table-success table-striped">
+                <thead>
+                <tr>
+                    <th scope="col" class="col-9">Name of Quiz</th>
+                    <th scope="col" class="col-1">Active</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for quiz in quizzes %}
+                    <tr>
+                        <td><a href="/quiz/{{ quiz.id }}">{{ quiz.name }}</td>
+                        <td>{{ quiz.active }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+{% endblock %}

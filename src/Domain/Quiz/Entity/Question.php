@@ -41,6 +41,11 @@ class Question
      */
     private Collection $answers;
 
+    /**
+     * @ORM\Column(type="integer", options={"default" : 1})
+     */
+    private int $queue;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -108,5 +113,21 @@ class Question
     public function setAnswer(Answer $answer): void
     {
         $this->answers->add($answer);
+    }
+
+    /**
+     * @return int
+     */
+    public function getQueue(): int
+    {
+        return $this->queue;
+    }
+
+    /**
+     * @param mixed $queue
+     */
+    public function setQueue(int $queue): void
+    {
+        $this->queue = $queue;
     }
 }

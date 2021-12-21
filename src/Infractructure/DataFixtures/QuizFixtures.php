@@ -18,12 +18,12 @@ class QuizFixtures extends Fixture implements DependentFixtureInterface
             self::FIRST_QUIZ,
             self::SECOND_QUIZ
         ];
-
-        foreach ($quizArray as $quiz) {
+        foreach ($quizArray as $queue => $quiz) {
             $quizFirst = new Quiz();
             $quizFirst->setName($quiz);
             $quizFirst->setActive(true);
             $quizFirst->setCustomer($this->getReference(CustomerFixtures::ADMIN_USER));
+            $quizFirst->setQueue($queue + 1);
             $manager->persist($quizFirst);
             $manager->flush();
 
