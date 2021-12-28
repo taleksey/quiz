@@ -7,57 +7,58 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeInterface;
 
-/**
- * @ORM\Entity
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table("quizzes")
- */
+#[ORM\Entity, ORM\HasLifecycleCallbacks]
+#[Table(name: "quizzes")]
 class Quiz
 {
     use Timestamps;
 
     /**
      * @var int
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=150)
      */
+    #[ORM\Column(type: 'string', length: 150)]
     private string $name;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", options={"default": "0"})
      */
+    #[ORM\Column(type: 'boolean', options: [
+        "default" => 0
+    ])]
     private bool $active = false;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="quizzes")
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
+     * @var Customer
      */
+    #[ORM\ManyToOne(targetEntity: "Customer", inversedBy:"quizzes")]
+    #[ORM\JoinColumn(name: "customer_id", referencedColumnName: "id")]
     private Customer $customer;
 
     /**
      * @var DateTimeInterface|null
-     * @ORM\Column(name="start_time", type="datetime", nullable=true)
      *
      */
+    #[ORM\Column(name:"start_time", type: 'datetime', nullable: true)]
     private ?DateTimeInterface $startTime;
+
     /**
      * @var DateTimeInterface|null
-     * @ORM\Column(name="end_time", type="datetime", nullable=true)
      */
+    #[ORM\Column(name:"end_time", type: 'datetime', nullable: true)]
     private ?DateTimeInterface $endTime;
 
     /**
      * @var Collection
-     * @ORM\OneToMany(targetEntity="Question", mappedBy="quiz")
      */
+    #[ORM\OneToMany(mappedBy: "quiz", targetEntity: "Question")]
     private Collection $questions;
 
     public function __construct()
