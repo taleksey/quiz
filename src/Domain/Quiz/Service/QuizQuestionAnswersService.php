@@ -7,28 +7,25 @@ use App\Presentation\DTO\QuizQuestionAnswerDTO;
 
 class QuizQuestionAnswersService
 {
-    private QuizResultRepository $quizResultRepository;
-
     /**
      * @param QuizResultRepository $quizResultRepository
      */
-    public function __construct(QuizResultRepository $quizResultRepository)
-    {
-        $this->quizResultRepository = $quizResultRepository;
-    }
+    public function __construct(
+        private QuizResultRepository $quizResultRepository
+    ) {}
 
     /**
      * @param QuizQuestionAnswerDTO $quizQuestionAnswerDTO
      * @param $resultAnswer
      * @return mixed
      */
-    public function save(QuizQuestionAnswerDTO $quizQuestionAnswerDTO, $resultAnswer): mixed
+    public function save(QuizQuestionAnswerDTO $quizQuestionAnswerDTO, $resultAnswer): void
     {
         if ($quizQuestionAnswerDTO->getQuestionStep()->isFirstStep()) {
             $this->quizResultRepository->clean($quizQuestionAnswerDTO->getQuizId());
         }
 
-        return $this->quizResultRepository->save($quizQuestionAnswerDTO->getQuizId(), $quizQuestionAnswerDTO->getQuestionStep()->getStepId(), $resultAnswer);
+        $this->quizResultRepository->save($quizQuestionAnswerDTO->getQuizId(), $quizQuestionAnswerDTO->getQuestionStep()->getStepId(), $resultAnswer);
     }
 
     /**

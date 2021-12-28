@@ -7,15 +7,12 @@ use App\Domain\Quiz\Repository\QuizzesRepository;
 
 class QuizService
 {
-    private QuizzesRepository $quizRepository;
-
     /**
      * @param QuizzesRepository $quizRepository
      */
-    public function __construct(QuizzesRepository $quizRepository)
-    {
-        $this->quizRepository = $quizRepository;
-    }
+    public function __construct(
+        private QuizzesRepository $quizRepository
+    ) {}
 
     /**
      * @return array

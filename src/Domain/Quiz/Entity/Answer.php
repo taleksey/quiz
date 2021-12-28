@@ -4,43 +4,46 @@ namespace App\Domain\Quiz\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table("answers")
- */
-
+#[ORM\Entity, ORM\HasLifecycleCallbacks]
+#[Table(name: "answers")]
 class Answer
 {
     use Timestamps;
 
     /**
      * @var int
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
+
     /**
      * @var string
-     * @ORM\Column(type="string", length=255)
      */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $text;
+
     /**
      * @var bool
-     * @ORM\Column(type="boolean")
      */
+    #[ORM\Column(type: 'boolean', options: [
+        "default" => 0
+    ])]
     private bool $correct;
 
     /**
      * @var Question
-     * @ORM\ManyToOne(targetEntity="Question", inversedBy="answers")
      */
-    private Question $question;
+    #[ORM\ManyToOne(targetEntity: "Question", inversedBy:"answers")]
+    private $question;
 
     /**
-     * @ORM\Column(type="integer", options={"default" : 1})
+     * @var int
      */
+    #[ORM\Column(type: 'integer', options: [
+        "default" => 1
+    ])]
     private int $queue;
 
     /**

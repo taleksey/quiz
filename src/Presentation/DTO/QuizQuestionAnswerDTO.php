@@ -11,11 +11,11 @@ class QuizQuestionAnswerDTO
     private int $step;
     private int $answerId;
 
-    public function __construct(Request $request)
+    public function __construct(array $array)
     {
-        $this->quizId = (int) $request->get('id');
-        $this->step = (int) $request->get('step');
-        $this->answerId = (int) $request->get('question_' . $this->step);
+        $this->quizId = $array['quizId'] ?? 0;
+        $this->step = $array['step'] ?? 0;
+        $this->answerId = $array['answerId'] ?? 0;
     }
 
     /**

@@ -10,15 +10,15 @@ class QuizResultRepository extends SessionRepository
      * @param int $quizId
      * @param int $step
      * @param bool $answerValue
-     * @return mixed
+     * @return void
      */
-    public function save(int $quizId, int $step, bool $answerValue): mixed
+    public function save(int $quizId, int $step, bool $answerValue): void
     {
         $mainKey = $this->getQuizMainKey($quizId);
         $savedAnswers = $this->getSavedCustomerAnswers($quizId);
         $savedAnswers[$step] = $answerValue;
 
-        return $this->manager->set($mainKey, $savedAnswers);
+        $this->manager->set($mainKey, $savedAnswers);
     }
 
     /**
@@ -32,11 +32,11 @@ class QuizResultRepository extends SessionRepository
 
     /**
      * @param $quizId
-     * @return mixed
+     * @return bool
      */
-    public function clean($quizId): mixed
+    public function clean($quizId): bool
     {
-        return $this->manager->remove($this->getQuizMainKey($quizId));
+        return (bool) $this->manager->remove($this->getQuizMainKey($quizId));
     }
     /**
      * @param $quizId

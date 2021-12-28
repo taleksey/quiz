@@ -4,6 +4,9 @@ namespace App\Domain\Quiz\Repository;
 
 use App\Domain\Quiz\Entity\Quiz;
 use App\Infractructure\Repository\DbRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Doctrine\ORM\TransactionRequiredException;
 
 class QuizzesRepository extends DbRepository
 {
@@ -23,7 +26,11 @@ class QuizzesRepository extends DbRepository
      */
     public function getQuizById($id): ?Quiz
     {
-        return $this->manager->find($id);
+        try {
+            return $this->manager->find($id);
+        } catch (OptimisticLockException|TransactionRequiredException|ORMException $e) {
+        }
+        return null;
     }
 
     /**

@@ -6,45 +6,51 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table("customer_type")
- */
+#[ORM\Entity, ORM\HasLifecycleCallbacks]
+#[Table(name: "customer_type")]
 class CustomerType
 {
     /**
      * @var int
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
     /**
      * @var string
-     * @ORM\Column(type="string", length=20)
      */
+    #[ORM\Column(type: 'string', length: 20)]
     private string $name;
+
     /**
      * @var bool
-     * @ORM\Column(name="show", type="boolean", options={"default":"1"})
      */
+    #[ORM\Column(name:"show", type: 'boolean', options: [
+        "default" => 1
+    ])]
     private bool $show = true;
+
     /**
      * @var bool
-     * @ORM\Column(name="add", type="boolean", options={"default":"1"})
      */
+    #[ORM\Column(name:"add", type: 'boolean', options: [
+        "default" => 1
+    ])]
     private bool $add;
+
     /**
      * @var bool
-     * @ORM\Column(name="edit", type="boolean", options={"default":"1"})
      */
+    #[ORM\Column(name:"edit", type: 'boolean', options: [
+        "default" => 1
+    ])]
     private bool $edit;
+
     /**
      * @var Collection
-     * @ORM\OneToMany(targetEntity="Customer", mappedBy="customerType")
-     *
      */
+    #[ORM\OneToMany(mappedBy: "customerType", targetEntity: "Customer")]
     private Collection $customers;
 
     public function __construct()

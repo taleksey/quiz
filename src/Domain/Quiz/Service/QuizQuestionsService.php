@@ -12,25 +12,17 @@ use App\Presentation\DTO\QuizQuestionAnswerDTO;
 
 class QuizQuestionsService
 {
-    private QuizQuestionsRepository $questionRepository;
-    private QuizQuestionAnswersRepository $quizQuestionAnswersRepository;
-    private QuizResultRepository $quizResultRepository;
-
     /**
      * @param QuizQuestionsRepository $questionRepository
      * @param QuizQuestionAnswersRepository $quizQuestionAnswersRepository
      * @param QuizResultRepository $quizResultRepository
      */
     public function __construct(
-        QuizQuestionsRepository $questionRepository,
-        QuizQuestionAnswersRepository $quizQuestionAnswersRepository,
-        QuizResultRepository $quizResultRepository
+        private QuizQuestionsRepository $questionRepository,
+        private QuizQuestionAnswersRepository $quizQuestionAnswersRepository,
+        private QuizResultRepository $quizResultRepository
     )
-    {
-        $this->questionRepository = $questionRepository;
-        $this->quizQuestionAnswersRepository = $quizQuestionAnswersRepository;
-        $this->quizResultRepository = $quizResultRepository;
-    }
+    {}
 
     /**
      * @param QuizQuestionAnswerDTO $quizQuestionAnswerDTO

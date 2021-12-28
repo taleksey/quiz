@@ -5,13 +5,14 @@ namespace App\Domain\Quiz\Repository;
 use App\Domain\Quiz\Entity\Answer;
 use App\Infractructure\Repository\DbRepository;
 use App\Presentation\DTO\QuizQuestionAnswerDTO;
+use Doctrine\ORM\NonUniqueResultException;
 
 class QuizQuestionAnswersRepository extends DbRepository
 {
     /**
      * @param QuizQuestionAnswerDTO $quizQuestionAnswerDTO
      * @return Answer|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getAnswer(QuizQuestionAnswerDTO $quizQuestionAnswerDTO): ?Answer
     {

@@ -6,49 +6,48 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table("customers")
- */
+#[ORM\Entity, ORM\HasLifecycleCallbacks]
+#[Table(name: "customers")]
 class Customer
 {
     use Timestamps;
 
     /**
      * @var int
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
     /**
      * @var string
-     * @ORM\Column(name="first_name", type="string", length=150)
      */
+    #[ORM\Column(name:"first_name", type: 'string', length: 150)]
     private string $firstName;
 
     /**
      * @var string
-     * @ORM\Column(name="last_name", type="string", length=150)
      */
+    #[ORM\Column(name:"last_name", type: 'string', length: 150)]
     private string $lastName;
 
     /**
-     * @ORM\OneToMany(targetEntity="Quiz", mappedBy="customer")
+     * @var  Collection
      */
+    #[ORM\OneToMany(mappedBy: "customer", targetEntity: "Quiz")]
     private Collection $quiz;
 
     /**
      * @var bool
-     * @ORM\Column(name="status", type="boolean", options={"default": "1"})
      */
+    #[ORM\Column(name:"status", type: 'boolean', options: [
+        "default" => 0
+    ])]
     private bool $active = true;
-    /**
-     * @ORM\ManyToOne(targetEntity="CustomerType", inversedBy="customers")
-     * @ORM\JoinColumn(name="customer_type", referencedColumnName="id")
-     */
+
+    #[ORM\ManyToOne(targetEntity: "CustomerType", inversedBy:"customers")]
+    #[ORM\JoinColumn(name: "customer_type", referencedColumnName: "id")]
     private $customerType;
 
     public function __construct()

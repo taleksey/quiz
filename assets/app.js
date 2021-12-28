@@ -17,12 +17,11 @@ require('bootstrap');
 
 $(document).ready(function() {
   $(document).on('submit','form#answersQuestion',function() {
-    let selectedRadioInputElement = $(this).find('input[type=radio]:checked');
+    const selectedRadioInputElement = $(this).find('input[type=radio]:checked');
     if (selectedRadioInputElement.length === 0) {
       alert('Please select answer');
       return false;
     }
     return true;
   });
-
 });

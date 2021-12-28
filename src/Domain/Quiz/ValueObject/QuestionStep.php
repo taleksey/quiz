@@ -4,15 +4,12 @@ namespace App\Domain\Quiz\ValueObject;
 
 class QuestionStep
 {
-    private int $step;
-
     /**
      * @param int $step
      */
-    public function __construct(int $step)
-    {
-        $this->step = $step;
-    }
+    public function __construct(
+        private int $step
+    ) {}
 
     /**
      * @return int

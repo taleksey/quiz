@@ -17,8 +17,7 @@ abstract class DbRepository
     public function __construct(ManagerRegistry $manager)
     {
         $entityName = $this->getFullEntityName();
-        $entity = new $entityName;
-        $this->manager = $manager->getRepository($entity::class);
+        $this->manager = $manager->getRepository($entityName);
     }
 
     abstract protected function getFullEntityName(): string;

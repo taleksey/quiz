@@ -27,7 +27,7 @@ trait Timestamps
 
     /**
      * @param DateTimeInterface|null $createdAt
-     * @return $this
+     * @return Answer|Customer|Question|Quiz|Timestamps
      */
     public function setCreatedAt(?DateTimeInterface $createdAt): self
     {
@@ -46,7 +46,7 @@ trait Timestamps
 
     /**
      * @param DateTimeInterface|null $updatedAt
-     * @return $this
+     * @return Answer|Customer|Question|Quiz|Timestamps
      */
     public function setUpdatedAt(?DateTimeInterface $updatedAt): self
     {
@@ -58,18 +58,22 @@ trait Timestamps
     /**
      * @ORM\PrePersist
      */
-    public function setCreatedAtAutomatically()
+    public function setCreatedAtAutomatically(): self
     {
         if ($this->getCreatedAt() === null) {
             $this->setCreatedAt(new \DateTime());
         }
+
+        return $this;
     }
 
     /**
      * @ORM\PreUpdate
      */
-    public function setUpdatedAtAutomatically()
+    public function setUpdatedAtAutomatically(): self
     {
         $this->setUpdatedAt(new \DateTime());
+
+        return $this;
     }
 }

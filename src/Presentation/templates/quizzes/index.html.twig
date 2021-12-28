@@ -21,7 +21,7 @@
                 <tbody>
                 {% for quiz in quizzes %}
                     <tr>
-                        <td><a href="/quiz/{{ quiz.id }}">{{ quiz.name }}</td>
+                        <td><a href="{{ path('quiz_show', {id: quiz.id}) }}">{{ quiz.name }}</td>
                         <td>{{ quiz.active }}</td>
                     </tr>
                 {% endfor %}

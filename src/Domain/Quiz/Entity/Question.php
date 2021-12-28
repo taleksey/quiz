@@ -6,44 +6,42 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table("questions")
- */
+#[ORM\Entity, ORM\HasLifecycleCallbacks]
+#[Table(name: "questions")]
 class Question
 {
     use Timestamps;
 
     /**
      * @var int
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=255)
      */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $text;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Quiz", inversedBy="questions")
-     * @ORM\JoinColumn(name="quiz_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: "Quiz", inversedBy:"questions")]
+    #[ORM\JoinColumn(name: "quiz_id", referencedColumnName: "id")]
     private $quiz;
 
     /**
      * @var Collection
-     * @ORM\OneToMany(targetEntity="Answer", mappedBy="question")
      */
+    #[ORM\OneToMany(mappedBy: "question", targetEntity: "Answer")]
     private Collection $answers;
 
     /**
-     * @ORM\Column(type="integer", options={"default" : 1})
+     * @var int
      */
+    #[ORM\Column(type: 'integer', options: [
+        "default" => 1
+    ])]
     private int $queue;
 
     public function __construct()

@@ -5,7 +5,8 @@ namespace App\Presentation\Controller;
 use App\Domain\Quiz\Service\QuizQuestionAnswersService;
 use App\Domain\Quiz\Service\QuizQuestionsService;
 use App\Domain\Quiz\Service\QuizService;
-use App\Presentation\DTO\QuizQuestionAnswerDTO;
+use App\Presentation\Transformers\RequestToQuizQuestionAnswerDTOTransformer;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +16,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class QuizController extends AbstractController
 {
     /**
-     * @Route("/", name="homepage")
      * @param QuizService $quizService
      * @return Response
      */
+    #[Route('/', name: 'homepage', methods: ['GET'])]
     public function index(QuizService $quizService): Response
     {
         $quizzes = $quizService->getAllQuizzes();
@@ -27,11 +28,11 @@ class QuizController extends AbstractController
     }
 
     /**
-     * @Route("/quiz/{id}", name="quiz_show", requirements={"id"="\d+"})
      * @param QuizService $quizService
      * @param int $id
      * @return Response
      */
+    #[Route('/quiz/{id}', name: 'quiz_show', methods: ['GET'])]
     public function showQuiz(QuizService $quizService, int $id): Response
     {
         $quiz = $quizService->getQuizById($id);
@@ -44,19 +45,21 @@ class QuizController extends AbstractController
     }
 
     /**
-     * @Route("/quiz/{id}/question/{step}", name="quiz_questions", methods={"GET"}, requirements={"id"="\d+", "step"="\d+"})
      * @param QuizService $quizService
      * @param QuizQuestionsService $quizQuestionsService
      * @param Request $request
+     * @param RequestToQuizQuestionAnswerDTOTransformer $answerDTOTransformer
      * @return Response
      */
+    #[Route('/quiz/{id}/question/{step}', name: 'quiz_questions', methods: ['GET'])]
     public function quizQuestion(
         QuizService $quizService,
         QuizQuestionsService $quizQuestionsService,
         Request $request,
+        RequestToQuizQuestionAnswerDTOTransformer $answerDTOTransformer
     ): Response
     {
-        $quizQuestionAnswerDTO = new QuizQuestionAnswerDTO($request);
+        $quizQuestionAnswerDTO = $answerDTOTransformer->transform($request);
         $question = $quizQuestionsService->getQuestionByQuizIdAndQueue($quizQuestionAnswerDTO);
         $quiz = $quizService->getQuizById($quizQuestionAnswerDTO->getQuizId());
         if (! $question) {
@@ -88,24 +91,26 @@ class QuizController extends AbstractController
     }
 
     /**
-     * @Route("/quiz/{id}/question/{step}", name="question_answers", methods={"POST"}, requirements={"id"="\d+", "step"="\d+"})
      * @param Request $request
      * @param QuizQuestionsService $quizQuestionsService
      * @param QuizQuestionAnswersService $quizQuestionAnswersService
+     * @param RequestToQuizQuestionAnswerDTOTransformer $answerDTOTransformer
      * @param int $id
      * @param int $step
      * @return RedirectResponse|Response
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
-    public function answerQuestion(
+    #[Route('/quiz/{id}/question/{step}', name: 'question_answers')]
+    public function editAnswerQuestion(
         Request $request,
         QuizQuestionsService $quizQuestionsService,
         QuizQuestionAnswersService $quizQuestionAnswersService,
+        RequestToQuizQuestionAnswerDTOTransformer $answerDTOTransformer,
         int $id,
         int $step
     ): RedirectResponse|Response
     {
-        $quizQuestionAnswerDTO = new QuizQuestionAnswerDTO($request);
+        $quizQuestionAnswerDTO = $answerDTOTransformer->transform($request);
 
         if (! $quizQuestionAnswerDTO->isCustomerSelectedAnswer()) {
             return $this->redirectToRoute('quiz_questions', ['id' => $id, 'step' => $step]);
@@ -129,8 +134,13 @@ class QuizController extends AbstractController
     }
 
     /**
-     * @Route("/quiz/{id}/result", name="quiz_result", methods={"GET"}, requirements={"id"="\d+"})
+     * @param QuizQuestionAnswersService $quizQuestionAnswersService
+     * @param QuizQuestionsService $quizQuestionsService
+     * @param QuizService $quizService
+     * @param int $id
+     * @return Response
      */
+    #[Route('/quiz/{id}/result', name: 'quiz_result', methods: ["GET"])]
     public function quizResult(
         QuizQuestionAnswersService $quizQuestionAnswersService,
         QuizQuestionsService $quizQuestionsService,
