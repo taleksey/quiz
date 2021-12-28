@@ -24,7 +24,8 @@
     "config": {
         "allow-plugins": {
             "symfony/flex": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "composer/package-versions-deprecated": true
         },
         "optimize-autoloader": true,
         "preferred-install": {
@@ -71,5 +72,8 @@
             "require": "6.0.*",
             "docker": true
         }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.2"
     }
 }
