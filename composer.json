@@ -27,7 +27,8 @@
     "config": {
         "allow-plugins": {
             "symfony/flex": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "composer/package-versions-deprecated": true
         },
         "optimize-autoloader": true,
         "preferred-install": {
@@ -78,6 +79,10 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "phpstan/phpstan": "^1.2",
-        "symfony/maker-bundle": "^1.36"
+        "phpunit/phpunit": "^9.5",
+        "symfony/browser-kit": "6.0.*",
+        "symfony/css-selector": "6.0.*",
+        "symfony/maker-bundle": "^1.36",
+        "symfony/phpunit-bridge": "^6.0"
     }
 }
