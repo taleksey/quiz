@@ -29,6 +29,24 @@ class QuizzesRepository extends DbRepository
     }
 
     /**
+     * @return int
+     */
+    public function getTotalQuizzes(): int
+    {
+        return $this->manager->count([]);
+    }
+
+    /**
+     * @param Quiz $quiz
+     * @return void
+     */
+    public function save(Quiz $quiz): void
+    {
+        $this->entityManager->persist($quiz);
+        $this->entityManager->flush();
+    }
+
+    /**
      * @return string
      */
     protected function getFullEntityName(): string

@@ -3,3 +3,7 @@
 .main > .container {
     padding: 60px 15px 0;
 }
+
+form > fieldset > legend.col-form-label {
+    display: none;
+}

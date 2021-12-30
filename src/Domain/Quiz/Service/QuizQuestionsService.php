@@ -8,7 +8,8 @@ use App\Domain\Quiz\Repository\QuizQuestionAnswersRepository;
 use App\Domain\Quiz\Repository\QuizQuestionsRepository;
 use App\Domain\Quiz\Repository\QuizResultRepository;
 use App\Domain\Quiz\ValueObject\QuestionStep;
-use App\Presentation\DTO\QuizQuestionAnswerDTO;
+use App\Presentation\DTO\QuizQuestionAnswerRequestDTO;
+use Doctrine\ORM\NonUniqueResultException;
 
 class QuizQuestionsService
 {
@@ -25,10 +26,10 @@ class QuizQuestionsService
     {}
 
     /**
-     * @param QuizQuestionAnswerDTO $quizQuestionAnswerDTO
+     * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
      * @return Question|null
      */
-    public function getQuestionByQuizIdAndQueue(QuizQuestionAnswerDTO $quizQuestionAnswerDTO): ?Question
+    public function getQuestionByQuizIdAndQueue(QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO): ?Question
     {
         return $this->questionRepository->getQuestionByQuizIdAndQueue($quizQuestionAnswerDTO->getQuizId(),
             $quizQuestionAnswerDTO->getQuestionStep()->getStepId());
@@ -44,20 +45,20 @@ class QuizQuestionsService
     }
 
     /**
-     * @param QuizQuestionAnswerDTO $quizQuestionAnswerDTO
+     * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
      * @return Answer|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
-    public function getAnswer(QuizQuestionAnswerDTO $quizQuestionAnswerDTO): ?Answer
+    public function getAnswer(QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO): ?Answer
     {
         return $this->quizQuestionAnswersRepository->getAnswer($quizQuestionAnswerDTO);
     }
 
     /**
-     * @param QuizQuestionAnswerDTO $quizQuestionAnswerDTO
+     * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
      * @return bool
      */
-    public function doesCustomerSelectCorrectStep(QuizQuestionAnswerDTO $quizQuestionAnswerDTO): bool
+    public function doesCustomerSelectCorrectStep(QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO): bool
     {
         if ($quizQuestionAnswerDTO->getQuestionStep()->isFirstStep()) {
             return true;
@@ -69,10 +70,10 @@ class QuizQuestionsService
     }
 
     /**
-     * @param QuizQuestionAnswerDTO $quizQuestionAnswerDTO
+     * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
      * @return int
      */
-    public function getNextCorrectStep(QuizQuestionAnswerDTO $quizQuestionAnswerDTO): int
+    public function getNextCorrectStep(QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO): int
     {
         $result = $this->quizResultRepository->getSavedCustomerAnswers($quizQuestionAnswerDTO->getQuizId());
 

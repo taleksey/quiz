@@ -33,7 +33,7 @@ class Question
     /**
      * @var Collection
      */
-    #[ORM\OneToMany(mappedBy: "question", targetEntity: "Answer")]
+    #[ORM\OneToMany(mappedBy: "question", targetEntity: "Answer", cascade: ["persist"])]
     private Collection $answers;
 
     /**

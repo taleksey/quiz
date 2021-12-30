@@ -30,4 +30,21 @@ class QuizService
     {
         return $this->quizRepository->getQuizById($id);
     }
+
+    /**
+     * @return int
+     */
+    public function getTotalQuizzes(): int
+    {
+        return $this->quizRepository->getTotalQuizzes();
+    }
+
+    /**
+     * @param Quiz $quiz
+     * @return void
+     */
+    public function save(Quiz $quiz): void
+    {
+        $this->quizRepository->save($quiz);
+    }
 }

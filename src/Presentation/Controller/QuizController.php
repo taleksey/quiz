@@ -5,8 +5,10 @@ namespace App\Presentation\Controller;
 use App\Domain\Quiz\Service\QuizQuestionAnswersService;
 use App\Domain\Quiz\Service\QuizQuestionsService;
 use App\Domain\Quiz\Service\QuizService;
+use App\Presentation\Service\MainQuizService;
 use App\Presentation\Transformers\RequestToQuizQuestionAnswerDTOTransformer;
 use Doctrine\ORM\NonUniqueResultException;
+use App\Presentation\Form\QuizType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +34,7 @@ class QuizController extends AbstractController
      * @param int $id
      * @return Response
      */
-    #[Route('/quiz/{id}', name: 'quiz_show', methods: ['GET'])]
+    #[Route('/quiz/{id}', name: 'quiz_show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function showQuiz(QuizService $quizService, int $id): Response
     {
         $quiz = $quizService->getQuizById($id);
@@ -161,5 +163,37 @@ class QuizController extends AbstractController
                 'quiz' => $quizService->getQuizById($id)
             ]
         );
+    }
+
+    /**
+     * @param Request $request
+     * @param MainQuizService $mainQuizService
+     * @return RedirectResponse|Response
+     */
+    #[Route('/quiz/new', name: 'quiz_new')]
+    public function createQuiz(Request $request, MainQuizService $mainQuizService): RedirectResponse|Response
+    {
+        $secretToken = $this->getParameter('app.secretToken');
+        $form = $this->createForm(QuizType::class, options: ['hiddenToken' => $secretToken]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && (! $form->has('token1') || $form->has('token' !== $secretToken))) {
+            return $this->redirectToRoute('quiz_new');
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $task = $form->getData();
+            $mainQuizService->createQuiz($task);
+            return $this->redirectToRoute('quiz_success');
+        }
+
+        return $this->renderForm('quiz/create/index.html.twig', ['formQuiz' => $form]);
+    }
+
+    #[Route('/quiz/created', name: 'quiz_success')]
+    public function createdQuiz(): Response
+    {
+        return $this->renderForm('quiz/created/index.html.twig');
     }
 }
