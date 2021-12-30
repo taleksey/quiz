@@ -16,10 +16,10 @@ class QuizQuestionAnswersService
 
     /**
      * @param QuizQuestionAnswerDTO $quizQuestionAnswerDTO
-     * @param $resultAnswer
-     * @return mixed
+     * @param bool $resultAnswer
+     * @return void
      */
-    public function save(QuizQuestionAnswerDTO $quizQuestionAnswerDTO, $resultAnswer): void
+    public function save(QuizQuestionAnswerDTO $quizQuestionAnswerDTO, bool $resultAnswer): void
     {
         if ($quizQuestionAnswerDTO->getQuestionStep()->isFirstStep()) {
             $this->quizResultRepository->clean($quizQuestionAnswerDTO->getQuizId());

@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
-#[Table(name: "questions")]
+#[ORM\Table(name: "questions")]
 class Question
 {
     use Timestamps;
@@ -122,7 +122,7 @@ class Question
     }
 
     /**
-     * @param mixed $queue
+     * @param int $queue
      */
     public function setQueue(int $queue): void
     {

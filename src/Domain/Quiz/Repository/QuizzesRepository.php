@@ -10,21 +10,16 @@ use Doctrine\ORM\TransactionRequiredException;
 
 class QuizzesRepository extends DbRepository
 {
-    /**
-     * @var string
-     */
-    protected static string $entityName = 'Quiz';
-
     public function getQuizzes(): array
     {
         return $this->manager->findAll();
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return Quiz|null
      */
-    public function getQuizById($id): ?Quiz
+    public function getQuizById(int $id): ?Quiz
     {
         try {
             return $this->manager->find($id);

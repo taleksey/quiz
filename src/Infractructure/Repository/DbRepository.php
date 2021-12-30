@@ -2,14 +2,14 @@
 
 namespace App\Infractructure\Repository;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use \Doctrine\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 
 abstract class DbRepository
 {
-    /** @var ObjectRepository|EntityManager  */
-    protected ObjectRepository|EntityManager $manager;
+    /** @var mixed  */
+    protected mixed $manager;
 
     /**
      * @param ManagerRegistry $manager

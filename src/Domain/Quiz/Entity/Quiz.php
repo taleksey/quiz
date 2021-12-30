@@ -9,7 +9,7 @@ use DateTimeInterface;
 use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
-#[Table(name: "quizzes")]
+#[ORM\Table(name: "quizzes")]
 class Quiz
 {
     use Timestamps;
@@ -172,9 +172,9 @@ class Quiz
     }
 
     /**
-     * @return PersistentCollection
+     * @return ArrayCollection|Collection
      */
-    public function getQuestions(): PersistentCollection
+    public function getQuestions(): ArrayCollection|Collection
     {
         return $this->questions;
     }

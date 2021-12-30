@@ -5,7 +5,7 @@ namespace App\Domain\Quiz\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
-#[Table(name: "answers")]
+#[ORM\Table(name: "answers")]
 class Answer
 {
     use Timestamps;
