@@ -28,14 +28,16 @@ class QuizQuestionType extends AbstractType
                 'prototype_name' => '__que__',
                 'row_attr' => ['class' => 'QuizAnswers'],
                 'attr' => ['class' => 'buildForm'],
+                'required' => false,
             ])
         ;
+
         $builder->get('answers')->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event){
             $forms = $event->getForm()->all();
             $setFormWithCorrectAnswer = array_filter($forms, function (Form $form){
                 return $form->get('correct')->getData();
             });
-            if (empty($setFormWithCorrectAnswer)) {
+            if (empty($setFormWithCorrectAnswer) && !empty($forms)) {
                 $forms[0]->getParent()->addError(new FormError("You have to select correct answer"));
             }
         });

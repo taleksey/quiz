@@ -20,7 +20,6 @@ class DTOHydrator
         $quizEntity->setName($quizCreateDTO->getName());
         $quizEntity->setQueue($queue);
         $quizEntity->setActive(true);
-
         foreach ($quizCreateDTO->getQuestions() as $key => $question) {
             $queueQuestion = $key + 1;
             $questionEntity = new Question();

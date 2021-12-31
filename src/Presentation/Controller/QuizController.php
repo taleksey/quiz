@@ -178,7 +178,7 @@ class QuizController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && (! $form->has('token1') || $form->has('token' !== $secretToken))) {
+        if ($form->isSubmitted() && (! $form->has('token') || $form->has('token' !== $secretToken))) {
             return $this->redirectToRoute('quiz_new');
         }
 

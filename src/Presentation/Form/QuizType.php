@@ -24,8 +24,8 @@ class QuizType extends AbstractType
                     'label' => false
                 ],
                 'by_reference' => false,
+                'required' => false,
             ])
-            ->add('name', TextType::class, ['label' => 'Set name of Quiz'])
             ->add('token', HiddenType::class, [
                 'data' => $options['hiddenToken'] ?? '',
             ])
