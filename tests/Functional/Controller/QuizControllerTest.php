@@ -123,8 +123,8 @@ class QuizControllerTest extends WebTestCase
         $form->set(new InputFormField($this->createInputElement($dom, 'quiz[questions][0][answers][1][text]', 'Second Answer')));
         $client->submit($form);
 
-        $client->followRedirects();
-        $this->assertResponseRedirects();
+        $this->assertResponseStatusCodeSame(HTTP_REDIRECT_FOUND);
+        $this->assertResponseRedirects('/quiz/created');
     }
 
     /**
