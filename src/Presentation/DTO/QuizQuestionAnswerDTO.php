@@ -5,7 +5,7 @@ namespace App\Presentation\DTO;
 use App\Domain\Quiz\ValueObject\QuestionStep;
 use Symfony\Component\HttpFoundation\Request;
 
-class QuizQuestionAnswerDTO
+class QuizQuestionAnswerDTO implements RequestQuizDTO
 {
     private int $quizId;
     private int $step;

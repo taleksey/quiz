@@ -5,10 +5,9 @@ namespace App\Presentation\Controller;
 use App\Domain\Quiz\Service\QuizQuestionAnswersService;
 use App\Domain\Quiz\Service\QuizQuestionsService;
 use App\Domain\Quiz\Service\QuizService;
-use App\Presentation\Transformers\RequestToQuizQuestionAnswerDTOTransformer;
+use App\Presentation\DTO\QuizQuestionAnswerDTO;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -47,19 +46,16 @@ class QuizController extends AbstractController
     /**
      * @param QuizService $quizService
      * @param QuizQuestionsService $quizQuestionsService
-     * @param Request $request
-     * @param RequestToQuizQuestionAnswerDTOTransformer $answerDTOTransformer
+     * @param QuizQuestionAnswerDTO $quizQuestionAnswerDTO
      * @return Response
      */
     #[Route('/quiz/{id}/question/{step}', name: 'quiz_questions', methods: ['GET'])]
     public function quizQuestion(
         QuizService $quizService,
         QuizQuestionsService $quizQuestionsService,
-        Request $request,
-        RequestToQuizQuestionAnswerDTOTransformer $answerDTOTransformer
+        QuizQuestionAnswerDTO $quizQuestionAnswerDTO
     ): Response
     {
-        $quizQuestionAnswerDTO = $answerDTOTransformer->transform($request);
         $question = $quizQuestionsService->getQuestionByQuizIdAndQueue($quizQuestionAnswerDTO);
         $quiz = $quizService->getQuizById($quizQuestionAnswerDTO->getQuizId());
         if (! $question) {
@@ -91,10 +87,8 @@ class QuizController extends AbstractController
     }
 
     /**
-     * @param Request $request
      * @param QuizQuestionsService $quizQuestionsService
      * @param QuizQuestionAnswersService $quizQuestionAnswersService
-     * @param RequestToQuizQuestionAnswerDTOTransformer $answerDTOTransformer
      * @param int $id
      * @param int $step
      * @return RedirectResponse|Response
@@ -102,16 +96,13 @@ class QuizController extends AbstractController
      */
     #[Route('/quiz/{id}/question/{step}', name: 'question_answers')]
     public function editAnswerQuestion(
-        Request $request,
         QuizQuestionsService $quizQuestionsService,
         QuizQuestionAnswersService $quizQuestionAnswersService,
-        RequestToQuizQuestionAnswerDTOTransformer $answerDTOTransformer,
+        QuizQuestionAnswerDTO $quizQuestionAnswerDTO,
         int $id,
         int $step
     ): RedirectResponse|Response
     {
-        $quizQuestionAnswerDTO = $answerDTOTransformer->transform($request);
-
         if (! $quizQuestionAnswerDTO->isCustomerSelectedAnswer()) {
             return $this->redirectToRoute('quiz_questions', ['id' => $id, 'step' => $step]);
         }
