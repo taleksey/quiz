@@ -3,6 +3,6 @@
         "friendsofphp/php-cs-fixer": "^3.4"
     },
     "scripts": {
-        "php-cs-fixer": "php-cs-fixer --rules=@PSR12"
+        "php-cs-fixer": "php-cs-fixer fix --rules=@PSR12 ./../../src/"
     }
 }

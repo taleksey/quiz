@@ -138,8 +138,7 @@ class QuizController extends AbstractController
         QuizQuestionsService $quizQuestionsService,
         QuizService $quizService,
         int $id
-    ): Response
-    {
+    ): Response {
         $quiz = $quizService->getQuizById($id);
         if (! $quiz) {
             throw $this->createNotFoundException(
