@@ -12,7 +12,8 @@ class QuizQuestionAnswersService
      */
     public function __construct(
         private QuizResultRepository $quizResultRepository
-    ) {}
+    ) {
+    }
 
     /**
      * @param QuizQuestionAnswerDTO $quizQuestionAnswerDTO
@@ -36,7 +37,7 @@ class QuizQuestionAnswersService
     {
         $answers =  $this->quizResultRepository->getSavedCustomerAnswers($quizId);
 
-        $correctAnswers = array_filter($answers, function ($answer){
+        $correctAnswers = array_filter($answers, function ($answer) {
             return $answer;
         });
 

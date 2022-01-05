@@ -12,7 +12,8 @@ class QuizService
      */
     public function __construct(
         private QuizzesRepository $quizRepository
-    ) {}
+    ) {
+    }
 
     /**
      * @return array

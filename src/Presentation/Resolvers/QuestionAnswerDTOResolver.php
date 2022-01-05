@@ -19,7 +19,8 @@ class QuestionAnswerDTOResolver implements ArgumentValueResolverInterface
         try {
             $reflection = new \ReflectionClass($argument->getType());
             return $reflection->implementsInterface(RequestQuizDTO::class);
-        } catch (\ReflectionException){}
+        } catch (\ReflectionException) {
+        }
 
         return false;
     }
