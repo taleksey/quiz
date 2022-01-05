@@ -14,11 +14,9 @@ jobs:
       with:
         php-version: '8.1'
     - uses: actions/checkout@v2
-    - uses: docker://oskarstark/phpstan-ga
-      env: 
-        REQUIRE_DEV: true
+    - uses: php-actions/phpstan@v3
       with:
-        args: analyse src/ --level=6
+        path: src/
     - name: Copy .env.test.local
       run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
     - name: Cache Composer packages
@@ -31,6 +29,8 @@ jobs:
           ${{ runner.os }}-php-
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+    - name: Run php-cs-fixer
+      run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix ./src/ --dry-run --rules=@PSR12 --diff 
     - name: Create Database
       run: |
         mkdir -p data
