@@ -27,10 +27,9 @@ jobs:
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - uses: php-actions/phpstan@v3
-      with:
-        path: src/
+      run: ./vendor/bin/phpstan analyse -l 5 src tests
     - name: Run php-cs-fixer
-      run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix ./src/ --dry-run --rules=@PSR12 --diff 
+      run: ./vendor/bin/php-cs-fixer fix ./src/ --dry-run --rules=@PSR12 --diff 
     - name: Create Database
       run: |
         mkdir -p data
