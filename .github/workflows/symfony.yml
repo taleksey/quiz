@@ -31,9 +31,9 @@ jobs:
         mkdir --parents tools/php-cs-fixer
         composer install --working-dir=./tools/php-cs-fixer -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Run PHPStan
-      run: ./tools/php-cs-fixer/vendor/bin/phpstan analyse -l 5 src tests
+      run: ./vendor/bin/phpstan analyse -l 5 src tests
     - name: Run php-cs-fixer
-      run: ./vendor/bin/php-cs-fixer fix ./src/ --dry-run --rules=@PSR12 --diff 
+      run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix ./src/ --dry-run --rules=@PSR12 --diff 
     - name: Create Database
       run: |
         mkdir -p data
