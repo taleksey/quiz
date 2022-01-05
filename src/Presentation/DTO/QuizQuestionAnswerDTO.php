@@ -3,7 +3,6 @@
 namespace App\Presentation\DTO;
 
 use App\Domain\Quiz\ValueObject\QuestionStep;
-use Symfony\Component\HttpFoundation\Request;
 
 class QuizQuestionAnswerDTO implements RequestQuizDTO
 {

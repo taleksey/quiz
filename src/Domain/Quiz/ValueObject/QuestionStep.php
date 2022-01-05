@@ -9,7 +9,8 @@ class QuestionStep
      */
     public function __construct(
         private int $step
-    ) {}
+    ) {
+    }
 
     /**
      * @return int
@@ -42,7 +43,7 @@ class QuestionStep
      */
     public function nextStepId(): int
     {
-        return (int) $this->step + 1;
+        return $this->step + 1;
     }
 
     /**

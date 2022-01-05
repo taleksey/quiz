@@ -2,9 +2,7 @@
 
 namespace App\Infractructure\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\ObjectRepository;
 
 abstract class DbRepository
 {
