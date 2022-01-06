@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
-#[Table(name: "customers")]
+#[ORM\Table(name: "customers")]
 class Customer
 {
     use Timestamps;
@@ -133,5 +133,21 @@ class Customer
     public function setCustomerType(CustomerType $customerType): void
     {
         $this->customerType = $customerType;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     */
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
     }
 }

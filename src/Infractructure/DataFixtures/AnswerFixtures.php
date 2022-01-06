@@ -92,13 +92,16 @@ class AnswerFixtures extends Fixture implements DependentFixtureInterface
     private function fillOutAnswers(array $values, ObjectManager $manager)
     {
         foreach ($values as $key => $itemsArray) {
+            $queue = 1;
             foreach ($itemsArray as $keyItem => $isCorrectAnswer) {
                 $answer = new Answer();
                 $answer->setText($keyItem);
                 $answer->setCorrect($isCorrectAnswer);
                 $answer->setQuestion($this->getReference($key));
+                $answer->setQueue($queue);
                 $manager->persist($answer);
                 $manager->flush();
+                ++$queue;
             }
         }
     }

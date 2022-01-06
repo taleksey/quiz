@@ -5,7 +5,7 @@ namespace App\Domain\Quiz\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
-#[Table(name: "answers")]
+#[ORM\Table(name: "answers")]
 class Answer
 {
     use Timestamps;
@@ -33,10 +33,18 @@ class Answer
     private bool $correct;
 
     /**
-     * @var
+     * @var Question
      */
     #[ORM\ManyToOne(targetEntity: "Question", inversedBy:"answers")]
     private $question;
+
+    /**
+     * @var int
+     */
+    #[ORM\Column(type: 'integer', options: [
+        "default" => 1
+    ])]
+    private int $queue;
 
     /**
      * @return int
@@ -100,5 +108,21 @@ class Answer
     public function setQuestion(Question $question): void
     {
         $this->question = $question;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQueue(): int
+    {
+        return $this->queue;
+    }
+
+    /**
+     * @param int $queue
+     */
+    public function setQueue(int $queue): void
+    {
+        $this->queue = $queue;
     }
 }

@@ -2,18 +2,157 @@
 
 namespace App\Presentation\Controller;
 
-use Symfony\Component\Routing\Annotation\Route;
+use App\Domain\Quiz\Service\QuizQuestionAnswersService;
+use App\Domain\Quiz\Service\QuizQuestionsService;
+use App\Domain\Quiz\Service\QuizService;
+use App\Presentation\DTO\QuizQuestionAnswerDTO;
+use Doctrine\ORM\NonUniqueResultException;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class QuizController
+class QuizController extends AbstractController
 {
     /**
-     * @Route("/")
+     * @param QuizService $quizService
+     * @return Response
      */
-    public function index(): Response
+    #[Route('/', name: 'homepage', methods: ['GET'])]
+    public function index(QuizService $quizService): Response
     {
-        return new Response(
-            '<html><body>Quiz</body></html>'
+        $quizzes = $quizService->getAllQuizzes();
+
+        return $this->render('quizzes/index.html.twig', ['quizzes' => $quizzes]);
+    }
+
+    /**
+     * @param QuizService $quizService
+     * @param int $id
+     * @return Response
+     */
+    #[Route('/quiz/{id}', name: 'quiz_show', methods: ['GET'])]
+    public function showQuiz(QuizService $quizService, int $id): Response
+    {
+        $quiz = $quizService->getQuizById($id);
+        if (! $quiz) {
+            throw $this->createNotFoundException(
+                'No quiz found for id ' . $id
+            );
+        }
+        return $this->render('quiz/index.html.twig', ['quiz' => $quiz]);
+    }
+
+    /**
+     * @param QuizService $quizService
+     * @param QuizQuestionsService $quizQuestionsService
+     * @param QuizQuestionAnswerDTO $quizQuestionAnswerDTO
+     * @return Response
+     */
+    #[Route('/quiz/{id}/question/{step}', name: 'quiz_questions', methods: ['GET'])]
+    public function quizQuestion(
+        QuizService $quizService,
+        QuizQuestionsService $quizQuestionsService,
+        QuizQuestionAnswerDTO $quizQuestionAnswerDTO
+    ): Response {
+        $question = $quizQuestionsService->getQuestionByQuizIdAndQueue($quizQuestionAnswerDTO);
+        $quiz = $quizService->getQuizById($quizQuestionAnswerDTO->getQuizId());
+        if (! $question) {
+            throw $this->createNotFoundException(
+                'No question found for quiz ' . $quizQuestionAnswerDTO->getQuizId()
+            );
+        }
+
+        $customerSelectCorrectStep = $quizQuestionsService->doesCustomerSelectCorrectStep($quizQuestionAnswerDTO);
+        if (! $customerSelectCorrectStep) {
+            $nextCorrectStep = $quizQuestionsService->getNextCorrectStep($quizQuestionAnswerDTO);
+
+            return $this->redirectToRoute('quiz_questions', ['id' => $quizQuestionAnswerDTO->getQuizId(), 'step' => $nextCorrectStep]);
+        }
+
+        $totalQuestions = $quizQuestionsService->getTotalQuestions($quizQuestionAnswerDTO->getQuizId());
+
+        return $this->render(
+            'question/index.html.twig',
+            [
+                'step' => $quizQuestionAnswerDTO->getQuestionStep()->getStepId(),
+                'totalQuestions' => $totalQuestions,
+                'question' => $question,
+                'answers' => $question->getAnswers(),
+                'isFirstQuestion' => $quizQuestionAnswerDTO->getQuestionStep()->isFirstStep(),
+                'isLastQuestion' => $quizQuestionAnswerDTO->getQuestionStep()->isFinalStep($totalQuestions),
+                'quiz' => $quiz
+            ]
+        );
+    }
+
+    /**
+     * @param QuizQuestionsService $quizQuestionsService
+     * @param QuizQuestionAnswersService $quizQuestionAnswersService
+     * @param QuizQuestionAnswerDTO $quizQuestionAnswerDTO
+     * @param int $id
+     * @param int $step
+     * @return RedirectResponse|Response
+     * @throws NonUniqueResultException
+     */
+    #[Route('/quiz/{id}/question/{step}', name: 'question_answers')]
+    public function editAnswerQuestion(
+        QuizQuestionsService $quizQuestionsService,
+        QuizQuestionAnswersService $quizQuestionAnswersService,
+        QuizQuestionAnswerDTO $quizQuestionAnswerDTO,
+        int $id,
+        int $step
+    ): RedirectResponse|Response {
+        if (! $quizQuestionAnswerDTO->isCustomerSelectedAnswer()) {
+            return $this->redirectToRoute('quiz_questions', ['id' => $id, 'step' => $step]);
+        }
+
+        $answer = $quizQuestionsService->getAnswer($quizQuestionAnswerDTO);
+        $quizQuestionAnswersService->save($quizQuestionAnswerDTO, $answer->isCorrect());
+        $totalQuestions = $quizQuestionsService->getTotalQuestions($quizQuestionAnswerDTO->getQuizId());
+
+        return $this->render(
+            'question/answer/index.html.twig',
+            [
+                'answer' => $answer,
+                'question' => $answer->getQuestion(),
+                'step' => $step,
+                'nextStep' => $quizQuestionAnswerDTO->getQuestionStep()->nextStepId(),
+                'isCorrectAnswer' => $answer->isCorrect(),
+                'quizId' => $id,
+                'isFinalStep' => $quizQuestionAnswerDTO->getQuestionStep()->isFinalStep($totalQuestions)
+            ]
+        );
+    }
+
+    /**
+     * @param QuizQuestionAnswersService $quizQuestionAnswersService
+     * @param QuizQuestionsService $quizQuestionsService
+     * @param QuizService $quizService
+     * @param int $id
+     * @return Response
+     */
+    #[Route('/quiz/{id}/result', name: 'quiz_result', methods: ["GET"])]
+    public function quizResult(
+        QuizQuestionAnswersService $quizQuestionAnswersService,
+        QuizQuestionsService $quizQuestionsService,
+        QuizService $quizService,
+        int $id
+    ): Response {
+        $quiz = $quizService->getQuizById($id);
+        if (! $quiz) {
+            throw $this->createNotFoundException(
+                'No quiz found for id ' . $id
+            );
+        }
+
+        return $this->render(
+            'question/answer/result.html.twig',
+            [
+                'totalCorrectAnswers' => $quizQuestionAnswersService->getTotalCorrectAnswers($id),
+                'totalQuestions' => $quizQuestionsService->getTotalQuestions($id),
+                'quiz' => $quizService->getQuizById($id)
+            ]
         );
     }
 }

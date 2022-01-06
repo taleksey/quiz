@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
-#[Table(name: "customer_type")]
+#[ORM\Table(name: "customer_type")]
 class CustomerType
 {
     /**
@@ -139,9 +139,9 @@ class CustomerType
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection|Collection
      */
-    public function getCustomers(): ArrayCollection
+    public function getCustomers(): ArrayCollection|Collection
     {
         return $this->customers;
     }

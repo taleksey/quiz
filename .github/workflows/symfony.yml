@@ -9,10 +9,25 @@ on:
 jobs:
   symfony-tests:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: symfony
+          POSTGRES_PASSWORD: symfony
+          POSTGRES_DB: app_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+        ports:
+          - 5432:5432
     steps:
     - uses: shivammathur/setup-php@v2
       with:
         php-version: '8.1'
+        extensions: mbstring, xml, ctype, iconv, intl, pgsql
     - uses: actions/checkout@v2
     - name: Copy .env.test.local
       run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
@@ -26,11 +41,28 @@ jobs:
           ${{ runner.os }}-php-
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Create Database
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+        check-latest: true
+    - run: npm install 
+    - run: npm test
+    - run: npm run build
+    - name: Install PHP CS Fixer
+      run: | 
+        mkdir --parents tools/php-cs-fixer
+        composer install --working-dir=./tools/php-cs-fixer -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+    - name: Run PHPStan
+      run: ./vendor/bin/phpstan analyse -l 5 src tests
+    - name: Run php-cs-fixer
+      run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix ./src/ --dry-run --rules=@PSR12 --diff 
+    - name: Run Migration
       run: |
-        mkdir -p data
-        touch data/database.sqlite
+        php bin/console --env=test doctrine:migrations:migrate || echo "No migrations found or migration failed"
+        php bin/console doctrine:fixtures:load --env=test --append
+      env:
+        DATABASE_URL: postgresql://symfony:symfony@127.0.0.1:5432/app?charset=utf8
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
-        DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
-      run: php -v
+        DATABASE_URL: postgresql://symfony:symfony@127.0.0.1:5432/app?charset=utf8
+      run: ./vendor/bin/phpunit

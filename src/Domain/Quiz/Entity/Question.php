@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
-#[Table(name: "questions")]
+#[ORM\Table(name: "questions")]
 class Question
 {
     use Timestamps;
@@ -35,6 +35,14 @@ class Question
      */
     #[ORM\OneToMany(mappedBy: "question", targetEntity: "Answer")]
     private Collection $answers;
+
+    /**
+     * @var int
+     */
+    #[ORM\Column(type: 'integer', options: [
+        "default" => 1
+    ])]
+    private int $queue;
 
     public function __construct()
     {
@@ -103,5 +111,21 @@ class Question
     public function setAnswer(Answer $answer): void
     {
         $this->answers->add($answer);
+    }
+
+    /**
+     * @return int
+     */
+    public function getQueue(): int
+    {
+        return $this->queue;
+    }
+
+    /**
+     * @param int $queue
+     */
+    public function setQueue(int $queue): void
+    {
+        $this->queue = $queue;
     }
 }

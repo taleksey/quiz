@@ -56,14 +56,17 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
 
     private function fillOutData(array $values, ObjectManager $manager, $type)
     {
+        $queue = 1;
         foreach ($values as $valueKey => $valueItem) {
             $firstQuizQuestion = new Question();
             $firstQuizQuestion->setText($valueItem);
             $firstQuizQuestion->setQuiz($this->getReference($type));
+            $firstQuizQuestion->setQueue($queue);
             $manager->persist($firstQuizQuestion);
             $manager->flush();
 
             $this->addReference($valueKey, $firstQuizQuestion);
+            ++$queue;
         }
     }
 }

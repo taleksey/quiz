@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use DateTimeInterface;
 
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
-#[Table(name: "quizzes")]
+#[ORM\Table(name: "quizzes")]
 class Quiz
 {
     use Timestamps;
@@ -60,6 +60,14 @@ class Quiz
      */
     #[ORM\OneToMany(mappedBy: "quiz", targetEntity: "Question")]
     private Collection $questions;
+
+    /**
+     * @var int
+     */
+    #[ORM\Column(type: 'integer', options: [
+        "default" => 1
+    ])]
+    private int $queue;
 
     public function __construct()
     {
@@ -163,9 +171,9 @@ class Quiz
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection|Collection
      */
-    public function getQuestions(): ArrayCollection
+    public function getQuestions(): ArrayCollection|Collection
     {
         return $this->questions;
     }
@@ -178,4 +186,19 @@ class Quiz
         $this->questions->add($question);
     }
 
+    /**
+     * @return int
+     */
+    public function getQueue(): int
+    {
+        return $this->queue;
+    }
+
+    /**
+     * @param int $queue
+     */
+    public function setQueue(int $queue): void
+    {
+        $this->queue = $queue;
+    }
 }
