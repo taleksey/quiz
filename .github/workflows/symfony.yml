@@ -52,7 +52,7 @@ jobs:
     - name: Run Migration
       run: php bin/console --env=test doctrine:migrations:migrate || echo "No migrations found or migration failed"
       env:
-        DATABASE_URL: postgresql://symfony:symfony@127.0.0.1:5432/app_test?charset=utf8
+        DATABASE_URL: postgresql://symfony:symfony@127.0.0.1:5432/app?charset=utf8
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DATABASE_URL: postgresql://symfony:symfony@127.0.0.1:5432/app_test?charset=utf8
