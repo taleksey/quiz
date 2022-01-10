@@ -17,10 +17,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class QuizController extends AbstractController
 {
-    /**
-     * @param QuizService $quizService
-     * @return Response
-     */
     #[Route('/', name: 'homepage', methods: ['GET'])]
     public function index(QuizService $quizService): Response
     {
@@ -29,11 +25,6 @@ class QuizController extends AbstractController
         return $this->render('quizzes/index.html.twig', ['quizzes' => $quizzes]);
     }
 
-    /**
-     * @param QuizService $quizService
-     * @param int $id
-     * @return Response
-     */
     #[Route('/quiz/{id}', name: 'quiz_show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function showQuiz(QuizService $quizService, int $id): Response
     {
@@ -46,12 +37,6 @@ class QuizController extends AbstractController
         return $this->render('quiz/index.html.twig', ['quiz' => $quiz]);
     }
 
-    /**
-     * @param QuizService $quizService
-     * @param QuizQuestionsService $quizQuestionsService
-     * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
-     * @return Response
-     */
     #[Route('/quiz/{id}/question/{step}', name: 'quiz_questions', methods: ['GET'])]
     public function quizQuestion(
         QuizService $quizService,
@@ -128,13 +113,6 @@ class QuizController extends AbstractController
         );
     }
 
-    /**
-     * @param QuizQuestionAnswersService $quizQuestionAnswersService
-     * @param QuizQuestionsService $quizQuestionsService
-     * @param QuizService $quizService
-     * @param int $id
-     * @return Response
-     */
     #[Route('/quiz/{id}/result', name: 'quiz_result', methods: ["GET"])]
     public function quizResult(
         QuizQuestionAnswersService $quizQuestionAnswersService,
@@ -159,11 +137,6 @@ class QuizController extends AbstractController
         );
     }
 
-    /**
-     * @param Request $request
-     * @param MainQuizService $mainQuizService
-     * @return RedirectResponse|Response
-     */
     #[Route('/quiz/new', name: 'quiz_new')]
     public function createQuiz(Request $request, MainQuizService $mainQuizService): RedirectResponse|Response
     {

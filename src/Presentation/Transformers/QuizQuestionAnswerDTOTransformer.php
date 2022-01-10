@@ -3,10 +3,9 @@
 namespace App\Presentation\Transformers;
 
 use App\Presentation\DTO\QuizQuestionAnswerRequestDTO;
-use App\Presentation\DTO\RequestQuizDTO;
 use Symfony\Component\HttpFoundation\Request;
 
-class QuizQuestionAnswerDTOTransformer implements RequestTransformer
+class QuizQuestionAnswerDTOTransformer
 {
     private Request $request;
 
@@ -18,7 +17,7 @@ class QuizQuestionAnswerDTOTransformer implements RequestTransformer
     /**
      * @return QuizQuestionAnswerRequestDTO
      */
-    public function transform(): RequestQuizDTO
+    public function transform(): QuizQuestionAnswerRequestDTO
     {
         $step = (int) $this->request->get('step');
         $array = [

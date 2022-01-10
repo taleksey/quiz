@@ -37,7 +37,7 @@ class DTOHydrator
             }
             $quizEntity->setQuestions($questionEntity);
         }
-        //dd($quizName);
+
         return $quizEntity;
     }
 }

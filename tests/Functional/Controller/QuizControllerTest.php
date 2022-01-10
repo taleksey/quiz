@@ -35,7 +35,7 @@ class QuizControllerTest extends WebTestCase
      * @return void
      * @throws DOMException
      */
-    public function testCreateNewQuizWithMissingAnswers()
+    public function testCreateNewQuizWithMissingAnswers(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/quiz/new');
@@ -54,7 +54,7 @@ class QuizControllerTest extends WebTestCase
      * @return void
      * @throws DOMException
      */
-    public function testCreateNewQuizWithMissingAnswersValue()
+    public function testCreateNewQuizWithMissingAnswersValue(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/quiz/new');
@@ -80,7 +80,7 @@ class QuizControllerTest extends WebTestCase
      * @return void
      * @throws DOMException
      */
-    public function testCreateNewQuizWithMissingSetCorrectAnswers()
+    public function testCreateNewQuizWithMissingSetCorrectAnswers(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/quiz/new');
@@ -105,7 +105,7 @@ class QuizControllerTest extends WebTestCase
      * @return void
      * @throws DOMException
      */
-    public function testCreateNewQuizGood()
+    public function testCreateNewQuizGood(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/quiz/new');

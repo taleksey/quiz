@@ -4,7 +4,7 @@ namespace App\Presentation\DTO;
 
 use App\Domain\Quiz\ValueObject\QuestionStep;
 
-class QuizQuestionAnswerRequestDTO implements RequestQuizDTO
+class QuizQuestionAnswerRequestDTO
 {
     private int $quizId;
     private int $step;

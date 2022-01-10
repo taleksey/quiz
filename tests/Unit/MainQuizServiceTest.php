@@ -16,25 +16,51 @@ use PHPUnit\Framework\TestCase;
 
 class MainQuizServiceTest extends TestCase
 {
-    private const TOTAL_QUIZZES = 2;
-    private const QUESTION_NAME = [
-        1 => 'Quiz Question One', 2=>'Quiz Question Two'
-    ];
-    private const QUIZ_NAME = 'Quiz Test';
-    private const QUESTION_ANSWER_NAME = [
-        1 => [
-            1 => 'Quiz Question One Answer One',
-            2 => 'Quiz Question One Answer Two',
-            3 => 'Quiz Question One Answer Three'
-            ],
-        2 => [
-            1 => 'Quiz Question Two Answer One',
-            2 => 'Quiz Question Two Answer Two',
-            3 => 'Quiz Question Two Answer Three'
+    private array $dataForCreatingQuizzes = [
+        'Quiz Test' => [
+            'questions' => [
+                [
+                    'questionName' => 'Quiz Question One',
+                    'answers' => [
+                        [
+                            'subject' => 'Quiz Question One Answer One', 'isCorrect' => false
+                        ],
+                        [
+                            'subject' => 'Quiz Question One Answer Two', 'isCorrect' => true
+                        ],
+                        [
+                            'subject' => 'Quiz Question One Answer Three', 'isCorrect' => false
+                        ]
+                    ]
+                ],
+                [
+                    'questionName' => 'Quiz Question Two',
+                    'answers' => [
+                        [
+                            'subject' => 'Quiz Question Two Answer One', 'isCorrect' => true
+                        ],
+                        [
+                            'subject' => 'Quiz Question Two Answer Two', 'isCorrect' => false
+                        ],
+                        [
+                            'subject' => 'Quiz Question Two Answer Three', 'isCorrect' => false
+                        ]
+                    ]
+                ]
+            ]
         ]
     ];
 
-    public function testCreateNewQuiz()
+    private const TOTAL_QUIZZES = 2;
+
+    /**
+     * @dataProvider  getQuizzesAndLinkedQuizDTO
+     *
+     * @param Quiz $quiz
+     * @param QuizCreateDTO $quizDTO
+     * @return void
+     */
+    public function testCreateNewQuiz(Quiz $quiz, QuizCreateDTO $quizDTO): void
     {
         $quizzesRepository = $this->createMock(QuizzesRepository::class);
         $quizzesRepository->expects($this->any())
@@ -42,61 +68,70 @@ class MainQuizServiceTest extends TestCase
             ->willReturn(self::TOTAL_QUIZZES)
            ;
         $quizzesRepository->method('save')
-        ->with($this->getEntity());
+            ->with($quiz);
+
         $quizService = new QuizService($quizzesRepository);
         $DTOHydrator = new DTOHydrator();
         $mainQuiz = new MainQuizService($DTOHydrator, $quizService);
-        $mainQuiz->createQuiz($this->getDTO());
-        $this->assertNotEquals($this->getDTO(), $this->getEntity());
+
+        $mainQuiz->createQuiz($quizDTO);
+        $this->assertNotEquals($quizDTO, $quiz);
     }
 
-    /**
-     * @return Quiz
-     */
-    private function getEntity(): Quiz
+    public function getQuizzesAndLinkedQuizDTO(): array
     {
-        $quiz = new Quiz();
-        $quiz->setName(self::QUIZ_NAME);
-        $quiz->setActive(true);
-        $quiz->setQueue(self::TOTAL_QUIZZES + 1);
-
-        for ($i=1; $i < 3; $i++) {
-            $question = new Question();
-            $question->setText(self::QUESTION_NAME[$i]);
-            $question->setQueue($i);
-            for ($k=1; $k < 4; $k++) {
-                $answer = new Answer();
-                $answer->setText(self::QUESTION_ANSWER_NAME[$i][$k]);
-                $answer->setQueue($k);
-                $isCorrect = 2 === $k;
-                $answer->setCorrect($isCorrect);
-                $answer->setQuestion($question);
-                $question->setAnswer($answer);
+        $currentQuizOrderNumber = 1;
+        $linkQuizWithQuizDTO = [];
+        foreach ($this->dataForCreatingQuizzes as $quizName => $dataForCreatingQuiz) {
+            $quiz = new Quiz();
+            $quiz->setName($quizName);
+            $quiz->setActive(true);
+            $quiz->setQueue(self::TOTAL_QUIZZES + $currentQuizOrderNumber);
+            $questions = $dataForCreatingQuiz['questions'] ?? [];
+            foreach ($questions as $questionIndex => $questionData) {
+                $question = new Question();
+                $question->setText($questionData['questionName']);
+                $question->setQueue($questionIndex + 1);
+                foreach ($questionData['answers'] as $answerIndex => $answerData) {
+                    $answer = new Answer();
+                    $answer->setText($answerData['subject']);
+                    $answer->setQueue($answerIndex + 1);
+                    $answer->setCorrect($answerData['isCorrect']);
+                    $answer->setQuestion($question);
+                    $question->setAnswer($answer);
+                }
+                $quiz->setQuestions($question);
+                $question->setQuiz($quiz);
             }
-            $quiz->setQuestions($question);
-            $question->setQuiz($quiz);
+            $currentQuizOrderNumber++;
+
+            $quizDTO = $this->createQuizDTO($quiz);
+            $linkQuizWithQuizDTO[] = [
+               'quiz' => $quiz,
+               'dto' => $quizDTO
+            ];
         }
 
-        return $quiz;
+        return $linkQuizWithQuizDTO;
     }
 
-    private function getDTO(): QuizCreateDTO
+    private function createQuizDTO(Quiz $quiz): QuizCreateDTO
     {
         $quizCreateDTO = new QuizCreateDTO();
-        $quizCreateDTO->setName(self::QUIZ_NAME);
+        $quizCreateDTO->setName($quiz->getName());
         $questions = [];
-        for ($i = 1; $i < 3; $i++) {
-            $question = new QuizQuestionCreateDTO();
-            $question->setText(self::QUESTION_NAME[$i]);
+        foreach ($quiz->getQuestions() as $question) {
+            $questionDTO = new QuizQuestionCreateDTO();
+            $questionDTO->setText($question->getText());
             $answers = [];
-            for ($k=1; $k < 4; $k++) {
-                $answer = new QuizQuestionAnswerCreateDTO();
-                $answer->setText(self::QUESTION_ANSWER_NAME[$i][$k]);
-                $answer->setCorrect(2 === $k);
-                $answers[] = $answer;
+            foreach ($question->getAnswers() as $answer) {
+                $answerDTO = new QuizQuestionAnswerCreateDTO();
+                $answerDTO->setText($answer->getText());
+                $answerDTO->setCorrect($answer->isCorrect());
+                $answers[] = $answerDTO;
             }
-            $question->setAnswers($answers);
-            $questions[] = $question;
+            $questionDTO->setAnswers($answers);
+            $questions[] = $questionDTO;
         }
         $quizCreateDTO->setQuestions($questions);
 

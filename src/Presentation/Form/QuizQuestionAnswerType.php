@@ -25,7 +25,6 @@ class QuizQuestionAnswerType extends AbstractType
                     'attr' => ['class' => 'radio-button'],
                     'value' => '__value__',
                     'required' => false,
-                    //'validation_groups' => true,
                 ]
             )
             ->add(

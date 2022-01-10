@@ -34,7 +34,7 @@ class QuizQuestionType extends AbstractType
 
         $builder->get('answers')->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
             $forms = $event->getForm()->all();
-            $setFormWithCorrectAnswer = array_filter($forms, function (FormInterface $form) {
+            $setFormWithCorrectAnswer = array_filter($forms, static function (FormInterface $form) {
                 return $form->get('correct')->getData();
             });
             if (empty($setFormWithCorrectAnswer) && !empty($forms)) {
