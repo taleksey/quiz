@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 use Symfony\Component\DomCrawler\Field\InputFormField;
+use Symfony\Component\HttpFoundation\Response;
 
 class QuizControllerTest extends WebTestCase
 {
@@ -122,7 +123,7 @@ class QuizControllerTest extends WebTestCase
         $form->set(new InputFormField($this->createInputElement($dom, 'quiz[questions][0][answers][1][text]', 'Second Answer')));
         $client->submit($form);
 
-        $this->assertResponseStatusCodeSame(HTTP_REDIRECT_FOUND);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
         $this->assertResponseRedirects('/quiz/created');
     }
 
