@@ -34,7 +34,8 @@ class QuizQuestionsRepository extends DbRepository
                 ->setParameter('quizId', $quizId)
                 ->getQuery()
                 ->getSingleScalarResult();
-        } catch (\Throwable) {}
+        } catch (\Throwable) {
+        }
 
         return 0;
     }

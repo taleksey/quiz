@@ -22,8 +22,8 @@ class QuizQuestionsService
         private QuizQuestionsRepository $questionRepository,
         private QuizQuestionAnswersRepository $quizQuestionAnswersRepository,
         private QuizResultRepository $quizResultRepository
-    )
-    {}
+    ) {
+    }
 
     /**
      * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
@@ -31,8 +31,10 @@ class QuizQuestionsService
      */
     public function getQuestionByQuizIdAndQueue(QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO): ?Question
     {
-        return $this->questionRepository->getQuestionByQuizIdAndQueue($quizQuestionAnswerDTO->getQuizId(),
-            $quizQuestionAnswerDTO->getQuestionStep()->getStepId());
+        return $this->questionRepository->getQuestionByQuizIdAndQueue(
+            $quizQuestionAnswerDTO->getQuizId(),
+            $quizQuestionAnswerDTO->getQuestionStep()->getStepId()
+        );
     }
 
     /**

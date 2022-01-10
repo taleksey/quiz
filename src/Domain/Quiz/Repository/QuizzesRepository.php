@@ -23,7 +23,7 @@ class QuizzesRepository extends DbRepository
     {
         try {
             return $this->manager->find($id);
-        } catch (OptimisticLockException|TransactionRequiredException|ORMException $e) {
+        } catch (OptimisticLockException|TransactionRequiredException|ORMException) {
         }
         return null;
     }

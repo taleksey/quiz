@@ -76,7 +76,8 @@ class QuizController extends AbstractController
 
         $totalQuestions = $quizQuestionsService->getTotalQuestions($quizQuestionAnswerDTO->getQuizId());
 
-        return $this->render('question/index.html.twig',
+        return $this->render(
+            'question/index.html.twig',
             [
                 'step' => $quizQuestionAnswerDTO->getQuestionStep()->getStepId(),
                 'totalQuestions' => $totalQuestions,
@@ -105,8 +106,7 @@ class QuizController extends AbstractController
         QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO,
         int $id,
         int $step
-    ): RedirectResponse|Response
-    {
+    ): RedirectResponse|Response {
         if (! $quizQuestionAnswerDTO->isCustomerSelectedAnswer()) {
             return $this->redirectToRoute('quiz_questions', ['id' => $id, 'step' => $step]);
         }
@@ -115,7 +115,8 @@ class QuizController extends AbstractController
         $quizQuestionAnswersService->save($quizQuestionAnswerDTO, $answer->isCorrect());
         $totalQuestions = $quizQuestionsService->getTotalQuestions($quizQuestionAnswerDTO->getQuizId());
 
-        return $this->render('question/answer/index.html.twig',
+        return $this->render(
+            'question/answer/index.html.twig',
             [
                 'answer' => $answer,
                 'question' => $answer->getQuestion(),
@@ -140,8 +141,8 @@ class QuizController extends AbstractController
         QuizQuestionAnswersService $quizQuestionAnswersService,
         QuizQuestionsService $quizQuestionsService,
         QuizService $quizService,
-        int $id): Response
-    {
+        int $id
+    ): Response {
         $quiz = $quizService->getQuizById($id);
         if (! $quiz) {
             throw $this->createNotFoundException(
@@ -149,7 +150,8 @@ class QuizController extends AbstractController
             );
         }
 
-        return $this->render('question/answer/result.html.twig',
+        return $this->render(
+            'question/answer/result.html.twig',
             [
                 'totalCorrectAnswers' => $quizQuestionAnswersService->getTotalCorrectAnswers($id),
                 'totalQuestions' => $quizQuestionsService->getTotalQuestions($id),
