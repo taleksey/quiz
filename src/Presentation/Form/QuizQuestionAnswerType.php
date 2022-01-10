@@ -17,7 +17,9 @@ class QuizQuestionAnswerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('correct', RadioType::class,
+            ->add(
+                'correct',
+                RadioType::class,
                 [
                     'row_attr' => ['class' => 'col-2'],
                     'attr' => ['class' => 'radio-button'],
@@ -26,7 +28,9 @@ class QuizQuestionAnswerType extends AbstractType
                     //'validation_groups' => true,
                 ]
             )
-            ->add('text', TextType::class,
+            ->add(
+                'text',
+                TextType::class,
                 [
                     'label' => 'Set answer of question',
                     'row_attr' => ['class' => 'col-8'],
@@ -34,7 +38,6 @@ class QuizQuestionAnswerType extends AbstractType
                 ]
             )
         ;
-
     }
 
     public function configureOptions(OptionsResolver $resolver)

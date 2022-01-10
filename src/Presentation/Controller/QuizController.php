@@ -57,8 +57,7 @@ class QuizController extends AbstractController
         QuizService $quizService,
         QuizQuestionsService $quizQuestionsService,
         QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
-    ): Response
-    {
+    ): Response {
         $question = $quizQuestionsService->getQuestionByQuizIdAndQueue($quizQuestionAnswerDTO);
         $quiz = $quizService->getQuizById($quizQuestionAnswerDTO->getQuizId());
         if (! $question) {
@@ -173,7 +172,7 @@ class QuizController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && (! $form->has('token') || $form->has('token' !== $secretToken))) {
+        if ($form->isSubmitted() && (! $form->has('token') || $form->get('token')->getData() !== $secretToken)) {
             return $this->redirectToRoute('quiz_new');
         }
 

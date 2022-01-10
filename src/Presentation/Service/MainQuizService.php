@@ -11,7 +11,8 @@ class MainQuizService
     public function __construct(
         private DTOHydrator $hydrator,
         private QuizService $quizService
-    ) {}
+    ) {
+    }
 
     /**
      * @param QuizCreateDTO $quizCreateDTO
