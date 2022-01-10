@@ -65,6 +65,4 @@ class QuizServiceTest extends TestCase
 
         $this->assertEquals($quiz, $findQuiz);
     }
-
-
 }
