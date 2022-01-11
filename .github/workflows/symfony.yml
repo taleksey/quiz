@@ -9,20 +9,6 @@ on:
 jobs:
   symfony-initial:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_USER: symfony
-          POSTGRES_PASSWORD: symfony
-          POSTGRES_DB: app_test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
-        ports:
-          - 5432:5432
     steps:
       - uses: shivammathur/setup-php@v2
         with: 
@@ -80,6 +66,20 @@ jobs:
   symfony-tests:
     needs: [symfony-initial, nodejs-initial]
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: symfony
+          POSTGRES_PASSWORD: symfony
+          POSTGRES_DB: app_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v2
       - name: Install Dependencies
