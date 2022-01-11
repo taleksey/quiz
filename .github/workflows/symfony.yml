@@ -63,6 +63,14 @@ jobs:
       - run: npm run build
       - name: Test Node.js
       - run: npm test
+      - name: Install PHP CS Fixer
+        run: |
+          mkdir --parents tools/php-cs-fixer
+          composer install --working-dir=./tools/php-cs-fixer -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan analyse -l 5 src tests
+      - name: Run php-cs-fixer
+        run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix ./src/ --dry-run --rules=@PSR12 --diff
       - name: Run Migration
         run: |
           php bin/console --env=test doctrine:migrations:migrate || echo "No migrations found or migration failed"
@@ -73,16 +81,3 @@ jobs:
         env:
           DATABASE_URL: postgresql://symfony:symfony@127.0.0.1:5432/app?charset=utf8
         run: ./vendor/bin/phpunit
-
-  check-php:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install PHP CS Fixer
-        run: |
-          mkdir --parents tools/php-cs-fixer
-          composer install --working-dir=./tools/php-cs-fixer -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Run PHPStan
-        run: ./vendor/bin/phpstan analyse -l 5 src tests
-      - name: Run php-cs-fixer
-        run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix ./src/ --dry-run --rules=@PSR12 --diff
