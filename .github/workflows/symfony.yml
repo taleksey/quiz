@@ -15,6 +15,8 @@ jobs:
         run: |
           mkdir --parents tools/php-cs-fixer
           composer install --working-dir=./tools/php-cs-fixer -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Run php-cs-fixer
+        run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix ./src/ --dry-run --rules=@PSR12 --diff      
   symfony-tests:
     runs-on: ubuntu-latest
     services:
@@ -73,8 +75,6 @@ jobs:
         run: npm test
       - name: Run PHPStan
         run: ./vendor/bin/phpstan analyse -l 5 src tests
-      - name: Run php-cs-fixer
-        run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix ./src/ --dry-run --rules=@PSR12 --diff
       - name: Run Migration
         run: |
           php bin/console --env=test doctrine:migrations:migrate || echo "No migrations found or migration failed"
