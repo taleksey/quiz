@@ -7,64 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  symfony-initial:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: shivammathur/setup-php@v2
-        with: 
-          php-version: '8.1'
-          extensions: mbstring, xml, ctype, iconv, intl, pgsql
-      - uses: actions/checkout@v2
-      - name: Copy .env.test.local
-        run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v2
-        with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
-      - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Install PHP CS Fixer
-        run: |
-          mkdir --parents tools/php-cs-fixer
-          composer install --working-dir=./tools/php-cs-fixer -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Run PHPStan
-        run: ./vendor/bin/phpstan analyse -l 5 src tests
-      - name: Run php-cs-fixer
-        run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix ./src/ --dry-run --rules=@PSR12 --diff
-
-  nodejs-initial:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with: 
-          node-version: '14'
-          check-latest: true
-      - name: Cache dependencies Node.js
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: Install Node.js Dependencies
-        run: npm install
-      - name: Create Node.js build
-        run: npm run build
-      - name: Test Node.js
-        run: npm test      
-
   symfony-tests:
-    needs: [symfony-initial, nodejs-initial]
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -81,9 +24,45 @@ jobs:
         ports:
           - 5432:5432
     steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, xml, ctype, iconv, intl, pgsql
       - uses: actions/checkout@v2
+      - name: Copy .env.test.local
+        run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Setup Node.js
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          check-latest: true
+      - name: Cache dependencies Node.js
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install Node.js Dependencies
+      - run: npm install
+      - name: Create Node.js build
+      - run: npm run build
+      - name: Test Node.js
+      - run: npm test
       - name: Run Migration
         run: |
           php bin/console --env=test doctrine:migrations:migrate || echo "No migrations found or migration failed"
@@ -94,3 +73,16 @@ jobs:
         env:
           DATABASE_URL: postgresql://symfony:symfony@127.0.0.1:5432/app?charset=utf8
         run: ./vendor/bin/phpunit
+
+  check-php:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install PHP CS Fixer
+        run: |
+          mkdir --parents tools/php-cs-fixer
+          composer install --working-dir=./tools/php-cs-fixer -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan analyse -l 5 src tests
+      - name: Run php-cs-fixer
+        run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix ./src/ --dry-run --rules=@PSR12 --diff
