@@ -33,7 +33,7 @@ jobs:
         id: composer-cache
         uses: actions/cache@v2
         with:
-          path: ~/vendor
+          path: ./vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
@@ -102,7 +102,7 @@ jobs:
         id: composer-cache
         uses: actions/cache@v2
         with:
-          path: ~/vendor
+          path: ./vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
@@ -125,9 +125,9 @@ jobs:
         id: composer-cache
         uses: actions/cache@v2
         with:
-          path: ~/vendor
+          path: ./vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-        
       - name: Run PHPStan
-        run: ~/vendor/bin/phpstan analyse -l 5 src tests
+        run: ./vendor/bin/phpstan analyse -l 5 src tests
