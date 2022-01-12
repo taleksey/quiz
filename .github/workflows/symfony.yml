@@ -130,4 +130,4 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-php-        
       - name: Run PHPStan
-        run: ./vendor/bin/phpstan analyse -l 5 src tests
+        run: ~/vendor/bin/phpstan analyse -l 5 src tests
