@@ -33,7 +33,7 @@ jobs:
         id: composer-cache
         uses: actions/cache@v2
         with:
-          path: ~/.vendor
+          path: ~/vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
@@ -79,6 +79,7 @@ jobs:
           --health-retries 3
         ports:
           - 5432:5432
+    needs: [cache-symfony, cache-node]
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node.js
@@ -101,7 +102,7 @@ jobs:
         id: composer-cache
         uses: actions/cache@v2
         with:
-          path: ~/.vendor
+          path: ~/vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
@@ -117,13 +118,14 @@ jobs:
         run: ./vendor/bin/phpunit
   phpstan-tests:
     runs-on: ubuntu-latest
+    needs: [cache-symfony]
     steps:
       - uses: actions/checkout@v2
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v2
         with:
-          path: ~/.vendor
+          path: ~/vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-        
