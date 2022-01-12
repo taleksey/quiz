@@ -38,7 +38,7 @@ class Quiz
     /**
      * @var Customer
      */
-    #[ORM\ManyToOne(targetEntity: "Customer", inversedBy:"quizzes")]
+    #[ORM\ManyToOne(targetEntity: "Customer", cascade: ["persist"], inversedBy: "quizzes")]
     #[ORM\JoinColumn(name: "customer_id", referencedColumnName: "id")]
     private Customer $customer;
 
@@ -58,7 +58,7 @@ class Quiz
     /**
      * @var Collection
      */
-    #[ORM\OneToMany(mappedBy: "quiz", targetEntity: "Question")]
+    #[ORM\OneToMany(mappedBy: "quiz", targetEntity: "Question", cascade: ["persist"])]
     private Collection $questions;
 
     /**

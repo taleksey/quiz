@@ -5,19 +5,18 @@ namespace App\Presentation\Controller;
 use App\Domain\Quiz\Service\QuizQuestionAnswersService;
 use App\Domain\Quiz\Service\QuizQuestionsService;
 use App\Domain\Quiz\Service\QuizService;
-use App\Presentation\DTO\QuizQuestionAnswerDTO;
+use App\Presentation\Service\MainQuizService;
+use App\Presentation\DTO\QuizQuestionAnswerRequestDTO;
 use Doctrine\ORM\NonUniqueResultException;
+use App\Presentation\Form\QuizType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class QuizController extends AbstractController
 {
-    /**
-     * @param QuizService $quizService
-     * @return Response
-     */
     #[Route('/', name: 'homepage', methods: ['GET'])]
     public function index(QuizService $quizService): Response
     {
@@ -26,12 +25,7 @@ class QuizController extends AbstractController
         return $this->render('quizzes/index.html.twig', ['quizzes' => $quizzes]);
     }
 
-    /**
-     * @param QuizService $quizService
-     * @param int $id
-     * @return Response
-     */
-    #[Route('/quiz/{id}', name: 'quiz_show', methods: ['GET'])]
+    #[Route('/quiz/{id}', name: 'quiz_show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function showQuiz(QuizService $quizService, int $id): Response
     {
         $quiz = $quizService->getQuizById($id);
@@ -43,17 +37,11 @@ class QuizController extends AbstractController
         return $this->render('quiz/index.html.twig', ['quiz' => $quiz]);
     }
 
-    /**
-     * @param QuizService $quizService
-     * @param QuizQuestionsService $quizQuestionsService
-     * @param QuizQuestionAnswerDTO $quizQuestionAnswerDTO
-     * @return Response
-     */
     #[Route('/quiz/{id}/question/{step}', name: 'quiz_questions', methods: ['GET'])]
     public function quizQuestion(
         QuizService $quizService,
         QuizQuestionsService $quizQuestionsService,
-        QuizQuestionAnswerDTO $quizQuestionAnswerDTO
+        QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
     ): Response {
         $question = $quizQuestionsService->getQuestionByQuizIdAndQueue($quizQuestionAnswerDTO);
         $quiz = $quizService->getQuizById($quizQuestionAnswerDTO->getQuizId());
@@ -89,7 +77,7 @@ class QuizController extends AbstractController
     /**
      * @param QuizQuestionsService $quizQuestionsService
      * @param QuizQuestionAnswersService $quizQuestionAnswersService
-     * @param QuizQuestionAnswerDTO $quizQuestionAnswerDTO
+     * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
      * @param int $id
      * @param int $step
      * @return RedirectResponse|Response
@@ -99,7 +87,7 @@ class QuizController extends AbstractController
     public function editAnswerQuestion(
         QuizQuestionsService $quizQuestionsService,
         QuizQuestionAnswersService $quizQuestionAnswersService,
-        QuizQuestionAnswerDTO $quizQuestionAnswerDTO,
+        QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO,
         int $id,
         int $step
     ): RedirectResponse|Response {
@@ -125,13 +113,6 @@ class QuizController extends AbstractController
         );
     }
 
-    /**
-     * @param QuizQuestionAnswersService $quizQuestionAnswersService
-     * @param QuizQuestionsService $quizQuestionsService
-     * @param QuizService $quizService
-     * @param int $id
-     * @return Response
-     */
     #[Route('/quiz/{id}/result', name: 'quiz_result', methods: ["GET"])]
     public function quizResult(
         QuizQuestionAnswersService $quizQuestionAnswersService,
@@ -154,5 +135,32 @@ class QuizController extends AbstractController
                 'quiz' => $quizService->getQuizById($id)
             ]
         );
+    }
+
+    #[Route('/quiz/new', name: 'quiz_new')]
+    public function createQuiz(Request $request, MainQuizService $mainQuizService): RedirectResponse|Response
+    {
+        $secretToken = $this->getParameter('app.secretToken');
+        $form = $this->createForm(QuizType::class, options: ['hiddenToken' => $secretToken]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && (! $form->has('token') || $form->get('token')->getData() !== $secretToken)) {
+            return $this->redirectToRoute('quiz_new');
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $task = $form->getData();
+            $mainQuizService->createQuiz($task);
+            return $this->redirectToRoute('quiz_success');
+        }
+
+        return $this->renderForm('quiz/create/index.html.twig', ['formQuiz' => $form]);
+    }
+
+    #[Route('/quiz/created', name: 'quiz_success')]
+    public function createdQuiz(): Response
+    {
+        return $this->renderForm('quiz/created/index.html.twig');
     }
 }

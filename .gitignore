@@ -19,7 +19,6 @@ yarn-error.log
 /tools/php-cs-fixer/vendor
 /docs
 ###> phpunit/phpunit ###
-###> phpunit/phpunit ###
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 .php-cs-fixer.cache

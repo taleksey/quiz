@@ -2,7 +2,7 @@
 
 namespace App\Presentation\Resolvers;
 
-use App\Presentation\DTO\RequestQuizDTO;
+use App\Presentation\Transformers\QuizQuestionAnswerDTOTransformer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -16,13 +16,7 @@ class QuestionAnswerDTOResolver implements ArgumentValueResolverInterface
      */
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
-        try {
-            $reflection = new \ReflectionClass($argument->getType());
-            return $reflection->implementsInterface(RequestQuizDTO::class);
-        } catch (\ReflectionException) {
-        }
-
-        return false;
+        return str_contains($argument->getType(), 'QuizQuestionAnswerRequestDTO');
     }
 
     /**
@@ -32,9 +26,7 @@ class QuestionAnswerDTOResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
-        $class = str_replace('\DTO\\', '\Transformers\\', $argument->getType()) . 'Transformer';
-
-        $dto = new $class($request);
+        $dto = new QuizQuestionAnswerDTOTransformer($request);
 
         yield $dto->transform();
     }

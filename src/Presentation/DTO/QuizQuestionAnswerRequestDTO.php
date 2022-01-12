@@ -4,12 +4,15 @@ namespace App\Presentation\DTO;
 
 use App\Domain\Quiz\ValueObject\QuestionStep;
 
-class QuizQuestionAnswerDTO implements RequestQuizDTO
+class QuizQuestionAnswerRequestDTO
 {
     private int $quizId;
     private int $step;
     private int $answerId;
 
+    /**
+     * @param array $array
+     */
     public function __construct(array $array)
     {
         $this->quizId = $array['quizId'] ?? 0;

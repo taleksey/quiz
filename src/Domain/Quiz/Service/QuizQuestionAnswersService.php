@@ -3,7 +3,7 @@
 namespace App\Domain\Quiz\Service;
 
 use App\Domain\Quiz\Repository\QuizResultRepository;
-use App\Presentation\DTO\QuizQuestionAnswerDTO;
+use App\Presentation\DTO\QuizQuestionAnswerRequestDTO;
 
 class QuizQuestionAnswersService
 {
@@ -16,11 +16,11 @@ class QuizQuestionAnswersService
     }
 
     /**
-     * @param QuizQuestionAnswerDTO $quizQuestionAnswerDTO
+     * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
      * @param bool $resultAnswer
      * @return void
      */
-    public function save(QuizQuestionAnswerDTO $quizQuestionAnswerDTO, bool $resultAnswer): void
+    public function save(QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO, bool$resultAnswer): void
     {
         if ($quizQuestionAnswerDTO->getQuestionStep()->isFirstStep()) {
             $this->quizResultRepository->clean($quizQuestionAnswerDTO->getQuizId());
