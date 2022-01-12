@@ -33,8 +33,7 @@ jobs:
         id: composer-cache
         uses: actions/cache@v2
         with:
-          path: |
-            ~/vendor
+          path: ./vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
@@ -58,7 +57,7 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
+          path: ./public/build
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -93,7 +92,7 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
+          path: ./public/build
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -103,7 +102,7 @@ jobs:
         id: composer-cache
         uses: actions/cache@v2
         with:
-          path: ~/vendor
+          path: ./vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
@@ -126,7 +125,7 @@ jobs:
         id: composer-cache
         uses: actions/cache@v2
         with:
-          path: ~/vendor
+          path: ./vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-        
