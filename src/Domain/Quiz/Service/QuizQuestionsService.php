@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Quiz\Service;
 
 use App\Domain\Quiz\Entity\Answer;
 use App\Domain\Quiz\Entity\Question;
-use App\Domain\Quiz\Repository\QuizQuestionAnswersRepository;
-use App\Domain\Quiz\Repository\QuizQuestionsRepository;
-use App\Domain\Quiz\Repository\QuizResultRepository;
+use App\Domain\Quiz\Repository\Interfaces\QuizQuestionAnswersRepository;
+use App\Domain\Quiz\Repository\Interfaces\QuizQuestionsRepository;
+use App\Domain\Quiz\Repository\Interfaces\QuizResultRepository;
 use App\Domain\Quiz\ValueObject\QuestionStep;
 use App\Presentation\DTO\QuizQuestionAnswerRequestDTO;
 use Doctrine\ORM\NonUniqueResultException;

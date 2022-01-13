@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infractructure\Repository;
 
 use Doctrine\Persistence\ManagerRegistry;

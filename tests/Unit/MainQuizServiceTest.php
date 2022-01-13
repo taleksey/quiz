@@ -1,12 +1,12 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Tests\Unit;
 
 use App\Domain\Quiz\Entity\Answer;
 use App\Domain\Quiz\Entity\Question;
 use App\Domain\Quiz\Entity\Quiz;
-use App\Domain\Quiz\Repository\QuizzesRepository;
 use App\Domain\Quiz\Service\QuizService;
+use App\Infractructure\Repository\QuizzesRepository;
 use App\Presentation\DTO\QuizCreateDTO;
 use App\Presentation\DTO\QuizQuestionAnswerCreateDTO;
 use App\Presentation\DTO\QuizQuestionCreateDTO;

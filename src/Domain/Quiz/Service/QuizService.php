@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Quiz\Service;
 
 use App\Domain\Quiz\Entity\Quiz;
-use App\Domain\Quiz\Repository\QuizzesRepository;
+use App\Domain\Quiz\Repository\Interfaces\QuizzesRepository;
 
 class QuizService
 {

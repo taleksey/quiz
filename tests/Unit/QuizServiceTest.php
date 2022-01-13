@@ -1,10 +1,10 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Tests\Unit;
 
 use App\Domain\Quiz\Entity\Quiz;
-use App\Domain\Quiz\Repository\QuizzesRepository;
 use App\Domain\Quiz\Service\QuizService;
+use App\Infractructure\Repository\QuizzesRepository;
 use PHPUnit\Framework\TestCase;
 
 class QuizServiceTest extends TestCase
