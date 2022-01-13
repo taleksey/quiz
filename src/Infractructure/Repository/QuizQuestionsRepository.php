@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Infractructure\Repository;
 
 use App\Domain\Quiz\Entity\Question;
+use App\Domain\Quiz\Repository\Interfaces\QuestionsRepository;
+use Throwable;
 
-class QuizQuestionsRepository extends DbRepository implements \App\Domain\Quiz\Repository\Interfaces\QuizQuestionsRepository
+class QuizQuestionsRepository extends DbRepository implements QuestionsRepository
 {
     /**
      * @param int $quizId
@@ -35,7 +37,7 @@ class QuizQuestionsRepository extends DbRepository implements \App\Domain\Quiz\R
                 ->setParameter('quizId', $quizId)
                 ->getQuery()
                 ->getSingleScalarResult();
-        } catch (\Throwable) {
+        } catch (Throwable) {
         }
 
         return 0;

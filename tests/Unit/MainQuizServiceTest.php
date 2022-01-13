@@ -6,7 +6,7 @@ use App\Domain\Quiz\Entity\Answer;
 use App\Domain\Quiz\Entity\Question;
 use App\Domain\Quiz\Entity\Quiz;
 use App\Domain\Quiz\Service\QuizService;
-use App\Infractructure\Repository\QuizzesRepository;
+use App\Infractructure\Repository\QuizRepository;
 use App\Presentation\DTO\QuizCreateDTO;
 use App\Presentation\DTO\QuizQuestionAnswerCreateDTO;
 use App\Presentation\DTO\QuizQuestionCreateDTO;
@@ -62,7 +62,7 @@ class MainQuizServiceTest extends TestCase
      */
     public function testCreateNewQuiz(Quiz $quiz, QuizCreateDTO $quizDTO): void
     {
-        $quizzesRepository = $this->createMock(QuizzesRepository::class);
+        $quizzesRepository = $this->createMock(QuizRepository::class);
         $quizzesRepository->expects($this->any())
             ->method('getTotalQuizzes')
             ->willReturn(self::TOTAL_QUIZZES)

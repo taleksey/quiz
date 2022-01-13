@@ -6,9 +6,9 @@ namespace App\Domain\Quiz\Service;
 
 use App\Domain\Quiz\Entity\Answer;
 use App\Domain\Quiz\Entity\Question;
-use App\Domain\Quiz\Repository\Interfaces\QuizQuestionAnswersRepository;
-use App\Domain\Quiz\Repository\Interfaces\QuizQuestionsRepository;
-use App\Domain\Quiz\Repository\Interfaces\QuizResultRepository;
+use App\Domain\Quiz\Repository\Interfaces\QuestionAnswersRepository;
+use App\Domain\Quiz\Repository\Interfaces\QuestionsRepository;
+use App\Domain\Quiz\Repository\Interfaces\ResultRepository;
 use App\Domain\Quiz\ValueObject\QuestionStep;
 use App\Presentation\DTO\QuizQuestionAnswerRequestDTO;
 use Doctrine\ORM\NonUniqueResultException;
@@ -16,14 +16,14 @@ use Doctrine\ORM\NonUniqueResultException;
 class QuizQuestionsService
 {
     /**
-     * @param QuizQuestionsRepository $questionRepository
-     * @param QuizQuestionAnswersRepository $quizQuestionAnswersRepository
-     * @param QuizResultRepository $quizResultRepository
+     * @param QuestionsRepository $questionRepository
+     * @param QuestionAnswersRepository $quizQuestionAnswersRepository
+     * @param ResultRepository $quizResultRepository
      */
     public function __construct(
-        private QuizQuestionsRepository $questionRepository,
-        private QuizQuestionAnswersRepository $quizQuestionAnswersRepository,
-        private QuizResultRepository $quizResultRepository
+        private QuestionsRepository       $questionRepository,
+        private QuestionAnswersRepository $quizQuestionAnswersRepository,
+        private ResultRepository $quizResultRepository
     ) {
     }
 

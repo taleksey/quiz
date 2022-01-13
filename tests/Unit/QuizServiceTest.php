@@ -4,14 +4,14 @@ namespace App\Tests\Unit;
 
 use App\Domain\Quiz\Entity\Quiz;
 use App\Domain\Quiz\Service\QuizService;
-use App\Infractructure\Repository\QuizzesRepository;
+use App\Infractructure\Repository\QuizRepository;
 use PHPUnit\Framework\TestCase;
 
 class QuizServiceTest extends TestCase
 {
     public function testGetAllQuizzes(): void
     {
-        $quizzesRepository = $this->createMock(QuizzesRepository::class);
+        $quizzesRepository = $this->createMock(QuizRepository::class);
         $quizzesRepository->expects($this->once())
             ->method('getQuizzes')
             ->willReturn($this->getQuizzes());
@@ -55,7 +55,7 @@ class QuizServiceTest extends TestCase
     public function testGetQuiz()
     {
         $quiz = $this->getOneQuiz();
-        $quizzesRepository = $this->createMock(QuizzesRepository::class);
+        $quizzesRepository = $this->createMock(QuizRepository::class);
         $quizzesRepository->expects($this->once())
             ->method('getQuizById')
             ->willReturn($this->getOneQuiz());

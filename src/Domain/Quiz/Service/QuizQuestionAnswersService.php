@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Domain\Quiz\Service;
 
-use App\Domain\Quiz\Repository\Interfaces\QuizResultRepository;
+use App\Domain\Quiz\Repository\Interfaces\ResultRepository;
 use App\Presentation\DTO\QuizQuestionAnswerRequestDTO;
 
 class QuizQuestionAnswersService
 {
     /**
-     * @param QuizResultRepository $quizResultRepository
+     * @param ResultRepository $quizResultRepository
      */
     public function __construct(
-        private QuizResultRepository $quizResultRepository
+        private ResultRepository $quizResultRepository
     ) {
     }
 

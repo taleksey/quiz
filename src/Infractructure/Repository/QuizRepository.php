@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Infractructure\Repository;
 
 use App\Domain\Quiz\Entity\Quiz;
+use App\Domain\Quiz\Repository\Interfaces\Repository;
 
-class QuizzesRepository extends DbRepository implements \App\Domain\Quiz\Repository\Interfaces\QuizzesRepository
+class QuizRepository extends DbRepository implements Repository
 {
     public function getQuizzes(): array
     {

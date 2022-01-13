@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Infractructure\Repository;
 
 use App\Domain\Quiz\Entity\Answer;
+use App\Domain\Quiz\Repository\Interfaces\QuestionAnswersRepository;
 use App\Presentation\DTO\QuizQuestionAnswerRequestDTO;
 use Doctrine\ORM\NonUniqueResultException;
 
-class QuizQuestionAnswersRepository extends DbRepository implements \App\Domain\Quiz\Repository\Interfaces\QuizQuestionAnswersRepository
+class QuizQuestionAnswersRepository extends DbRepository implements QuestionAnswersRepository
 {
     /**
      * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO

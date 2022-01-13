@@ -2,7 +2,7 @@
 
 namespace App\Domain\Quiz\Repository\Interfaces;
 
-interface QuizResultRepository
+interface ResultRepository
 {
     public function save(int $quizId, int $step, bool $answerValue): void;
 

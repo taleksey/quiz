@@ -4,7 +4,7 @@ namespace App\Domain\Quiz\Repository\Interfaces;
 
 use App\Domain\Quiz\Entity\Quiz;
 
-interface QuizzesRepository
+interface Repository
 {
     public function getQuizzes(): array;
 

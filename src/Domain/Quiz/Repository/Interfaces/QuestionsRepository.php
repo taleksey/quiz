@@ -4,7 +4,7 @@ namespace App\Domain\Quiz\Repository\Interfaces;
 
 use App\Domain\Quiz\Entity\Question;
 
-interface QuizQuestionsRepository
+interface QuestionsRepository
 {
     public function getQuestionByQuizIdAndQueue(int $quizId, int $step): ?Question;
 
