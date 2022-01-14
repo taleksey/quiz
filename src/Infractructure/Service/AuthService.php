@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Quiz\Service;
+namespace App\Infractructure\Service;
 
 use App\Domain\Quiz\Repository\Interfaces\AuthRepository;
+use App\Presentation\DTO\Auth\AuthorizationDTO;
 
 class AuthService
 {
@@ -23,5 +24,10 @@ class AuthService
     public function setAuthorizationKeyForCreatingQuiz()
     {
         $this->authRepository->setAuthorizationKeyForCreatingQuiz();
+    }
+
+    public function isEqual(AuthorizationDTO $authorizationDTO, string $authToken): bool
+    {
+        return $authorizationDTO->getToken() === trim($authToken);
     }
 }

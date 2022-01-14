@@ -16,7 +16,7 @@ class AuthorizationDTO
      */
     public function getToken(): string
     {
-        return $this->token;
+        return trim($this->token);
     }
 
     /**
@@ -25,10 +25,5 @@ class AuthorizationDTO
     public function setToken(string $token): void
     {
         $this->token = $token;
-    }
-
-    public function isEqual(string $authToken): bool
-    {
-        return trim($this->token) === trim($authToken);
     }
 }

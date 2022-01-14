@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller;
 
-use App\Domain\Quiz\Service\AuthService;
+use App\Infractructure\Service\AuthService;
 use App\Presentation\DTO\Auth\AuthorizationDTO;
 use App\Presentation\Form\Auth\AuthorizationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,9 +23,7 @@ class AuthController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var AuthorizationDTO $authorizationDTO */
-            $authorizationDTO = $form->getData();
-            if (! $authorizationDTO->isEqual($authorizationKey)) {
+            if (! $authService->isEqual($form->getData(), $authorizationKey)) {
                 $this->addFlash('error', 'We\'ve entered wrong key');
                 return $this->redirect($request->getUri());
             }
