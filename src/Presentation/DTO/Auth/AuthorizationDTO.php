@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Presentation\DTO\Auth;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -25,7 +27,7 @@ class AuthorizationDTO
         $this->token = $token;
     }
 
-    public function isEqual($authToken): bool
+    public function isEqual(string $authToken): bool
     {
         return trim($this->token) === trim($authToken);
     }

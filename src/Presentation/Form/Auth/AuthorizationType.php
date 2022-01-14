@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Presentation\Form\Auth;
 
 use App\Presentation\DTO\Auth\AuthorizationDTO;

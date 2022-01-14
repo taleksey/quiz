@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infractructure\Repository;
 
 class AuthRepository extends SessionRepository implements \App\Domain\Quiz\Repository\Interfaces\AuthRepository
