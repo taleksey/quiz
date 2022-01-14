@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\DTO;
+namespace App\Presentation\DTO\Quiz;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class QuizQuestionAnswerCreateDTO
+class QuestionAnswerCreateDTO
 {
     /**
      * @var string

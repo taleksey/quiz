@@ -7,7 +7,12 @@
                         <li class="nav-item">
                             <a class="nav-link {% if isMainPage is defined %} active {% endif %}" href="{{ path('homepage') }}">Main page</a>
                         </li>
-                        <li class="nav-item"><a class="nav-link{% if isCreatePage is defined %} active {% endif %}" href="{{ path('quiz_new') }}">Add new Quiz</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link{% if isCreatePage is defined %} active {% endif %}" href="{{ path('quiz_new') }}">Add new Quiz</a>
+                        </li>
+                        <li>
+                            <a class="nav-link{% if isAuthorizePage is defined %} active {% endif %}" href="{{ path('authorize') }}">Authorization</a>
+                        </li>
                     </ul>
                 </div>
             </div>

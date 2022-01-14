@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller;
 
+use App\Domain\Quiz\Service\AuthService;
 use App\Domain\Quiz\Service\QuizQuestionAnswersService;
 use App\Domain\Quiz\Service\QuizQuestionsService;
 use App\Domain\Quiz\Service\QuizService;
+use App\Presentation\DTO\Quiz\QuestionAnswerRequestDTO;
+use App\Presentation\Form\Quiz\QuizType;
 use App\Presentation\Service\MainQuizService;
-use App\Presentation\DTO\QuizQuestionAnswerRequestDTO;
 use Doctrine\ORM\NonUniqueResultException;
-use App\Presentation\Form\QuizType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class QuizController extends AbstractController
 {
@@ -43,7 +44,7 @@ class QuizController extends AbstractController
     public function quizQuestion(
         QuizService $quizService,
         QuizQuestionsService $quizQuestionsService,
-        QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
+        QuestionAnswerRequestDTO $quizQuestionAnswerDTO
     ): Response {
         $question = $quizQuestionsService->getQuestionByQuizIdAndQueue($quizQuestionAnswerDTO);
         $quiz = $quizService->getQuizById($quizQuestionAnswerDTO->getQuizId());
@@ -79,17 +80,17 @@ class QuizController extends AbstractController
     /**
      * @param QuizQuestionsService $quizQuestionsService
      * @param QuizQuestionAnswersService $quizQuestionAnswersService
-     * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
+     * @param QuestionAnswerRequestDTO $quizQuestionAnswerDTO
      * @param int $id
      * @param int $step
      * @return RedirectResponse|Response
      * @throws NonUniqueResultException
      */
     #[Route('/quiz/{id}/question/{step}', name: 'question_answers')]
-    public function editAnswerQuestion(
+    public function saveAnswerQuestion(
         QuizQuestionsService $quizQuestionsService,
         QuizQuestionAnswersService $quizQuestionAnswersService,
-        QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO,
+        QuestionAnswerRequestDTO $quizQuestionAnswerDTO,
         int $id,
         int $step
     ): RedirectResponse|Response {
@@ -140,8 +141,12 @@ class QuizController extends AbstractController
     }
 
     #[Route('/quiz/new', name: 'quiz_new')]
-    public function createQuiz(Request $request, MainQuizService $mainQuizService): RedirectResponse|Response
+    public function createQuiz(Request $request, MainQuizService $mainQuizService, AuthService $authService): RedirectResponse|Response
     {
+        if (! $authService->isCustomerAuthorizedForCreatingQuiz()) {
+            return $this->render('quiz/forbidden/index.html.twig');
+        }
+
         $secretToken = $this->getParameter('app.secretToken');
         $form = $this->createForm(QuizType::class, options: ['hiddenToken' => $secretToken]);
 

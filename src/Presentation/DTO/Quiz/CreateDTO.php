@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\DTO;
+namespace App\Presentation\DTO\Quiz;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class QuizCreateDTO
+class CreateDTO
 {
     /**
      * @var string|null
@@ -15,7 +15,7 @@ class QuizCreateDTO
     public ?string $name;
 
     /**
-     * @var QuizQuestionCreateDTO[]
+     * @var QuestionCreateDTO[]
      */
     #[Assert\NotBlank(message:"Set questions")]
     #[Assert\Valid]
@@ -42,7 +42,7 @@ class QuizCreateDTO
     }
 
     /**
-     * @return QuizQuestionCreateDTO[]
+     * @return QuestionCreateDTO[]
      */
     public function getQuestions(): array
     {

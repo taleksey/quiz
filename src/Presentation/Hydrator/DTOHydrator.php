@@ -7,16 +7,16 @@ namespace App\Presentation\Hydrator;
 use App\Domain\Quiz\Entity\Answer;
 use App\Domain\Quiz\Entity\Question;
 use App\Domain\Quiz\Entity\Quiz;
-use App\Presentation\DTO\QuizCreateDTO;
+use App\Presentation\DTO\Quiz\CreateDTO;
 
 class DTOHydrator
 {
     /**
-     * @param QuizCreateDTO $quizCreateDTO
+     * @param CreateDTO $quizCreateDTO
      * @param int $queue
      * @return Quiz
      */
-    public function hydrate(QuizCreateDTO $quizCreateDTO, int $queue): Quiz
+    public function hydrate(CreateDTO $quizCreateDTO, int $queue): Quiz
     {
         $quizEntity = new Quiz();
         $quizEntity->setName($quizCreateDTO->getName());

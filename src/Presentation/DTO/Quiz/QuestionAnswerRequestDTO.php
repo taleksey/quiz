@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\DTO;
+namespace App\Presentation\DTO\Quiz;
 
 use App\Domain\Quiz\ValueObject\QuestionStep;
 
-class QuizQuestionAnswerRequestDTO
+class QuestionAnswerRequestDTO
 {
     private int $quizId;
     private int $step;
