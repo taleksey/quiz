@@ -10,7 +10,6 @@ use App\Domain\Quiz\Repository\Interfaces\ResultRepository;
 use App\Domain\Quiz\Service\QuizQuestionsService;
 use App\Presentation\DTO\Quiz\QuestionAnswerRequestDTO;
 use PHPUnit\Framework\TestCase;
-use App\Domain\Quiz\ValueObject\QuestionStep;
 
 class QuizQuestionsServiceTest extends TestCase
 {
