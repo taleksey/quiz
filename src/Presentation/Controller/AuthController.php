@@ -17,7 +17,6 @@ class AuthController extends AbstractController
     #[Route('/auth', name: 'authorize')]
     public function authorize(Request $request, AuthService $authService): RedirectResponse|Response
     {
-        $authorizationKey = $this->getParameter('app.authorizationKey');
         $form = $this->createForm(AuthorizationType::class);
         $form->handleRequest($request);
 
