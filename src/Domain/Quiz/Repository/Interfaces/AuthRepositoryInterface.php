@@ -2,7 +2,7 @@
 
 namespace App\Domain\Quiz\Repository\Interfaces;
 
-interface AuthRepository
+interface AuthRepositoryInterface
 {
     public function isCustomerAuthorizedForCreatingQuiz(): bool;
 

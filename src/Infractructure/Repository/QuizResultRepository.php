@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Infractructure\Repository;
 
-use App\Domain\Quiz\Repository\Interfaces\ResultRepository;
+use App\Domain\Quiz\Repository\Interfaces\ResultRepositoryInterface;
 
-class QuizResultRepository extends SessionRepository implements ResultRepository
+class QuizResultRepository extends SessionRepository implements ResultRepositoryInterface
 {
     /**
      * @param int $quizId

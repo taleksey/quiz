@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Infractructure\Repository;
 
-class AuthRepository extends SessionRepository implements \App\Domain\Quiz\Repository\Interfaces\AuthRepository
+use App\Domain\Quiz\Repository\Interfaces\AuthRepositoryInterface;
+
+class AuthRepository extends SessionRepository implements AuthRepositoryInterface
 {
     public function isCustomerAuthorizedForCreatingQuiz(): bool
     {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Presentation\Controller;
 
 use App\Infractructure\Service\AuthService;
-use App\Presentation\DTO\Auth\AuthorizationDTO;
 use App\Presentation\Form\Auth\AuthorizationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,11 +22,10 @@ class AuthController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (! $authService->isEqual($form->getData(), $authorizationKey)) {
-                $this->addFlash('error', 'We\'ve entered wrong key');
+            if (! $authService->authorize($form->getData())) {
+                $this->addFlash('error', 'We were not able to authorize. Please check if you inputted correct token.');
                 return $this->redirect($request->getUri());
             }
-            $authService->setAuthorizationKeyForCreatingQuiz();
 
             return $this->render('auth/success_authorization_quiz.html.twig');
         }

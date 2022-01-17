@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace App\Domain\Quiz\Service;
 
 use App\Domain\Quiz\Entity\Quiz;
-use App\Domain\Quiz\Repository\Interfaces\Repository;
+use App\Domain\Quiz\Repository\Interfaces\RepositoryInterface;
 
 class QuizService
 {
     /**
-     * @param Repository $quizRepository
+     * @param RepositoryInterface $quizRepository
      */
     public function __construct(
-        private Repository $quizRepository
+        private RepositoryInterface $quizRepository
     ) {
     }
 

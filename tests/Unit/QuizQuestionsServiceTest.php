@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit;
 
-use App\Domain\Quiz\Repository\Interfaces\QuestionAnswersRepository;
-use App\Domain\Quiz\Repository\Interfaces\QuestionsRepository;
-use App\Domain\Quiz\Repository\Interfaces\ResultRepository;
+use App\Domain\Quiz\Repository\Interfaces\QuestionAnswersRepositoryInterface;
+use App\Domain\Quiz\Repository\Interfaces\QuestionsRepositoryInterface;
+use App\Domain\Quiz\Repository\Interfaces\ResultRepositoryInterface;
 use App\Domain\Quiz\Service\QuizQuestionsService;
 use App\Presentation\DTO\Quiz\QuestionAnswerRequestDTO;
 use PHPUnit\Framework\TestCase;
@@ -15,9 +15,9 @@ class QuizQuestionsServiceTest extends TestCase
 {
     public function testCorrectCheckingFirstStepWhenInitializeQuiz()
     {
-        $quizzesRepository = $this->createMock(QuestionsRepository::class);
-        $questionAnswersRepository = $this->createMock(QuestionAnswersRepository::class);
-        $resultRepository = $this->createMock(ResultRepository::class);
+        $quizzesRepository = $this->createMock(QuestionsRepositoryInterface::class);
+        $questionAnswersRepository = $this->createMock(QuestionAnswersRepositoryInterface::class);
+        $resultRepository = $this->createMock(ResultRepositoryInterface::class);
         $resultRepository->expects($this->any())
             ->method('getSavedCustomerAnswers')
             ->willReturn([])
@@ -38,9 +38,9 @@ class QuizQuestionsServiceTest extends TestCase
 
     public function testCheckWrongStepWhenClientSelectStepButHeDidNotFinishStepsBefore()
     {
-        $quizzesRepository = $this->createMock(QuestionsRepository::class);
-        $questionAnswersRepository = $this->createMock(QuestionAnswersRepository::class);
-        $resultRepository = $this->createMock(ResultRepository::class);
+        $quizzesRepository = $this->createMock(QuestionsRepositoryInterface::class);
+        $questionAnswersRepository = $this->createMock(QuestionAnswersRepositoryInterface::class);
+        $resultRepository = $this->createMock(ResultRepositoryInterface::class);
         $resultRepository->expects($this->any())
             ->method('getSavedCustomerAnswers')
             ->willReturn([
@@ -60,9 +60,9 @@ class QuizQuestionsServiceTest extends TestCase
 
     public function testCheckCorrectStepWhenClientPassedAllStepsBeforeCurrent()
     {
-        $quizzesRepository = $this->createMock(QuestionsRepository::class);
-        $questionAnswersRepository = $this->createMock(QuestionAnswersRepository::class);
-        $resultRepository = $this->createMock(ResultRepository::class);
+        $quizzesRepository = $this->createMock(QuestionsRepositoryInterface::class);
+        $questionAnswersRepository = $this->createMock(QuestionAnswersRepositoryInterface::class);
+        $resultRepository = $this->createMock(ResultRepositoryInterface::class);
         $resultRepository->expects($this->any())
             ->method('getSavedCustomerAnswers')
             ->willReturn([
@@ -83,9 +83,9 @@ class QuizQuestionsServiceTest extends TestCase
 
     public function testNextStepWhenInitializeQuiz()
     {
-        $quizzesRepository = $this->createMock(QuestionsRepository::class);
-        $questionAnswersRepository = $this->createMock(QuestionAnswersRepository::class);
-        $resultRepository = $this->createMock(ResultRepository::class);
+        $quizzesRepository = $this->createMock(QuestionsRepositoryInterface::class);
+        $questionAnswersRepository = $this->createMock(QuestionAnswersRepositoryInterface::class);
+        $resultRepository = $this->createMock(ResultRepositoryInterface::class);
         $resultRepository->expects($this->any())
             ->method('getSavedCustomerAnswers')
             ->willReturn([])
@@ -103,9 +103,9 @@ class QuizQuestionsServiceTest extends TestCase
 
     public function testNextStepWhenClientPassedSomeSteps()
     {
-        $quizzesRepository = $this->createMock(QuestionsRepository::class);
-        $questionAnswersRepository = $this->createMock(QuestionAnswersRepository::class);
-        $resultRepository = $this->createMock(ResultRepository::class);
+        $quizzesRepository = $this->createMock(QuestionsRepositoryInterface::class);
+        $questionAnswersRepository = $this->createMock(QuestionAnswersRepositoryInterface::class);
+        $resultRepository = $this->createMock(ResultRepositoryInterface::class);
         $resultRepository->expects($this->any())
             ->method('getSavedCustomerAnswers')
             ->willReturn([
