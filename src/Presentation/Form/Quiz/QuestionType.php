@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Form;
+namespace App\Presentation\Form\Quiz;
 
-use App\Presentation\DTO\QuizQuestionCreateDTO;
+use App\Presentation\DTO\Quiz\QuestionCreateDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -15,22 +15,21 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class QuizQuestionType extends AbstractType
+class QuestionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('text', TextType::class, ['label' => 'Set name of question', 'required' => false])
+            ->add('text', TextType::class, ['label' => 'Set name of question'])
             ->add('answers', CollectionType::class, [
-                'entry_type' => QuizQuestionAnswerType::class,
+                'entry_type' => QuestionAnswerType::class,
                 'allow_add' => true,
                 'entry_options' => [
                     'label' => false
                 ],
                 'prototype_name' => '__que__',
                 'row_attr' => ['class' => 'QuizAnswers'],
-                'attr' => ['class' => 'buildForm'],
-                'required' => false,
+                'attr' => ['class' => 'buildForm']
             ])
         ;
 
@@ -48,7 +47,7 @@ class QuizQuestionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => QuizQuestionCreateDTO::class,
+            'data_class' => QuestionCreateDTO::class,
             'cascade_validation' => true,
         ]);
     }

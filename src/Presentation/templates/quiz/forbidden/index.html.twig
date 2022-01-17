@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% block title %}Create Quiz Forbidden{% endblock %}
+{% block header %}
+    {{ include('base/header.html.twig', {}) }}
+{% endblock %}
+{% block body %}
+    <main class="flex-shrink-0 main">
+        <div class="container mt-5">
+            <h2>You are not authorize.</h2>
+        </div>
+        <div class="container">
+            <div class="col-md-10 col-lg-10">
+                <div class="border">
+                    <div class="question bg-white p-3 border-bottom">
+                        <div class="d-flex flex-row justify-content-between align-items-center mcq">
+                            <p class="forbidden-message">If you want to add quiz you have to pass authorization.  You can do it click on link <a href="{{ path('authorize') }}">Link on authorization</a>
+                                or select menu "Authorization"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

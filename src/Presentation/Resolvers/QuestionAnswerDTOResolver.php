@@ -18,7 +18,7 @@ class QuestionAnswerDTOResolver implements ArgumentValueResolverInterface
      */
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
-        return str_contains($argument->getType(), 'QuizQuestionAnswerRequestDTO');
+        return str_contains($argument->getType(), 'QuestionAnswerRequestDTO');
     }
 
     /**

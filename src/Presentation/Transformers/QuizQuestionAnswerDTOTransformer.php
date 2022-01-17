@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Transformers;
 
-use App\Presentation\DTO\QuizQuestionAnswerRequestDTO;
+use App\Presentation\DTO\Quiz\QuestionAnswerRequestDTO;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuizQuestionAnswerDTOTransformer
@@ -17,9 +17,9 @@ class QuizQuestionAnswerDTOTransformer
     }
 
     /**
-     * @return QuizQuestionAnswerRequestDTO
+     * @return QuestionAnswerRequestDTO
      */
-    public function transform(): QuizQuestionAnswerRequestDTO
+    public function transform(): QuestionAnswerRequestDTO
     {
         $step = (int) $this->request->get('step');
         $array = [
@@ -28,6 +28,6 @@ class QuizQuestionAnswerDTOTransformer
             'answerId' => (int) $this->request->get('question_' . $step)
         ];
 
-        return new QuizQuestionAnswerRequestDTO($array);
+        return new QuestionAnswerRequestDTO($array);
     }
 }

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Infractructure\Repository;
 
 use App\Domain\Quiz\Entity\Question;
-use App\Domain\Quiz\Repository\Interfaces\QuestionsRepository;
+use App\Domain\Quiz\Repository\Interfaces\QuestionsRepositoryInterface;
 use Throwable;
 
-class QuizQuestionsRepository extends DbRepository implements QuestionsRepository
+class QuizQuestionsRepository extends DbRepository implements QuestionsRepositoryInterface
 {
     /**
      * @param int $quizId

@@ -7,9 +7,9 @@ use App\Domain\Quiz\Entity\Question;
 use App\Domain\Quiz\Entity\Quiz;
 use App\Domain\Quiz\Service\QuizService;
 use App\Infractructure\Repository\QuizRepository;
-use App\Presentation\DTO\QuizCreateDTO;
-use App\Presentation\DTO\QuizQuestionAnswerCreateDTO;
-use App\Presentation\DTO\QuizQuestionCreateDTO;
+use App\Presentation\DTO\Quiz\CreateDTO;
+use App\Presentation\DTO\Quiz\QuestionAnswerCreateDTO;
+use App\Presentation\DTO\Quiz\QuestionCreateDTO;
 use App\Presentation\Hydrator\DTOHydrator;
 use App\Presentation\Service\MainQuizService;
 use PHPUnit\Framework\TestCase;
@@ -57,10 +57,10 @@ class MainQuizServiceTest extends TestCase
      * @dataProvider  getQuizzesAndLinkedQuizDTO
      *
      * @param Quiz $quiz
-     * @param QuizCreateDTO $quizDTO
+     * @param CreateDTO $quizDTO
      * @return void
      */
-    public function testCreateNewQuiz(Quiz $quiz, QuizCreateDTO $quizDTO): void
+    public function testCreateNewQuiz(Quiz $quiz, CreateDTO $quizDTO): void
     {
         $quizzesRepository = $this->createMock(QuizRepository::class);
         $quizzesRepository->expects($this->any())
@@ -115,17 +115,17 @@ class MainQuizServiceTest extends TestCase
         return $linkQuizWithQuizDTO;
     }
 
-    private function createQuizDTO(Quiz $quiz): QuizCreateDTO
+    private function createQuizDTO(Quiz $quiz): CreateDTO
     {
-        $quizCreateDTO = new QuizCreateDTO();
+        $quizCreateDTO = new CreateDTO();
         $quizCreateDTO->setName($quiz->getName());
         $questions = [];
         foreach ($quiz->getQuestions() as $question) {
-            $questionDTO = new QuizQuestionCreateDTO();
+            $questionDTO = new QuestionCreateDTO();
             $questionDTO->setText($question->getText());
             $answers = [];
             foreach ($question->getAnswers() as $answer) {
-                $answerDTO = new QuizQuestionAnswerCreateDTO();
+                $answerDTO = new QuestionAnswerCreateDTO();
                 $answerDTO->setText($answer->getText());
                 $answerDTO->setCorrect($answer->isCorrect());
                 $answers[] = $answerDTO;

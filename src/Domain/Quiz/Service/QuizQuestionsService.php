@@ -6,32 +6,32 @@ namespace App\Domain\Quiz\Service;
 
 use App\Domain\Quiz\Entity\Answer;
 use App\Domain\Quiz\Entity\Question;
-use App\Domain\Quiz\Repository\Interfaces\QuestionAnswersRepository;
-use App\Domain\Quiz\Repository\Interfaces\QuestionsRepository;
-use App\Domain\Quiz\Repository\Interfaces\ResultRepository;
+use App\Domain\Quiz\Repository\Interfaces\QuestionAnswersRepositoryInterface;
+use App\Domain\Quiz\Repository\Interfaces\QuestionsRepositoryInterface;
+use App\Domain\Quiz\Repository\Interfaces\ResultRepositoryInterface;
 use App\Domain\Quiz\ValueObject\QuestionStep;
-use App\Presentation\DTO\QuizQuestionAnswerRequestDTO;
+use App\Presentation\DTO\Quiz\QuestionAnswerRequestDTO;
 use Doctrine\ORM\NonUniqueResultException;
 
 class QuizQuestionsService
 {
     /**
-     * @param QuestionsRepository $questionRepository
-     * @param QuestionAnswersRepository $quizQuestionAnswersRepository
-     * @param ResultRepository $quizResultRepository
+     * @param QuestionsRepositoryInterface $questionRepository
+     * @param QuestionAnswersRepositoryInterface $quizQuestionAnswersRepository
+     * @param ResultRepositoryInterface $quizResultRepository
      */
     public function __construct(
-        private QuestionsRepository       $questionRepository,
-        private QuestionAnswersRepository $quizQuestionAnswersRepository,
-        private ResultRepository $quizResultRepository
+        private QuestionsRepositoryInterface       $questionRepository,
+        private QuestionAnswersRepositoryInterface $quizQuestionAnswersRepository,
+        private ResultRepositoryInterface $quizResultRepository
     ) {
     }
 
     /**
-     * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
+     * @param QuestionAnswerRequestDTO $quizQuestionAnswerDTO
      * @return Question|null
      */
-    public function getQuestionByQuizIdAndQueue(QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO): ?Question
+    public function getQuestionByQuizIdAndQueue(QuestionAnswerRequestDTO $quizQuestionAnswerDTO): ?Question
     {
         return $this->questionRepository->getQuestionByQuizIdAndQueue(
             $quizQuestionAnswerDTO->getQuizId(),
@@ -49,20 +49,20 @@ class QuizQuestionsService
     }
 
     /**
-     * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
+     * @param QuestionAnswerRequestDTO $quizQuestionAnswerDTO
      * @return Answer|null
      * @throws NonUniqueResultException
      */
-    public function getAnswer(QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO): ?Answer
+    public function getAnswer(QuestionAnswerRequestDTO $quizQuestionAnswerDTO): ?Answer
     {
         return $this->quizQuestionAnswersRepository->getAnswer($quizQuestionAnswerDTO);
     }
 
     /**
-     * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
+     * @param QuestionAnswerRequestDTO $quizQuestionAnswerDTO
      * @return bool
      */
-    public function doesCustomerSelectCorrectStep(QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO): bool
+    public function doesCustomerSelectCorrectStep(QuestionAnswerRequestDTO $quizQuestionAnswerDTO): bool
     {
         if ($quizQuestionAnswerDTO->getQuestionStep()->isFirstStep()) {
             return true;
@@ -74,10 +74,10 @@ class QuizQuestionsService
     }
 
     /**
-     * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
+     * @param QuestionAnswerRequestDTO $quizQuestionAnswerDTO
      * @return int
      */
-    public function getNextCorrectStep(QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO): int
+    public function getNextCorrectStep(QuestionAnswerRequestDTO $quizQuestionAnswerDTO): int
     {
         $result = $this->quizResultRepository->getSavedCustomerAnswers($quizQuestionAnswerDTO->getQuizId());
 

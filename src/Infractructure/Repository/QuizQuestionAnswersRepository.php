@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace App\Infractructure\Repository;
 
 use App\Domain\Quiz\Entity\Answer;
-use App\Domain\Quiz\Repository\Interfaces\QuestionAnswersRepository;
-use App\Presentation\DTO\QuizQuestionAnswerRequestDTO;
+use App\Domain\Quiz\Repository\Interfaces\QuestionAnswersRepositoryInterface;
+use App\Presentation\DTO\Quiz\QuestionAnswerRequestDTO;
 use Doctrine\ORM\NonUniqueResultException;
 
-class QuizQuestionAnswersRepository extends DbRepository implements QuestionAnswersRepository
+class QuizQuestionAnswersRepository extends DbRepository implements QuestionAnswersRepositoryInterface
 {
     /**
-     * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
+     * @param QuestionAnswerRequestDTO $quizQuestionAnswerDTO
      * @return Answer|null
      * @throws NonUniqueResultException
      */
-    public function getAnswer(QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO): ?Answer
+    public function getAnswer(QuestionAnswerRequestDTO $quizQuestionAnswerDTO): ?Answer
     {
         return $this->manager->createQueryBuilder('a')
             ->join('a.question', 'quest')

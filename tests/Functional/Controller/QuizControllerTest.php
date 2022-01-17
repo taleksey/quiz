@@ -5,7 +5,9 @@ namespace App\Tests\Functional\Controller;
 use DOMDocument;
 use DOMElement;
 use DOMException;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 use Symfony\Component\DomCrawler\Field\InputFormField;
@@ -31,6 +33,47 @@ class QuizControllerTest extends WebTestCase
         $this->assertContains('Geography', $nameQuizzes);
     }
 
+    public function testCreateNewQuizWithOutAuthorization(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/quiz/new');
+        $buttonCrawlerNode = $crawler->selectButton('Save');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertEquals(0,  $buttonCrawlerNode->count());
+        $messageWithTextWhyPageDoNotAvailable = $crawler->filterXPath('//p[@class="forbidden-message"]');
+        $this->assertGreaterThan(0, $messageWithTextWhyPageDoNotAvailable->count());
+    }
+
+    public function testAuthorizationCustomerWithBadToken(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/auth');
+        $buttonCrawlerNode = $crawler->selectButton('Save');
+        $form = $buttonCrawlerNode->form([
+            'authorization[token]' => 'BadToken',
+        ]);
+
+        $client->submit($form);
+        $this->assertResponseRedirects();
+        $crawler = $client->followRedirect();
+        $messageWithTextThatTokenIsWrong = $crawler->filterXPath('//div[contains(@class, "alert alert-secondary")]');
+        $this->assertGreaterThan(0, $messageWithTextThatTokenIsWrong->count());
+    }
+
+    public function testAuthorizationCustomerWithGoodToken(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/auth');
+        $buttonCrawlerNode = $crawler->selectButton('Save');
+        $form = $buttonCrawlerNode->form([
+            'authorization[token]' => self::getContainer()->getParameter('app.authorizationKey'),
+        ]);
+        $crawler = $client->submit($form);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $messageWithTextThatTokenIsWrong = $crawler->filterXPath('//p[@class="authorization-success"]');
+        $this->assertGreaterThan(0, $messageWithTextThatTokenIsWrong->count());
+    }
+
     /**
      * @return void
      * @throws DOMException
@@ -38,6 +81,7 @@ class QuizControllerTest extends WebTestCase
     public function testCreateNewQuizWithMissingAnswers(): void
     {
         $client = static::createClient();
+        $this->authorize($client);
         $crawler = $client->request('GET', '/quiz/new');
         $buttonCrawlerNode = $crawler->selectButton('Save');
         $form = $buttonCrawlerNode->form([
@@ -57,6 +101,7 @@ class QuizControllerTest extends WebTestCase
     public function testCreateNewQuizWithMissingAnswersValue(): void
     {
         $client = static::createClient();
+        $this->authorize($client);
         $crawler = $client->request('GET', '/quiz/new');
         $buttonCrawlerNode = $crawler->selectButton('Save');
         $form = $buttonCrawlerNode->form([
@@ -83,6 +128,7 @@ class QuizControllerTest extends WebTestCase
     public function testCreateNewQuizWithMissingSetCorrectAnswers(): void
     {
         $client = static::createClient();
+        $this->authorize($client);
         $crawler = $client->request('GET', '/quiz/new');
         $buttonCrawlerNode = $crawler->selectButton('Save');
         $form = $buttonCrawlerNode->form([
@@ -108,6 +154,7 @@ class QuizControllerTest extends WebTestCase
     public function testCreateNewQuizGood(): void
     {
         $client = static::createClient();
+        $this->authorize($client);
         $crawler = $client->request('GET', '/quiz/new');
         $buttonCrawlerNode = $crawler->selectButton('Save');
         $form = $buttonCrawlerNode->form([
@@ -161,5 +208,15 @@ class QuizControllerTest extends WebTestCase
             $inputElement->setAttribute('checked', 'checked');
         }
         return $inputElement;
+    }
+
+    private function authorize(KernelBrowser $client): void
+    {
+        $session = self::getContainer()->get('session.factory')->createSession();
+        $session->set('authKey', true);
+        $session->save();
+
+        $cookie = new Cookie($session->getName(), $session->getId());
+        $client->getCookieJar()->set($cookie);
     }
 }

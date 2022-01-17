@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Form;
+namespace App\Presentation\Form\Quiz;
 
-use App\Presentation\DTO\QuizCreateDTO;
+use App\Presentation\DTO\Quiz\CreateDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -18,15 +18,14 @@ class QuizType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['label' => 'Set name of Quiz', 'required' => false])
+            ->add('name', TextType::class, ['label' => 'Set name of Quiz'])
             ->add('questions', CollectionType::class, [
-                'entry_type' => QuizQuestionType::class,
+                'entry_type' => QuestionType::class,
                 'allow_add' => true,
                 'entry_options' => [
                     'label' => false
                 ],
                 'by_reference' => false,
-                'required' => false,
             ])
             ->add('token', HiddenType::class, [
                 'data' => $options['hiddenToken'] ?? '',
@@ -38,7 +37,7 @@ class QuizType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => QuizCreateDTO::class,
+            'data_class' => CreateDTO::class,
             'hiddenToken' => 0,
         ]);
     }

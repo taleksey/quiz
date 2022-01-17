@@ -4,25 +4,25 @@ declare(strict_types=1);
 
 namespace App\Domain\Quiz\Service;
 
-use App\Domain\Quiz\Repository\Interfaces\ResultRepository;
-use App\Presentation\DTO\QuizQuestionAnswerRequestDTO;
+use App\Domain\Quiz\Repository\Interfaces\ResultRepositoryInterface;
+use App\Presentation\DTO\Quiz\QuestionAnswerRequestDTO;
 
 class QuizQuestionAnswersService
 {
     /**
-     * @param ResultRepository $quizResultRepository
+     * @param ResultRepositoryInterface $quizResultRepository
      */
     public function __construct(
-        private ResultRepository $quizResultRepository
+        private ResultRepositoryInterface $quizResultRepository
     ) {
     }
 
     /**
-     * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO
+     * @param QuestionAnswerRequestDTO $quizQuestionAnswerDTO
      * @param bool $resultAnswer
      * @return void
      */
-    public function save(QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO, bool$resultAnswer): void
+    public function save(QuestionAnswerRequestDTO $quizQuestionAnswerDTO, bool$resultAnswer): void
     {
         if ($quizQuestionAnswerDTO->getQuestionStep()->isFirstStep()) {
             $this->quizResultRepository->clean($quizQuestionAnswerDTO->getQuizId());
