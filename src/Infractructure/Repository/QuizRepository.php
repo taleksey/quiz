@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Domain\Quiz\Repository;
+declare(strict_types=1);
+
+namespace App\Infractructure\Repository;
 
 use App\Domain\Quiz\Entity\Quiz;
-use App\Infractructure\Repository\DbRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
-use Doctrine\ORM\TransactionRequiredException;
+use App\Domain\Quiz\Repository\Interfaces\Repository;
 
-class QuizzesRepository extends DbRepository
+class QuizRepository extends DbRepository implements Repository
 {
     public function getQuizzes(): array
     {
@@ -21,11 +20,7 @@ class QuizzesRepository extends DbRepository
      */
     public function getQuizById(int $id): ?Quiz
     {
-        try {
-            return $this->manager->find($id);
-        } catch (OptimisticLockException|TransactionRequiredException|ORMException) {
-        }
-        return null;
+        return $this->manager->find($id);
     }
 
     /**

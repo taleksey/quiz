@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Domain\Quiz\Repository;
+declare(strict_types=1);
+
+namespace App\Infractructure\Repository;
 
 use App\Domain\Quiz\Entity\Answer;
-use App\Infractructure\Repository\DbRepository;
+use App\Domain\Quiz\Repository\Interfaces\QuestionAnswersRepository;
 use App\Presentation\DTO\QuizQuestionAnswerRequestDTO;
 use Doctrine\ORM\NonUniqueResultException;
 
-class QuizQuestionAnswersRepository extends DbRepository
+class QuizQuestionAnswersRepository extends DbRepository implements QuestionAnswersRepository
 {
     /**
      * @param QuizQuestionAnswerRequestDTO $quizQuestionAnswerDTO

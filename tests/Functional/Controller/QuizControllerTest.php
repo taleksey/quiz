@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Tests\Functional\Controller;
 
 use DOMDocument;
@@ -17,7 +17,6 @@ class QuizControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/');
-        $createdNameQuizzes = ['Ocean', 'Geography'];
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'There are list quizzes.');
 
@@ -28,7 +27,8 @@ class QuizControllerTest extends WebTestCase
         });
 
         $nameQuizzes = (array_column(array_filter($listTdElementsWithQuizzes), 0));
-        $this->assertEquals($nameQuizzes, $createdNameQuizzes);
+        $this->assertContains('Ocean', $nameQuizzes);
+        $this->assertContains('Geography', $nameQuizzes);
     }
 
     /**

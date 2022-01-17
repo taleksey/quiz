@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Domain\Quiz\Repository;
+declare(strict_types=1);
 
-use App\Infractructure\Repository\SessionRepository;
+namespace App\Infractructure\Repository;
 
-class QuizResultRepository extends SessionRepository
+use App\Domain\Quiz\Repository\Interfaces\ResultRepository;
+
+class QuizResultRepository extends SessionRepository implements ResultRepository
 {
     /**
      * @param int $quizId
