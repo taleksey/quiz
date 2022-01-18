@@ -35,7 +35,7 @@ class Customer
     private string $lastName;
 
     /**
-     * @var  Collection
+     * @var Collection<int, Quiz>
      */
     #[ORM\OneToMany(mappedBy: "customer", targetEntity: "Quiz")]
     private Collection $quiz;
@@ -50,7 +50,7 @@ class Customer
 
     #[ORM\ManyToOne(targetEntity: "CustomerType", inversedBy:"customers")]
     #[ORM\JoinColumn(name: "customer_type", referencedColumnName: "id")]
-    private $customerType;
+    private CustomerType $customerType;
 
     public function __construct()
     {
@@ -106,7 +106,7 @@ class Customer
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, Quiz>
      */
     public function getQuiz(): Collection
     {

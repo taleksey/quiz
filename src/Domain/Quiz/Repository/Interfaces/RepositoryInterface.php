@@ -6,6 +6,9 @@ use App\Domain\Quiz\Entity\Quiz;
 
 interface RepositoryInterface
 {
+    /**
+     * @return array<int, Quiz>
+     */
     public function getQuizzes(): array;
 
     public function getQuizById(int $id): ?Quiz;

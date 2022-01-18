@@ -7,6 +7,9 @@ namespace App\Infractructure\Repository;
 use App\Domain\Quiz\Entity\Quiz;
 use App\Domain\Quiz\Repository\Interfaces\RepositoryInterface;
 
+/**
+ * @extends DbRepository<Quiz>
+ */
 class QuizRepository extends DbRepository implements RepositoryInterface
 {
     public function getQuizzes(): array
@@ -42,7 +45,7 @@ class QuizRepository extends DbRepository implements RepositoryInterface
     }
 
     /**
-     * @return string
+     * @return class-string<Quiz>
      */
     protected function getFullEntityName(): string
     {

@@ -2,6 +2,7 @@
 
 namespace App\Infractructure\DataFixtures;
 
+use App\Domain\Quiz\Entity\Customer;
 use App\Domain\Quiz\Entity\Quiz;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -12,17 +13,19 @@ class QuizFixtures extends Fixture implements DependentFixtureInterface
     public const FIRST_QUIZ = 'Ocean';
     public const SECOND_QUIZ = 'Geography';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $quizArray = [
             self::FIRST_QUIZ,
             self::SECOND_QUIZ
         ];
         foreach ($quizArray as $queue => $quiz) {
+            /** @var Customer $reference */
+            $reference = $this->getReference(CustomerFixtures::ADMIN_USER);
             $quizFirst = new Quiz();
             $quizFirst->setName($quiz);
             $quizFirst->setActive(true);
-            $quizFirst->setCustomer($this->getReference(CustomerFixtures::ADMIN_USER));
+            $quizFirst->setCustomer($reference);
             $quizFirst->setQueue($queue + 1);
             $manager->persist($quizFirst);
             $manager->flush();
@@ -32,7 +35,7 @@ class QuizFixtures extends Fixture implements DependentFixtureInterface
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
     public function getDependencies(): array
     {

@@ -25,7 +25,7 @@ class QuizResultRepository extends SessionRepository implements ResultRepository
 
     /**
      * @param int $quizId
-     * @return array
+     * @return array<int, string>
      */
     public function getSavedCustomerAnswers(int $quizId): array
     {

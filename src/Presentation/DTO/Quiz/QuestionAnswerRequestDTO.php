@@ -13,7 +13,7 @@ class QuestionAnswerRequestDTO
     private int $answerId;
 
     /**
-     * @param array $array
+     * @param array<string, string|int> $array
      */
     public function __construct(array $array)
     {

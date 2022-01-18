@@ -30,10 +30,10 @@ class Question
 
     #[ORM\ManyToOne(targetEntity: "Quiz", inversedBy:"questions")]
     #[ORM\JoinColumn(name: "quiz_id", referencedColumnName: "id")]
-    private $quiz;
+    private Quiz $quiz;
 
     /**
-     * @var Collection
+     * @var Collection<int, Answer>
      */
     #[ORM\OneToMany(mappedBy: "question", targetEntity: "Answer", cascade: ["persist"])]
     private Collection $answers;
@@ -100,7 +100,7 @@ class Question
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, Answer>
      */
     public function getAnswers(): Collection
     {

@@ -16,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 
 class MainQuizServiceTest extends TestCase
 {
+    /** @var array<string, array<string, array<int, array<string, array<int, array<string, bool|string>>|string>>>>  */
     private array $dataForCreatingQuizzes = [
         'Quiz Test' => [
             'questions' => [
@@ -54,7 +55,7 @@ class MainQuizServiceTest extends TestCase
     private const TOTAL_QUIZZES = 2;
 
     /**
-     * @dataProvider  getQuizzesAndLinkedQuizDTO
+     * @dataProvider getQuizzesAndLinkedQuizDTO
      *
      * @param Quiz $quiz
      * @param CreateDTO $quizDTO
@@ -78,6 +79,9 @@ class MainQuizServiceTest extends TestCase
         $this->assertNotEquals($quizDTO, $quiz);
     }
 
+    /**
+     * @return array<int, array<string, Quiz|CreateDTO>>
+     */
     public function getQuizzesAndLinkedQuizDTO(): array
     {
         $currentQuizOrderNumber = 1;
