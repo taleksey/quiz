@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Domain\Quiz\Entity;
 
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use DateTimeInterface;
 
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: "quizzes")]
@@ -37,12 +37,8 @@ class Quiz
     ])]
     private bool $active = false;
 
-    /**
-     * @var Customer
-     */
-    #[ORM\ManyToOne(targetEntity: "Customer", cascade: ["persist"], inversedBy: "quizzes")]
-    #[ORM\JoinColumn(name: "customer_id", referencedColumnName: "id")]
-    private Customer $customer;
+    #[ORM\Column(type: 'string', length: 180)]
+    private string $email;
 
     /**
      * @var DateTimeInterface|null
@@ -157,22 +153,6 @@ class Quiz
     }
 
     /**
-     * @return Customer
-     */
-    public function getCustomer(): Customer
-    {
-        return $this->customer;
-    }
-
-    /**
-     * @param Customer $customer
-     */
-    public function setCustomer(Customer $customer): void
-    {
-        $this->customer = $customer;
-    }
-
-    /**
      * @return ArrayCollection<int, Question>|Collection<int, Question>
      */
     public function getQuestions(): ArrayCollection|Collection
@@ -202,5 +182,21 @@ class Quiz
     public function setQueue(int $queue): void
     {
         $this->queue = $queue;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
     }
 }

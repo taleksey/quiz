@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+{% block header %}
+    {{ include('base/header.html.twig', {isMainPage: true}) }}
+{% endblock %}
+{% block body %}
+    <main class="flex-shrink-0 main">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 ml-md-auto">
+                    <div class="">
+                        <div class="card bg-light mb-3 mt-5 w-75">
+                            <div class="card-body">
+                                <form action="{{ path('app_login') }}" class="form-horizontal" role="form" method="post" id="form_login">
+                                    {% if error %}
+                                        <div class="alert alert-danger">
+                                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                                        </div>
+                                    {% endif %}
+
+                                    {% if app.user %}
+                                        <div class="mb-3">
+                                            You are logged in as {{ app.user.firstName }}, <a href="{{ path('app_logout') }}">Logout</a>
+                                        </div>
+                                    {% endif %}
+                                    <div class="card-header mb-3">Please sign in</div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-12 mb-3">
+                                            <div class="mb-3">
+                                                <label for="inputEmail" class="form-label required">E-Mail Address</label>
+                                                <input id="inputEmail" type="email" class="form-control" name="email" value="{{ last_username }}" required autofocus>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12 mb-3">
+                                            <div class="mb-3">
+                                                <label for="inputPassword" class="form-label required">Password</label>
+                                                <input id="inputPassword" type="password" class="form-control" name="password" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fa fa-btn fa-sign-in"></i> Login
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="col-md-12 mb-3 mt-3">
+                                    <div class="mb-3">
+                                        <a href="{{ path('hwi_oauth_service_redirect', {'service': 'auth0'}) }}" style="color: #fff;">
+                                            <div class="card mb-3" style="background-color: #e8542e">
+                                                <div class="card-body" style="padding: 0;">
+                                                    <img src="https://i.imgur.com/02VeCz0.png" height="40" alt="logo">
+                                                    Connect with Auth0
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
