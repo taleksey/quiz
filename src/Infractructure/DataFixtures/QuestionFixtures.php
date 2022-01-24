@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infractructure\DataFixtures;
 
 use App\Domain\Quiz\Entity\Question;

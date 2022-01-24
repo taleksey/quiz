@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infractructure\DataFixtures;
 
 use App\Domain\Quiz\Entity\Answer;
@@ -97,8 +99,9 @@ class AnswerFixtures extends Fixture implements DependentFixtureInterface
             foreach ($itemsArray as $keyItem => $isCorrectAnswer) {
                 /** @var Question $reference */
                 $reference = $this->getReference($key);
+                $keyItemString = (string)$keyItem;
                 $answer = new Answer();
-                $answer->setText($keyItem);
+                $answer->setText($keyItemString);
                 $answer->setCorrect($isCorrectAnswer);
                 $answer->setQuestion($reference);
                 $answer->setQueue($queue);

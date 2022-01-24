@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infractructure\Repository\Registration;
 
 use App\Domain\Customer\Entity\Customer;

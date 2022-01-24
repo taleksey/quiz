@@ -1,24 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infractructure\DataFixtures;
 
-use App\Domain\Quiz\Entity\Customer;
 use App\Domain\Quiz\Entity\Quiz;
-use App\Infractructure\ValueObject\TestCustomer;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class QuizFixtures extends Fixture implements DependentFixtureInterface
+class QuizFixtures extends Fixture
 {
     public const FIRST_QUIZ = 'Ocean';
     public const SECOND_QUIZ = 'Geography';
-    private TestCustomer $customer;
-
-    public function __construct(TestCustomer $customer)
-    {
-        $this->customer = $customer;
-    }
+    public const USER_EMAIL = 'test@example.com';
 
     public function load(ObjectManager $manager): void
     {
@@ -30,22 +24,12 @@ class QuizFixtures extends Fixture implements DependentFixtureInterface
             $quizFirst = new Quiz();
             $quizFirst->setName($quiz);
             $quizFirst->setActive(true);
-            $quizFirst->setEmail($this->customer->getEmail());
+            $quizFirst->setEmail(self::USER_EMAIL);
             $quizFirst->setQueue($queue + 1);
             $manager->persist($quizFirst);
             $manager->flush();
 
             $this->addReference($quiz, $quizFirst);
         }
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    public function getDependencies(): array
-    {
-        return [
-            SecurityCustomerFixtures::class
-        ];
     }
 }

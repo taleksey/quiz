@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Presentation\Form\Registration;
 
 use App\Presentation\DTO\Customer\CustomerDTO;

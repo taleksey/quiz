@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Controller;
 
 use App\Infractructure\Repository\Registration\CustomerRepository;
-use App\Infractructure\ValueObject\TestCustomer;
+use App\Tests\Data\TestCustomer;
 use DOMDocument;
 use DOMElement;
 use DOMException;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Customer\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -79,8 +81,7 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = CustomerRole::getDefaultRole();
 
         return array_unique($roles);
     }

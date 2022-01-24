@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Infractructure\ValueObject;
+declare(strict_types=1);
+
+namespace App\Tests\Data;
 
 class TestCustomer
 {
