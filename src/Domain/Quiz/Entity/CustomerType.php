@@ -50,7 +50,7 @@ class CustomerType
     private bool $edit;
 
     /**
-     * @var Collection
+     * @var Collection<int, Customer>
      */
     #[ORM\OneToMany(mappedBy: "customerType", targetEntity: "Customer")]
     private Collection $customers;
@@ -141,7 +141,7 @@ class CustomerType
     }
 
     /**
-     * @return ArrayCollection|Collection
+     * @return ArrayCollection<int, Customer>|Collection<int, Customer>
      */
     public function getCustomers(): ArrayCollection|Collection
     {

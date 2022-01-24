@@ -8,6 +8,9 @@ use App\Domain\Quiz\Entity\Question;
 use App\Domain\Quiz\Repository\Interfaces\QuestionsRepositoryInterface;
 use Throwable;
 
+/**
+ * @extends DbRepository<Question>
+ */
 class QuizQuestionsRepository extends DbRepository implements QuestionsRepositoryInterface
 {
     /**
@@ -44,7 +47,7 @@ class QuizQuestionsRepository extends DbRepository implements QuestionsRepositor
     }
 
     /**
-     * @return string
+     * @return class-string<Question>
      */
     protected function getFullEntityName(): string
     {

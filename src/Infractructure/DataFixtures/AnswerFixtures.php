@@ -3,13 +3,14 @@
 namespace App\Infractructure\DataFixtures;
 
 use App\Domain\Quiz\Entity\Answer;
+use App\Domain\Quiz\Entity\Question;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class AnswerFixtures extends Fixture implements DependentFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $firstQuestion = [
             QuestionFixtures::FIRST_QUIZ_QUESTION_ONE => [
@@ -75,7 +76,7 @@ class AnswerFixtures extends Fixture implements DependentFixtureInterface
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
     public function getDependencies(): array
     {
@@ -85,19 +86,21 @@ class AnswerFixtures extends Fixture implements DependentFixtureInterface
     }
 
     /**
-     * @param array $values
+     * @param array<string, array<int|string, bool>> $values
      * @param ObjectManager $manager
      * @return void
      */
-    private function fillOutAnswers(array $values, ObjectManager $manager)
+    private function fillOutAnswers(array $values, ObjectManager $manager): void
     {
         foreach ($values as $key => $itemsArray) {
             $queue = 1;
             foreach ($itemsArray as $keyItem => $isCorrectAnswer) {
+                /** @var Question $reference */
+                $reference = $this->getReference($key);
                 $answer = new Answer();
                 $answer->setText($keyItem);
                 $answer->setCorrect($isCorrectAnswer);
-                $answer->setQuestion($this->getReference($key));
+                $answer->setQuestion($reference);
                 $answer->setQueue($queue);
                 $manager->persist($answer);
                 $manager->flush();

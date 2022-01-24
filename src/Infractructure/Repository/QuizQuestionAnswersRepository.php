@@ -9,6 +9,9 @@ use App\Domain\Quiz\Repository\Interfaces\QuestionAnswersRepositoryInterface;
 use App\Presentation\DTO\Quiz\QuestionAnswerRequestDTO;
 use Doctrine\ORM\NonUniqueResultException;
 
+/**
+ * @extends DbRepository<Answer>
+ */
 class QuizQuestionAnswersRepository extends DbRepository implements QuestionAnswersRepositoryInterface
 {
     /**
@@ -34,7 +37,7 @@ class QuizQuestionAnswersRepository extends DbRepository implements QuestionAnsw
     }
 
     /**
-     * @return string
+     * @return class-string<Answer>
      */
     protected function getFullEntityName(): string
     {

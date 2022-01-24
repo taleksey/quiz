@@ -52,7 +52,7 @@ class QuizServiceTest extends TestCase
         return $quiz;
     }
 
-    public function testGetQuiz()
+    public function testGetQuiz(): void
     {
         $quiz = $this->getOneQuiz();
         $quizzesRepository = $this->createMock(QuizRepository::class);

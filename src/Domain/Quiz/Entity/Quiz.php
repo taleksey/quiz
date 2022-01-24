@@ -58,7 +58,7 @@ class Quiz
     private ?DateTimeInterface $endTime;
 
     /**
-     * @var Collection
+     * @var Collection<int, Question>
      */
     #[ORM\OneToMany(mappedBy: "quiz", targetEntity: "Question", cascade: ["persist"])]
     private Collection $questions;
@@ -173,7 +173,7 @@ class Quiz
     }
 
     /**
-     * @return ArrayCollection|Collection
+     * @return ArrayCollection<int, Question>|Collection<int, Question>
      */
     public function getQuestions(): ArrayCollection|Collection
     {

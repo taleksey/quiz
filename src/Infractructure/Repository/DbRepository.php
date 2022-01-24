@@ -7,6 +7,7 @@ namespace App\Infractructure\Repository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 
+/** @template T */
 abstract class DbRepository
 {
     /** @var mixed */
@@ -21,9 +22,13 @@ abstract class DbRepository
     public function __construct(ManagerRegistry $manager)
     {
         $entityName = $this->getFullEntityName();
-        $this->manager = $manager->getRepository($entityName);
+        $repository = $manager->getRepository($entityName);
+        $this->manager = $repository;
         $this->entityManager = $manager->getManager();
     }
 
+    /**
+     * @return class-string<T>
+     */
     abstract protected function getFullEntityName(): string;
 }

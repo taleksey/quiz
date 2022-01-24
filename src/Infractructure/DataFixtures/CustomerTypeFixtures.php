@@ -9,7 +9,7 @@ use Doctrine\Persistence\ObjectManager;
 class CustomerTypeFixtures extends Fixture
 {
     public const ADMIN_TYPE = 'admin-type';
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $customerType = new CustomerType();
         $customerType->setName('Admin');

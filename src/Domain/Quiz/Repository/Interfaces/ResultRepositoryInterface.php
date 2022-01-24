@@ -6,6 +6,10 @@ interface ResultRepositoryInterface
 {
     public function save(int $quizId, int $step, bool $answerValue): void;
 
+    /**
+     * @param int $quizId
+     * @return array<int, string>
+     */
     public function getSavedCustomerAnswers(int $quizId): array;
 
     public function clean(int $quizId): bool;

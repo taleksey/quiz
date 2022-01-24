@@ -3,6 +3,7 @@
 namespace App\Infractructure\DataFixtures;
 
 use App\Domain\Quiz\Entity\Question;
+use App\Domain\Quiz\Entity\Quiz;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -21,7 +22,7 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
     public const SECOND_QUIZ_QUESTION_FOURTH = 'second-quiz-question-fourth';
     public const SECOND_QUIZ_QUESTION_FIFTH = 'second-quiz-question-fifth';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $firstQuizQuestion = [
             self::FIRST_QUIZ_QUESTION_ONE => 'How many ocean on Earth?',
@@ -45,7 +46,7 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
     public function getDependencies(): array
     {
@@ -54,13 +55,21 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
         ];
     }
 
-    private function fillOutData(array $values, ObjectManager $manager, $type)
+    /**
+     * @param array<string, string> $values
+     * @param ObjectManager $manager
+     * @param string $type
+     * @return void
+     */
+    private function fillOutData(array $values, ObjectManager $manager, string $type): void
     {
         $queue = 1;
         foreach ($values as $valueKey => $valueItem) {
+            /** @var Quiz $reference */
+            $reference = $this->getReference($type);
             $firstQuizQuestion = new Question();
             $firstQuizQuestion->setText($valueItem);
-            $firstQuizQuestion->setQuiz($this->getReference($type));
+            $firstQuizQuestion->setQuiz($reference);
             $firstQuizQuestion->setQueue($queue);
             $manager->persist($firstQuizQuestion);
             $manager->flush();

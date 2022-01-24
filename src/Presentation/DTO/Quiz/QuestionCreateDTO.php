@@ -39,6 +39,7 @@ class QuestionCreateDTO
     /**
      * @Assert\NotBlank()
      * @Assert\Valid
+     * @return QuestionAnswerCreateDTO[]
      */
     public function getAnswers(): array
     {
@@ -46,7 +47,7 @@ class QuestionCreateDTO
     }
 
     /**
-     * @param array $answers
+     * @param QuestionAnswerCreateDTO[] $answers
      */
     public function setAnswers(array $answers): void
     {

@@ -18,7 +18,7 @@ class QuizService
     }
 
     /**
-     * @return array
+     * @return array<int, Quiz>
      */
     public function getAllQuizzes(): array
     {

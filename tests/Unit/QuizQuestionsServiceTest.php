@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class QuizQuestionsServiceTest extends TestCase
 {
-    public function testCorrectCheckingFirstStepWhenInitializeQuiz()
+    public function testCorrectCheckingFirstStepWhenInitializeQuiz(): void
     {
         $quizzesRepository = $this->createMock(QuestionsRepositoryInterface::class);
         $questionAnswersRepository = $this->createMock(QuestionAnswersRepositoryInterface::class);
@@ -36,7 +36,7 @@ class QuizQuestionsServiceTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testCheckWrongStepWhenClientSelectStepButHeDidNotFinishStepsBefore()
+    public function testCheckWrongStepWhenClientSelectStepButHeDidNotFinishStepsBefore(): void
     {
         $quizzesRepository = $this->createMock(QuestionsRepositoryInterface::class);
         $questionAnswersRepository = $this->createMock(QuestionAnswersRepositoryInterface::class);
@@ -58,7 +58,7 @@ class QuizQuestionsServiceTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testCheckCorrectStepWhenClientPassedAllStepsBeforeCurrent()
+    public function testCheckCorrectStepWhenClientPassedAllStepsBeforeCurrent(): void
     {
         $quizzesRepository = $this->createMock(QuestionsRepositoryInterface::class);
         $questionAnswersRepository = $this->createMock(QuestionAnswersRepositoryInterface::class);
@@ -81,7 +81,7 @@ class QuizQuestionsServiceTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testNextStepWhenInitializeQuiz()
+    public function testNextStepWhenInitializeQuiz(): void
     {
         $quizzesRepository = $this->createMock(QuestionsRepositoryInterface::class);
         $questionAnswersRepository = $this->createMock(QuestionAnswersRepositoryInterface::class);
@@ -101,7 +101,7 @@ class QuizQuestionsServiceTest extends TestCase
         $this->assertEquals(1, $result);
     }
 
-    public function testNextStepWhenClientPassedSomeSteps()
+    public function testNextStepWhenClientPassedSomeSteps(): void
     {
         $quizzesRepository = $this->createMock(QuestionsRepositoryInterface::class);
         $questionAnswersRepository = $this->createMock(QuestionAnswersRepositoryInterface::class);
