@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\Tests\Functional\Controller;
 
+use App\Domain\Customer\Entity\Customer;
 use App\Infractructure\Repository\Registration\CustomerRepository;
 use App\Tests\Data\TestCustomer;
 use DOMDocument;
@@ -22,7 +23,6 @@ class QuizControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'There are list quizzes.');
-
         $listTdElementsWithQuizzes = $crawler->filter('table.table-success')->filter('tr')->each(function (Crawler $tr) {
             return $tr->filter('td')->each(function ($td) {
                 return $td->text();
@@ -235,8 +235,17 @@ class QuizControllerTest extends WebTestCase
     private function loggedIn(KernelBrowser $client): KernelBrowser
     {
         $testCustomer = new TestCustomer();
+        $customer = new Customer();
+
+        $customer->setNickName($testCustomer->getNickName());
+        $customer->setFirstName($testCustomer->getUserName());
+        $customer->setLastName($testCustomer->getLastName());
+        $customer->setEmail($testCustomer->getEmail());
+        $customer->setPassword($testCustomer->getPassword());
+
         /** @var CustomerRepository $customerRepository */
         $customerRepository = static::getContainer()->get(CustomerRepository::class);
+        $customerRepository->create($customer);
         $testUser = $customerRepository->getCustomerByEmail($testCustomer->getEmail());
 
         return $client->loginUser($testUser);
