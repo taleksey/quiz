@@ -11,7 +11,7 @@ security:
                 class: App\Domain\Customer\Entity\Customer
                 property: email
         oauth_hwi:
-            id: hwi_oauth.user.provider
+            id: domen_customer.oauth.user.provider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -25,9 +25,9 @@ security:
                     auth0: "/auth0/callback"
                 login_path: /
                 failure_path: /
-                default_target_path: /list
+                default_target_path: /
                 oauth_user_provider:
-                    service: hwi_oauth.user.provider
+                    service: domen_customer.oauth.user.provider
             form_login:
                 login_path: app_login
                 check_path: app_login
