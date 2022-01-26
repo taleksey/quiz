@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Customer\Entity;
+namespace App\Infrastructure\Entity;
 
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;

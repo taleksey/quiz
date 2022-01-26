@@ -6,7 +6,7 @@ use App\Domain\Quiz\Entity\Answer;
 use App\Domain\Quiz\Entity\Question;
 use App\Domain\Quiz\Entity\Quiz;
 use App\Domain\Quiz\Service\QuizService;
-use App\Infractructure\Repository\QuizRepository;
+use App\Infrastructure\Repository\QuizRepository;
 use App\Presentation\DTO\Quiz\CreateDTO;
 use App\Presentation\DTO\Quiz\QuestionAnswerCreateDTO;
 use App\Presentation\DTO\Quiz\QuestionCreateDTO;

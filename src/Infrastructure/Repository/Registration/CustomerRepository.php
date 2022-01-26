@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Infractructure\Repository\Registration;
+namespace App\Infrastructure\Repository\Registration;
 
 use App\Domain\Customer\Entity\Customer;
 use App\Domain\Customer\Repository\Interfaces\CustomerRepositoryInterface;
-use App\Infractructure\Repository\DbRepository;
+use App\Infrastructure\Repository\DbRepository;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends DbRepository<Customer>
@@ -19,7 +20,7 @@ class CustomerRepository extends DbRepository implements CustomerRepositoryInter
         $this->entityManager->flush();
     }
 
-    public function getCustomerByEmail(string $email): ?Customer
+    public function getCustomerByEmail(string $email): ?UserInterface
     {
         return $this->manager->findOneBy([
             'email' => $email
@@ -31,6 +32,6 @@ class CustomerRepository extends DbRepository implements CustomerRepositoryInter
      */
     protected function getFullEntityName(): string
     {
-        return 'App\Domain\Customer\Entity\Customer';
+        return 'App\Infrastructure\Entity\Customer\Customer';
     }
 }

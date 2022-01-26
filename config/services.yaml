@@ -17,7 +17,7 @@ services:
     App\Presentation\Resolvers\QuestionAnswerDTOResolver:
         tags:
             - { name: controller.argument_value_resolver, priority: 50}
-    App\Infractructure\Service\AuthService:
+    App\Infrastructure\Service\AuthService:
        arguments:
            $authToken: '%app.authorizationKey%'
     domen_customer.oauth.user.provider: 

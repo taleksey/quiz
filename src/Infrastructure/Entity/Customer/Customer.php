@@ -2,29 +2,52 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Customer\Entity;
+namespace App\Infrastructure\Entity\Customer;
 
+use App\Domain\Customer\Entity\Customer as CustomerDomain;
 use App\Domain\Customer\Entity\ValueObject\CustomerRole;
+use App\Infrastructure\Entity\Timestamps;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-class Customer
+#[ORM\Entity, ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: "customers")]
+#[UniqueEntity('email', 'There is already an account with this email')]
+class Customer extends CustomerDomain implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    use Timestamps;
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private string $email;
 
+    #[ORM\Column(type: 'string', length: 100)]
     private string $nickname;
 
     /**
      * @var array<int, string>
      */
+    #[ORM\Column(type: 'json')]
     private array $roles = [];
 
+    #[ORM\Column(type: 'string')]
     private string $password;
 
+    #[ORM\Column(name:"first_name", type: 'string', length: 150)]
     private string $firstName;
 
+    #[ORM\Column(name:"last_name", type: 'string', length: 150)]
     private string $lastName;
 
+    #[ORM\Column(name:"is_verified", type: 'boolean', options: [
+        "default" => 0
+    ])]
     private bool $isVerified = false;
 
     public function getId(): ?int
@@ -44,13 +67,19 @@ class Customer
         return $this;
     }
 
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return $this->email;
     }
 
     /**
      * @return array<int, string>
+     * @see UserInterface
      */
     public function getRoles(): array
     {
@@ -59,7 +88,6 @@ class Customer
 
     /**
      * @param array<int, string> $roles
-     * @return $this
      */
     public function setRoles(array $roles): self
     {
@@ -68,6 +96,9 @@ class Customer
         return $this;
     }
 
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
     public function getPassword(): string
     {
         return $this->password;
@@ -80,30 +111,50 @@ class Customer
         return $this;
     }
 
+    /**
+     * @see UserInterface
+     */
     public function eraseCredentials(): void
     {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 
+    /**
+     * @return string
+     */
     public function getFirstName(): string
     {
         return $this->firstName;
     }
 
+    /**
+     * @param string $firstName
+     */
     public function setFirstName(string $firstName): void
     {
         $this->firstName = $firstName;
     }
 
+    /**
+     * @return string
+     */
     public function getLastName(): string
     {
         return $this->lastName;
     }
 
+    /**
+     * @param string $lastName
+     */
     public function setLastName(string $lastName): void
     {
         $this->lastName = $lastName;
     }
 
+    /**
+     * @param int $id
+     */
     public function setId(int $id): void
     {
         $this->id = $id;
@@ -121,6 +172,9 @@ class Customer
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getNickName(): string
     {
         return $this->nickname;

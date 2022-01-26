@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Infractructure\DataFixtures;
+namespace App\Infrastructure\DataFixtures;
 
-use App\Domain\Quiz\Entity\Question;
-use App\Domain\Quiz\Entity\Quiz;
+use App\Infrastructure\Entity\Quiz\Question;
+use App\Infrastructure\Entity\Quiz\Quiz;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;

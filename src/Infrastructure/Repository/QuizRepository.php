@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Infractructure\Repository;
+namespace App\Infrastructure\Repository;
 
-use App\Domain\Quiz\Entity\Quiz;
+use App\Domain\Quiz\Entity\Quiz as QuizDomain;
 use App\Domain\Quiz\Repository\Interfaces\RepositoryInterface;
 
 /**
- * @extends DbRepository<Quiz>
+ * @extends DbRepository<QuizDomain>
  */
 class QuizRepository extends DbRepository implements RepositoryInterface
 {
@@ -19,9 +19,9 @@ class QuizRepository extends DbRepository implements RepositoryInterface
 
     /**
      * @param int $id
-     * @return Quiz|null
+     * @return QuizDomain|null
      */
-    public function getQuizById(int $id): ?Quiz
+    public function getQuizById(int $id): ?QuizDomain
     {
         return $this->manager->find($id);
     }
@@ -34,21 +34,17 @@ class QuizRepository extends DbRepository implements RepositoryInterface
         return $this->manager->count([]);
     }
 
-    /**
-     * @param Quiz $quiz
-     * @return void
-     */
-    public function save(Quiz $quiz): void
+    public function save(QuizDomain $quiz): void
     {
         $this->entityManager->persist($quiz);
         $this->entityManager->flush();
     }
 
     /**
-     * @return class-string<Quiz>
+     * @return class-string<QuizDomain>
      */
     protected function getFullEntityName(): string
     {
-        return  'App\Domain\Quiz\Entity\Quiz';
+        return  'App\Infrastructure\Entity\Quiz\Quiz';
     }
 }

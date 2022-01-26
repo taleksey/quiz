@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infractructure\Service;
+namespace App\Infrastructure\Service;
 
 use App\Domain\Quiz\Repository\Interfaces\AuthRepositoryInterface;
 use App\Presentation\DTO\Auth\AuthorizationDTO;

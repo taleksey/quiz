@@ -4,7 +4,7 @@ namespace App\Tests\Unit;
 
 use App\Domain\Quiz\Entity\Quiz;
 use App\Domain\Quiz\Service\QuizService;
-use App\Infractructure\Repository\QuizRepository;
+use App\Infrastructure\Repository\QuizRepository;
 use PHPUnit\Framework\TestCase;
 
 class QuizServiceTest extends TestCase

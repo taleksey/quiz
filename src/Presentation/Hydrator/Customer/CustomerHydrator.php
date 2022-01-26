@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Hydrator\Customer;
 
-use App\Domain\Customer\Entity\Customer;
+use App\Infrastructure\Entity\Customer\Customer;
 use App\Presentation\DTO\Customer\CustomerDTO;
 
 class CustomerHydrator
