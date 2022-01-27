@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Entity\Quiz;
+namespace App\Infrastructure\DB\Quiz;
 
 use App\Domain\Quiz\Entity\Question as QuestionDomain;
-use App\Infrastructure\Entity\Timestamps;
+use App\Domain\Quiz\Entity\Quiz as QuizDomain;
+use App\Infrastructure\DB\Timestamps;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Domain\Quiz\Entity\Quiz as QuizDomain;
-use DateTimeInterface;
 
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: "quizzes")]

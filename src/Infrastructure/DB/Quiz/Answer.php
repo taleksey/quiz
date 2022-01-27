@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Entity\Quiz;
+namespace App\Infrastructure\DB\Quiz;
 
-use App\Infrastructure\Entity\Timestamps;
-use Doctrine\ORM\Mapping as ORM;
 use App\Domain\Quiz\Entity\Answer as AnswerDomain;
 use App\Domain\Quiz\Entity\Question as QuestionDomain;
+use App\Infrastructure\DB\Timestamps;
+use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: "answers")]

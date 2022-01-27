@@ -73,7 +73,7 @@ class CustomerEntityProvider extends DbRepository implements UserProviderInterfa
 
     protected function getFullEntityName(): string
     {
-        return 'App\Infrastructure\Entity\Customer\Customer';
+        return 'App\Infrastructure\DB\Customer\Customer';
     }
 
     /**

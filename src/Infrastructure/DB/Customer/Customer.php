@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Entity\Customer;
+namespace App\Infrastructure\DB\Customer;
 
 use App\Domain\Customer\Entity\Customer as CustomerDomain;
 use App\Domain\Customer\Entity\ValueObject\CustomerRole;
-use App\Infrastructure\Entity\Timestamps;
+use App\Infrastructure\DB\Timestamps;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;

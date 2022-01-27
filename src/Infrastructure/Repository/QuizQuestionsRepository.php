@@ -51,6 +51,6 @@ class QuizQuestionsRepository extends DbRepository implements QuestionsRepositor
      */
     protected function getFullEntityName(): string
     {
-        return  'App\Infrastructure\Entity\Quiz\Question';
+        return \App\Infrastructure\DB\Quiz\Question::class;
     }
 }

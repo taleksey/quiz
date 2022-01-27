@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\DataFixtures;
 
-use App\Infrastructure\Entity\Quiz\Question;
-use App\Infrastructure\Entity\Quiz\Quiz;
+use App\Infrastructure\DB\Quiz\Question;
+use App\Infrastructure\DB\Quiz\Quiz;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 class QuestionFixtures extends Fixture implements DependentFixtureInterface
 {

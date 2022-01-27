@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Hydrator;
 
-use App\Infrastructure\Entity\Quiz\Answer;
-use App\Infrastructure\Entity\Quiz\Question;
-use App\Infrastructure\Entity\Quiz\Quiz;
+use App\Infrastructure\DB\Quiz\Answer;
+use App\Infrastructure\DB\Quiz\Question;
+use App\Infrastructure\DB\Quiz\Quiz;
 use App\Presentation\DTO\Quiz\CreateDTO;
 
 class DTOHydrator

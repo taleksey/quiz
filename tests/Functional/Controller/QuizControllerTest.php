@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace App\Tests\Functional\Controller;
 
-use App\Infrastructure\Entity\Customer\Customer;
+use App\Infrastructure\DB\Customer\Customer;
 use App\Infrastructure\Repository\Registration\CustomerRepository;
 use App\Tests\Data\TestCustomer;
 use DOMDocument;

@@ -6,6 +6,7 @@ namespace App\Infrastructure\Repository;
 
 use App\Domain\Quiz\Entity\Quiz as QuizDomain;
 use App\Domain\Quiz\Repository\Interfaces\RepositoryInterface;
+use App\Infrastructure\DB\Quiz\Quiz;
 
 /**
  * @extends DbRepository<QuizDomain>
@@ -45,6 +46,6 @@ class QuizRepository extends DbRepository implements RepositoryInterface
      */
     protected function getFullEntityName(): string
     {
-        return  'App\Infrastructure\Entity\Quiz\Quiz';
+        return Quiz::class;
     }
 }
