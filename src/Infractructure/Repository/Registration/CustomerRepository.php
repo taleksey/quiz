@@ -31,6 +31,6 @@ class CustomerRepository extends DbRepository implements CustomerRepositoryInter
      */
     protected function getFullEntityName(): string
     {
-        return 'App\Domain\Customer\Entity\Customer';
+        return Customer::class;
     }
 }

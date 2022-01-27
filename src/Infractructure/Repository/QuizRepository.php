@@ -49,6 +49,6 @@ class QuizRepository extends DbRepository implements RepositoryInterface
      */
     protected function getFullEntityName(): string
     {
-        return  'App\Domain\Quiz\Entity\Quiz';
+        return  Quiz::class;
     }
 }
