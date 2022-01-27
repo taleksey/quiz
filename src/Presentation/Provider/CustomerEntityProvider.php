@@ -68,7 +68,7 @@ class CustomerEntityProvider extends DbRepository implements UserProviderInterfa
 
     public function supportsClass(string $class): bool
     {
-        return 'App\\Domain\\Quiz\\Entity\\Customer' === $class;
+        return Customer::class === $class || is_subclass_of($class, Customer::class);
     }
 
     protected function getFullEntityName(): string
