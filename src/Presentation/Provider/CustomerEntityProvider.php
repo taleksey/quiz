@@ -65,7 +65,6 @@ class CustomerEntityProvider extends DbRepository implements UserProviderInterfa
         return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
 
-
     public function supportsClass(string $class): bool
     {
         return Customer::class === $class || is_subclass_of($class, Customer::class);

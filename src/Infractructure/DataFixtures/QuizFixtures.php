@@ -11,7 +11,9 @@ use Doctrine\Persistence\ObjectManager;
 class QuizFixtures extends Fixture
 {
     public const FIRST_QUIZ = 'Ocean';
+
     public const SECOND_QUIZ = 'Geography';
+
     public const USER_EMAIL = 'test@example.com';
 
     public function load(ObjectManager $manager): void

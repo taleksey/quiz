@@ -13,15 +13,23 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 class QuestionFixtures extends Fixture implements DependentFixtureInterface
 {
     public const FIRST_QUIZ_QUESTION_ONE = 'first-quiz-question-one';
+
     public const FIRST_QUIZ_QUESTION_SECOND = 'first-quiz-question-second';
+
     public const FIRST_QUIZ_QUESTION_THIRD = 'first-quiz-question-third';
+
     public const FIRST_QUIZ_QUESTION_FOURTH = 'first-quiz-question-fourth';
+
     public const FIRST_QUIZ_QUESTION_FIFTH = 'first-quiz-question-fifth';
 
     public const SECOND_QUIZ_QUESTION_ONE = 'second-quiz-question-one';
+
     public const SECOND_QUIZ_QUESTION_SECOND = 'second-quiz-question-second';
+
     public const SECOND_QUIZ_QUESTION_THIRD = 'second-quiz-question-third';
+
     public const SECOND_QUIZ_QUESTION_FOURTH = 'second-quiz-question-fourth';
+
     public const SECOND_QUIZ_QUESTION_FIFTH = 'second-quiz-question-fifth';
 
     public function load(ObjectManager $manager): void
