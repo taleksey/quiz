@@ -20,5 +20,5 @@ services:
     App\Infractructure\Service\AuthService:
        arguments:
            $authToken: '%app.authorizationKey%'
-           
-           
+    domen_customer.oauth.user.provider: 
+        class: App\Presentation\Provider\CustomerEntityProvider
