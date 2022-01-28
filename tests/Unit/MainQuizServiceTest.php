@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace App\Tests\Unit;
 
-use App\Domain\Quiz\Entity\Answer;
-use App\Domain\Quiz\Entity\Question;
-use App\Domain\Quiz\Entity\Quiz;
 use App\Domain\Quiz\Service\QuizService;
+use App\Infrastructure\DB\Quiz\Answer;
+use App\Infrastructure\DB\Quiz\Question;
+use App\Infrastructure\DB\Quiz\Quiz;
 use App\Infrastructure\Repository\QuizRepository;
 use App\Presentation\DTO\Quiz\CreateDTO;
 use App\Presentation\DTO\Quiz\QuestionAnswerCreateDTO;
