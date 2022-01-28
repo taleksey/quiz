@@ -4,7 +4,6 @@ namespace App\Tests\Functional\Controller;
 
 use App\Infrastructure\DB\Customer\Customer;
 use App\Infrastructure\Repository\Registration\CustomerRepository;
-use App\Tests\Data\TestCustomer;
 use DOMDocument;
 use DOMElement;
 use DOMException;
@@ -17,6 +16,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class QuizControllerTest extends WebTestCase
 {
+    private const USER_FIRSTNAME = 'FirstName';
+    private const USER_LASTNAME = 'LastName';
+    private const USER_NICK_NAME = 'test';
+    private const USER_EMAIL = 'test@example.com';
+    private const USER_PASSWORD = 'TestPassword';
+
     public function testHomepage(): void
     {
         $client = static::createClient();
@@ -234,19 +239,18 @@ class QuizControllerTest extends WebTestCase
 
     private function loggedIn(KernelBrowser $client): KernelBrowser
     {
-        $testCustomer = new TestCustomer();
         $customer = new Customer();
-
-        $customer->setNickName($testCustomer->getNickName());
-        $customer->setFirstName($testCustomer->getUserName());
-        $customer->setLastName($testCustomer->getLastName());
-        $customer->setEmail($testCustomer->getEmail());
-        $customer->setPassword($testCustomer->getPassword());
+        $email = self::USER_EMAIL;
+        $customer->setNickName(self::USER_NICK_NAME);
+        $customer->setFirstName(self::USER_FIRSTNAME);
+        $customer->setLastName(self::USER_LASTNAME);
+        $customer->setEmail($email);
+        $customer->setPassword(self::USER_PASSWORD);
 
         /** @var CustomerRepository $customerRepository */
         $customerRepository = static::getContainer()->get(CustomerRepository::class);
         $customerRepository->create($customer);
-        $testUser = $customerRepository->getCustomerByEmail($testCustomer->getEmail());
+        $testUser = $customerRepository->getCustomerByEmail($email);
 
         return $client->loginUser($testUser);
     }

@@ -12,7 +12,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class CustomerService
 {
     private UserPasswordHasherInterface $passwordHash;
+
     private CustomerRepositoryInterface $customerRepository;
+
     private CustomerHydrator $hydrator;
 
     public function __construct(UserPasswordHasherInterface $passwordHash, CustomerRepositoryInterface $customerRepository, CustomerHydrator $hydrator)

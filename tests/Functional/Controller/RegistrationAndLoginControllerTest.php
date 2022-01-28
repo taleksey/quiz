@@ -2,7 +2,6 @@
 
 namespace App\Tests\Functional\Controller;
 
-use App\Tests\Data\TestCustomer;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class RegistrationAndLoginControllerTest extends WebTestCase
@@ -13,12 +12,11 @@ class RegistrationAndLoginControllerTest extends WebTestCase
 
     public function testLoginWithBadCorrectUser(): void
     {
-        $testCustomer = new TestCustomer();
         $client = static::createClient();
         $crawler = $client->request('GET', '/login');
         $buttonCrawlerNode = $crawler->selectButton('Login');
         $form = $buttonCrawlerNode->form([
-            'email' => $testCustomer->getEmail(),
+            'email' => self::USER_EMAIL,
             'password' => 'Fake'
         ]);
         $client->submit($form);

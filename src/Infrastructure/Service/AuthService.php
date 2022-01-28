@@ -10,6 +10,7 @@ use App\Presentation\DTO\Auth\AuthorizationDTO;
 class AuthService
 {
     private AuthRepositoryInterface $authRepository;
+
     private string $authToken;
 
     public function __construct(AuthRepositoryInterface $authRepository, string $authToken)

@@ -40,6 +40,7 @@ class QuizResultRepository extends SessionRepository implements ResultRepository
     {
         return (bool) $this->manager->remove($this->getQuizMainKey($quizId));
     }
+
     /**
      * @param int $quizId
      * @return string

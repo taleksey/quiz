@@ -9,7 +9,9 @@ use App\Domain\Quiz\ValueObject\QuestionStep;
 class QuestionAnswerRequestDTO
 {
     private int $quizId;
+
     private int $step;
+
     private int $answerId;
 
     /**

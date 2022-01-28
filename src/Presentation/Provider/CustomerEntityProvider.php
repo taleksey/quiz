@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Provider;
 
-use App\Domain\Customer\Entity\Customer;
+use App\Infrastructure\DB\Customer\Customer;
 use App\Infrastructure\Repository\DbRepository;
 use App\Presentation\Transformers\Auth0\ResponseToCustomerTransformer;
 use Doctrine\Persistence\ManagerRegistry;
@@ -65,15 +65,14 @@ class CustomerEntityProvider extends DbRepository implements UserProviderInterfa
         return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
 
-
     public function supportsClass(string $class): bool
     {
-        return 'App\\Domain\\Quiz\\Entity\\Customer' === $class;
+        return Customer::class === $class || is_subclass_of($class, Customer::class);
     }
 
     protected function getFullEntityName(): string
     {
-        return 'App\Infrastructure\DB\Customer\Customer';
+        return Customer::class;
     }
 
     /**
