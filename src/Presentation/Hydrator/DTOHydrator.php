@@ -11,17 +11,13 @@ use App\Presentation\DTO\Quiz\CreateDTO;
 
 class DTOHydrator
 {
-    /**
-     * @param CreateDTO $quizCreateDTO
-     * @param int $queue
-     * @return Quiz
-     */
-    public function hydrate(CreateDTO $quizCreateDTO, int $queue): Quiz
+    public function hydrate(CreateDTO $quizCreateDTO, int $queue, string $email): Quiz
     {
         $quizEntity = new Quiz();
         $quizEntity->setName($quizCreateDTO->getName());
         $quizEntity->setQueue($queue);
         $quizEntity->setActive(true);
+        $quizEntity->setEmail($email);
         foreach ($quizCreateDTO->getQuestions() as $key => $question) {
             $queueQuestion = $key + 1;
             $questionEntity = new Question();

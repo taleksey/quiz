@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Repository;
 
 use App\Domain\Quiz\Repository\Interfaces\ResultRepositoryInterface;
+use App\Domain\QuizSession\Entity\QuizSession;
 
 class QuizResultRepository extends SessionRepository implements ResultRepositoryInterface
 {
@@ -21,6 +22,12 @@ class QuizResultRepository extends SessionRepository implements ResultRepository
         $savedAnswers[$step] = $answerValue;
 
         $this->manager->set($mainKey, $savedAnswers);
+    }
+
+    public function saveQuizStartDate(int $quizId, \DateTime $date): void
+    {
+        $mainKey = $this->getQuizMainKey($quizId);
+        $this->manager->set($mainKey, ['startDate' => $date->format(DATE_ATOM)]);
     }
 
     /**
@@ -43,10 +50,32 @@ class QuizResultRepository extends SessionRepository implements ResultRepository
 
     /**
      * @param int $quizId
+     * @return array <int|string, bool|string>
+     */
+    public function getQuizResult(int $quizId): array
+    {
+        $mainKey = $this->getQuizMainKey($quizId);
+
+        return (array)$this->manager->get($mainKey);
+    }
+
+    public function getPrefixKey(): string
+    {
+        return 'Quiz-';
+    }
+
+    public function saveAnswers(QuizSession $quizSession): void
+    {
+        $mainKey = $this->getQuizMainKey($quizSession->getQuiz()->getId());
+        $this->manager->set($mainKey, $quizSession->getSession());
+    }
+
+    /**
+     * @param int $quizId
      * @return string
      */
     private function getQuizMainKey(int $quizId): string
     {
-        return 'Quiz-' . $quizId;
+        return $this->getPrefixKey() . $quizId;
     }
 }
