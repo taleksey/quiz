@@ -1,20 +1,19 @@
 <?php
 
-namespace App\Tests\DataFixtures\ORM;
+namespace App\Tests\DB;
 
 use App\Infrastructure\DataFixtures\QuizFixtures;
 use App\Infrastructure\DB\Customer\Customer;
 use App\Infrastructure\DB\Quiz\Quiz;
-use App\Infrastructure\DB\Statistics\QuizStatistic;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use App\Infrastructure\DB\Statistics\Customer as CustomerDomain;
 use App\Infrastructure\DB\Statistics\Quiz as QuizStatistics;
+use App\Infrastructure\DB\Statistics\QuizStatistic;
+use Doctrine\Persistence\ObjectManager;
 
-class ResultInTopThreeFixtures extends Fixture
+class ResultInTopThreeData
 {
     /**
-     * @var array<int, array<string, string|int>> 
+     * @var array<int, array<string, string|int>>
      */
     protected array $rawCustomers = [
         [

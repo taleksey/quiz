@@ -141,7 +141,7 @@ COPY docker/caddy/Caddyfile /etc/caddy/Caddyfile
 
 FROM symfony_php AS symfony_php_debug
 
-ARG XDEBUG_VERSION=3.0.4
+ARG XDEBUG_VERSION=3.1.3
 RUN set -eux; \
 	apk add --no-cache --virtual .build-deps $PHPIZE_DEPS; \
 	pecl install xdebug-$XDEBUG_VERSION; \

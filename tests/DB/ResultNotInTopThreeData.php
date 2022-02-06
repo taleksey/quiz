@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests\DataFixtures\ORM;
+namespace App\Tests\DB;
 
-class ResultOnForthPositionWithDifferentCorrectAnswersFixtures extends ResultInTopThreeFixtures
+class ResultNotInTopThreeData extends ResultInTopThreeData
 {
     protected array $rawCustomers = [
         [
@@ -11,7 +11,7 @@ class ResultOnForthPositionWithDifferentCorrectAnswersFixtures extends ResultInT
             'customerFirstName' => 'OneFirstName',
             'customerLastName' => 'OneLastName',
             'quizCustomerSeconds' => 1,
-            'correctAnswers' => 4
+            'correctAnswers' => 5
         ],
         [
             'customerEmail' => 'test_two@example.com',
@@ -19,7 +19,7 @@ class ResultOnForthPositionWithDifferentCorrectAnswersFixtures extends ResultInT
             'customerFirstName' => 'TwoFirstName',
             'customerLastName' => 'TwoLastName',
             'quizCustomerSeconds' => 2,
-            'correctAnswers' => 3
+            'correctAnswers' => 5
         ],
         [
             'customerEmail' => 'test_three@example.com',
@@ -35,22 +35,6 @@ class ResultOnForthPositionWithDifferentCorrectAnswersFixtures extends ResultInT
             'customerFirstName' => 'ForthFirstName',
             'customerLastName' => 'ForthLastName',
             'quizCustomerSeconds' => 4,
-            'correctAnswers' => 5
-        ],
-        [
-            'customerEmail' => 'test_fifth@example.com',
-            'customerNick' => 'test_fifth',
-            'customerFirstName' => 'FifthFirstName',
-            'customerLastName' => 'FifthLastName',
-            'quizCustomerSeconds' => 4,
-            'correctAnswers' => 5
-        ],
-        [
-            'customerEmail' => 'test_sixth@example.com',
-            'customerNick' => 'test_sixth',
-            'customerFirstName' => 'SixthFirstName',
-            'customerLastName' => 'SixthLastName',
-            'quizCustomerSeconds' => 99,
             'correctAnswers' => 5
         ],
     ];

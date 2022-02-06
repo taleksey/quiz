@@ -38,7 +38,3 @@ services:
                 method: onLoginEvent        
         arguments:
             $quizSessionService: '@App\Domain\QuizSession\Service\QuizSessionService'
-
-    App\Tests\DataFixtures\ORM\:
-        resource: '../tests/DataFixtures/ORM/*'
-        tags: [ 'doctrine.fixture.orm' ]

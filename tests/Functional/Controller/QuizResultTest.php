@@ -3,9 +3,11 @@
 namespace App\Tests\Functional\Controller;
 
 use App\Infrastructure\DataFixtures\QuizFixtures;
+use App\Tests\DB\ResultInTopThreeData;
+use App\Tests\DB\ResultNotInTopThreeData;
+use App\Tests\DB\ResultOnForthPositionWithDifferentCorrectAnswersData;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 
@@ -26,8 +28,11 @@ class QuizResultTest extends WebTestCase
     public function testResultInTopThree(): void
     {
         $client = static::createClient();
-        $databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures(['App\Tests\DataFixtures\ORM\ResultInTopThreeFixtures'], true);
+        $entityManager = static::getContainer()
+            ->get('doctrine')
+            ->getManager();
+        $resultInTopThreeFixtures = new ResultInTopThreeData();
+        $resultInTopThreeFixtures->load($entityManager);
         $crawler = $this->returnResultPage($client);
         $rawListFirstName = $crawler->filter('table.table-result')->filter('tr')->each(function (Crawler $tr) {
             $tdWithFirstName = $tr->filter('td')->eq(0);
@@ -47,8 +52,11 @@ class QuizResultTest extends WebTestCase
     public function testResultOnFifthPosition(): void
     {
         $client = static::createClient();
-        $databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures(['App\Tests\DataFixtures\ORM\ResultNotInTopThreeFixtures'], true);
+        $entityManager = static::getContainer()
+            ->get('doctrine')
+            ->getManager();
+        $resultNotInTopThreeData = new ResultNotInTopThreeData();
+        $resultNotInTopThreeData->load($entityManager);
         $crawler = $this->returnResultPage($client);
         $lastRowInStatisticTable = $crawler->filter('table.table-result')->filter('tr')->last();
         $th = $lastRowInStatisticTable->filter('th');
@@ -61,8 +69,12 @@ class QuizResultTest extends WebTestCase
     public function testResultOnForthPositionWithDifferentCorrectAnswers(): void
     {
         $client = static::createClient();
-        $databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures(['App\Tests\DataFixtures\ORM\ResultOnForthPositionWithDifferentCorrectAnswersFixtures'], true);
+        $entityManager = static::getContainer()
+            ->get('doctrine')
+            ->getManager();
+        $ResultOnForthPositionWithDifferentCorrectAnswersFixtures = new ResultOnForthPositionWithDifferentCorrectAnswersData();
+
+        $ResultOnForthPositionWithDifferentCorrectAnswersFixtures->load($entityManager);
         $crawler = $this->returnResultPage($client);
         $lastRowInStatisticTable = $crawler->filter('table.table-result')->filter('tr')->last();
         $th = $lastRowInStatisticTable->filter('th');
