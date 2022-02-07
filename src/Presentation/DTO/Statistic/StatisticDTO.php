@@ -9,38 +9,45 @@ use App\Infrastructure\DB\Statistics\Quiz;
 
 class StatisticDTO
 {
+    private string $startDate;
+
+    private Quiz $quiz;
+
+    private Customer $customer;
+
     /**
-     * @var array<string, int|string|array<int|string, bool|string>>
+     * @var array<int|string, bool|string>
      */
-    private array $statistic;
+    private array $answers;
 
     /**
      * @param array<string, int|string|array<int|string, bool|string>> $statistic
      */
     public function __construct(array $statistic)
     {
-        $this->statistic = $statistic;
+        $this->startDate = $statistic['startDate'];
+        $this->quiz = new Quiz();
+        $this->quiz->setId($statistic['quizId']);
+
+        $this->customer = new Customer();
+        $this->customer->setId($statistic['customerId']);
+
+        $this->answers = $statistic['answers'];
     }
 
     public function getStartDate(): string
     {
-        return $this->statistic['startDate'];
+        return $this->startDate;
     }
 
     public function getQuiz(): Quiz
     {
-        $quiz = new Quiz();
-        $quiz->setId($this->statistic['quizId']);
-
-        return $quiz;
+        return $this->quiz;
     }
 
     public function getCustomer(): Customer
     {
-        $customer = new Customer();
-        $customer->setId($this->statistic['customerId']);
-
-        return $customer;
+        return $this->customer;
     }
 
     /**
@@ -48,6 +55,6 @@ class StatisticDTO
      */
     public function getRawAnswers(): array
     {
-        return $this->statistic['answers'];
+        return $this->answers;
     }
 }
