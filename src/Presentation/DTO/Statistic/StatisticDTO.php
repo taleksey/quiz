@@ -22,23 +22,9 @@ class StatisticDTO
         $this->statistic = $statistic;
     }
 
-    public function getDateTimeWhenStartQuiz(): \DateTime
+    public function getStartDate(): string
     {
-        try {
-            return new \DateTime($this->statistic['startDate']);
-        } catch (\Exception) {
-        }
-
-        return new \DateTime('NOW');
-    }
-
-    public function getTotalQuestions(): int
-    {
-        $questions = array_filter($this->getRawAnswers(), static function ($key) {
-            return is_int($key);
-        }, ARRAY_FILTER_USE_KEY);
-
-        return count($questions);
+        return $this->statistic['startDate'];
     }
 
     public function getQuiz(): Quiz
@@ -55,15 +41,6 @@ class StatisticDTO
         $customer->setId($this->statistic['customerId']);
 
         return $customer;
-    }
-
-    public function getTotalCorrectAnswers(): int
-    {
-        $correctQuestions = array_filter($this->getRawAnswers(), static function ($answer, $key) {
-            return is_int($key) && $answer;
-        }, ARRAY_FILTER_USE_BOTH);
-
-        return count($correctQuestions);
     }
 
     /**

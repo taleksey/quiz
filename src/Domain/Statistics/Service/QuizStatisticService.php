@@ -26,7 +26,12 @@ class QuizStatisticService
 
     public function saveResultQuiz(StatisticDTO $statisticDTO): void
     {
-        $dateTime = $statisticDTO->getDateTimeWhenStartQuiz();
+        try {
+            $dateTime = new \DateTime($statisticDTO->getStartDate());
+        } catch (\Exception) {
+            $dateTime = new \DateTime('NOW');
+        }
+
         $currentDateTime = new \DateTime('NOW');
         $dateTimeResult = $currentDateTime->diff($dateTime);
         $spendSecondsOnQuiz = $this->convertToSeconds($dateTimeResult);

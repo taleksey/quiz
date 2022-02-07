@@ -21,11 +21,7 @@ class StatisticRepository extends DbRepository implements StatisticRepositoryInt
 {
     public function saveOrUpdate(QuizStatisticDomain $statistic): void
     {
-        /** @var QuizStatistic|null $statisticEntity */
-        $statisticEntity = $this->manager->findOneBy([
-            'customer' => $statistic->getCustomer()->getId(),
-            'quiz' => $statistic->getQuiz()->getId()
-        ]);
+        $statisticEntity = $this->getQuizStatisticByCustomer($statistic->getQuiz()->getId(), $statistic->getCustomer());
 
         if (null === $statisticEntity) {
             $quiz = $this->entityManager->find(Quiz::class, $statistic->getQuiz()->getId());
@@ -58,12 +54,10 @@ class StatisticRepository extends DbRepository implements StatisticRepositoryInt
 
     public function getPositionCurrentCustomer(CustomerDomain $customer, int $quizId): int
     {
-        /** @var QuizStatistic $statistic */
-        $statistic =  $this->manager->findOneBy([
-            'quiz' => $quizId,
-            'customer' => $customer->getId()
-        ]);
-
+        $statistic = $this->getQuizStatisticByCustomer($quizId, $customer);
+        if (null === $statistic) {
+            return  0;
+        }
         try {
             $beforePositions =  (int) $this->manager->createQueryBuilder('st')
                 ->select('count(st.id)')
@@ -87,17 +81,20 @@ class StatisticRepository extends DbRepository implements StatisticRepositoryInt
 
     public function getTotalCorrectAnswersByCustomer(CustomerDomain $customer, int $quizId): int
     {
-        /** @var QuizStatistic|null $statistic */
-        $statistic =  $this->manager->findOneBy([
-            'quiz' => $quizId,
-            'customer' => $customer->getId()
-        ]);
-
+        $statistic = $this->getQuizStatisticByCustomer($quizId, $customer);
         if (null !== $statistic) {
             return $statistic->getTotalCorrectAnswers();
         }
 
         return 0;
+    }
+
+    protected function getQuizStatisticByCustomer(int $quizId, CustomerDomain $customer): QuizStatistic|null
+    {
+        return $this->manager->findOneBy([
+            'customer' => $customer->getId(),
+            'quiz' => $quizId
+        ]);
     }
 
     protected function getFullEntityName(): string
