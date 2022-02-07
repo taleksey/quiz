@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domain\Customer\Service;
 
-use App\Domain\Customer\Entity\Customer;
 use App\Domain\Customer\Repository\Interfaces\CustomerRepositoryInterface;
 use App\Presentation\DTO\Customer\CustomerDTO;
 use App\Presentation\Hydrator\Customer\CustomerHydrator;

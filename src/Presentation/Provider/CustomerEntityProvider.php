@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Presentation\Provider;
 
-use App\Domain\Customer\Entity\Customer;
-use App\Infractructure\Repository\DbRepository;
+use App\Infrastructure\DB\Customer\Customer;
+use App\Infrastructure\Repository\DbRepository;
 use App\Presentation\Transformers\Auth0\ResponseToCustomerTransformer;
 use Doctrine\Persistence\ManagerRegistry;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;

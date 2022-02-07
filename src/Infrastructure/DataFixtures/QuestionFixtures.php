@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Infractructure\DataFixtures;
+namespace App\Infrastructure\DataFixtures;
 
-use App\Domain\Quiz\Entity\Question;
-use App\Domain\Quiz\Entity\Quiz;
+use App\Infrastructure\DB\Quiz\Question;
+use App\Infrastructure\DB\Quiz\Quiz;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 class QuestionFixtures extends Fixture implements DependentFixtureInterface
 {

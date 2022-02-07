@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Transformers\Auth0;
 
-use App\Domain\Customer\Entity\Customer;
+use App\Infrastructure\DB\Customer\Customer;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 
 class ResponseToCustomerTransformer

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infractructure\Repository;
+namespace App\Infrastructure\Repository;
 
 use App\Domain\Quiz\Entity\Answer;
 use App\Domain\Quiz\Repository\Interfaces\QuestionAnswersRepositoryInterface;
@@ -41,6 +41,6 @@ class QuizQuestionAnswersRepository extends DbRepository implements QuestionAnsw
      */
     protected function getFullEntityName(): string
     {
-        return  Answer::class;
+        return \App\Infrastructure\DB\Quiz\Answer::class;
     }
 }

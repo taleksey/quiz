@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infractructure\Repository;
+namespace App\Infrastructure\Repository;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;

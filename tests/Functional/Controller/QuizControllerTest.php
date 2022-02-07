@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace App\Tests\Functional\Controller;
 
-use App\Domain\Customer\Entity\Customer;
-use App\Infractructure\Repository\Registration\CustomerRepository;
+use App\Infrastructure\DB\Customer\Customer;
+use App\Infrastructure\Repository\Registration\CustomerRepository;
 use DOMDocument;
 use DOMElement;
 use DOMException;

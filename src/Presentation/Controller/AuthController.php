@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller;
 
-use App\Infractructure\Service\AuthService;
+use App\Infrastructure\Service\AuthService;
 use App\Presentation\Form\Auth\AuthorizationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;

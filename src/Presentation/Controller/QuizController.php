@@ -7,7 +7,7 @@ namespace App\Presentation\Controller;
 use App\Domain\Quiz\Service\QuizQuestionAnswersService;
 use App\Domain\Quiz\Service\QuizQuestionsService;
 use App\Domain\Quiz\Service\QuizService;
-use App\Infractructure\Service\AuthService;
+use App\Infrastructure\Service\AuthService;
 use App\Presentation\DTO\Quiz\QuestionAnswerRequestDTO;
 use App\Presentation\Form\Quiz\QuizType;
 use App\Presentation\Service\MainQuizService;

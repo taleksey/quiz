@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infractructure\Repository;
+namespace App\Infrastructure\Repository;
 
 use App\Domain\Quiz\Repository\Interfaces\ResultRepositoryInterface;
 
