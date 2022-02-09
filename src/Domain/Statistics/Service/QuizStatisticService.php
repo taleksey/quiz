@@ -26,11 +26,7 @@ class QuizStatisticService
 
     public function saveResultQuiz(StatisticDTO $statisticDTO): void
     {
-        try {
-            $dateTime = new \DateTime($statisticDTO->getStartDate());
-        } catch (\Exception) {
-            $dateTime = new \DateTime('NOW');
-        }
+        $dateTime = $statisticDTO->getStartDate();
 
         $currentDateTime = new \DateTime('NOW');
         $dateTimeResult = $currentDateTime->diff($dateTime);

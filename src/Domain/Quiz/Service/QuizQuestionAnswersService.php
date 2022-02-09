@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Domain\Quiz\Service;
 
 use App\Domain\Quiz\Repository\Interfaces\ResultRepositoryInterface;
+use App\Domain\Quiz\ValueObject\QuizResult;
 use App\Presentation\DTO\Quiz\QuestionAnswerRequestDTO;
+use DateTime;
 
 class QuizQuestionAnswersService
 {
@@ -26,7 +28,7 @@ class QuizQuestionAnswersService
     {
         if ($quizQuestionAnswerDTO->getQuestionStep()->isFirstStep()) {
             $this->quizResultRepository->clean($quizQuestionAnswerDTO->getQuizId());
-            $this->quizResultRepository->saveQuizStartDate($quizQuestionAnswerDTO->getQuizId(), new \DateTime('NOW'));
+            $this->quizResultRepository->saveQuizStartDate($quizQuestionAnswerDTO->getQuizId(), new DateTime('NOW'));
         }
 
         $this->quizResultRepository->save($quizQuestionAnswerDTO->getQuizId(), $quizQuestionAnswerDTO->getQuestionStep()->getStepId(), $resultAnswer);
@@ -46,27 +48,16 @@ class QuizQuestionAnswersService
         return count($correctAnswers);
     }
 
-    /**
-     * @param int $quizId
-     * @return array <int|string, bool|string>
-     */
-    public function getAnswersByQuiz(int $quizId): array
+    public function getQuizResult(int $quizId): QuizResult
     {
         return $this->quizResultRepository->getQuizResult($quizId);
     }
 
     public function getLastPassedQuestion(int $quizId): int
     {
-        $rawAnswers = $this->getAnswersByQuiz($quizId);
-        $answers = array_filter($rawAnswers, static function ($answer, $key) {
-            return is_int($key);
-        }, ARRAY_FILTER_USE_BOTH);
+        $quizResult = $this->getQuizResult($quizId);
 
-        if (empty($answers)) {
-            return 0;
-        }
-
-        return (int) max(array_keys($answers));
+        return $quizResult->getLastPosition();
     }
 
     public function cleanQuizAnswers(int $quizId): void

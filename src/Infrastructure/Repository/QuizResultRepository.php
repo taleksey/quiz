@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Repository;
 
 use App\Domain\Quiz\Repository\Interfaces\ResultRepositoryInterface;
+use App\Domain\Quiz\ValueObject\QuizResult;
 use App\Domain\QuizSession\Entity\QuizSession;
 
 class QuizResultRepository extends SessionRepository implements ResultRepositoryInterface
@@ -48,15 +49,12 @@ class QuizResultRepository extends SessionRepository implements ResultRepository
         return (bool) $this->manager->remove($this->getQuizMainKey($quizId));
     }
 
-    /**
-     * @param int $quizId
-     * @return array <int|string, bool|string>
-     */
-    public function getQuizResult(int $quizId): array
+    public function getQuizResult(int $quizId): QuizResult
     {
         $mainKey = $this->getQuizMainKey($quizId);
+        $quizResult = (array)$this->manager->get($mainKey);
 
-        return (array)$this->manager->get($mainKey);
+        return new QuizResult($quizResult);
     }
 
     public function getPrefixKey(): string

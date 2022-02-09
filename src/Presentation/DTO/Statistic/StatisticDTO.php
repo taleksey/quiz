@@ -4,40 +4,35 @@ declare(strict_types=1);
 
 namespace App\Presentation\DTO\Statistic;
 
+use App\Domain\Quiz\ValueObject\QuizResult;
 use App\Infrastructure\DB\Statistics\Customer;
 use App\Infrastructure\DB\Statistics\Quiz;
 
 class StatisticDTO
 {
-    private string $startDate;
-
     private Quiz $quiz;
 
     private Customer $customer;
 
-    /**
-     * @var array<int|string, bool|string>
-     */
-    private array $answers;
+    private QuizResult $quizResult;
 
     /**
-     * @param array<string, int|string|array<int|string, bool|string>> $statistic
+     * @param array<string, int|QuizResult> $statistic
      */
     public function __construct(array $statistic)
     {
-        $this->startDate = $statistic['startDate'];
         $this->quiz = new Quiz();
         $this->quiz->setId($statistic['quizId']);
 
         $this->customer = new Customer();
         $this->customer->setId($statistic['customerId']);
 
-        $this->answers = $statistic['answers'];
+        $this->quizResult = $statistic['quizResult'];
     }
 
-    public function getStartDate(): string
+    public function getStartDate(): \DateTime
     {
-        return $this->startDate;
+        return $this->quizResult->getStartDate();
     }
 
     public function getQuiz(): Quiz
@@ -50,11 +45,8 @@ class StatisticDTO
         return $this->customer;
     }
 
-    /**
-     * @return array <int|string, bool|string>
-     */
-    public function getRawAnswers(): array
+    public function getQuizResult(): QuizResult
     {
-        return $this->answers;
+        return $this->quizResult;
     }
 }

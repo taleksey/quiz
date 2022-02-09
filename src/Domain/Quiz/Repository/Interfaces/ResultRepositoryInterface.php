@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Quiz\Repository\Interfaces;
 
+use App\Domain\Quiz\ValueObject\QuizResult;
 use App\Domain\QuizSession\Entity\QuizSession;
 
 interface ResultRepositoryInterface
@@ -20,11 +21,7 @@ interface ResultRepositoryInterface
 
     public function saveQuizStartDate(int $quizId, \DateTime $date): void;
 
-    /**
-     * @param int $quizId
-     * @return array <int|string, string|bool>
-     */
-    public function getQuizResult(int $quizId): array;
+    public function getQuizResult(int $quizId): QuizResult;
 
     public function getPrefixKey(): string;
 

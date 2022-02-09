@@ -148,8 +148,8 @@ class QuizController extends AbstractController
         $customer = $this->getUser();
 
         $statisticDTO = $customerTransformer->transform($id, $customer->getId());
-        $getAnswers = $quizQuestionAnswersService->getAnswersByQuiz($id);
-        if (empty($getAnswers)) {
+        $quizResult = $quizQuestionAnswersService->getQuizResult($id);
+        if (! $quizResult->isAnswers()) {
             $totalCorrectAnswers = $quizStatisticService->getTotalCorrectAnswersByCustomer($statisticDTO->getCustomer(), $id);
         } else {
             $quizStatisticService->saveResultQuiz($statisticDTO);
