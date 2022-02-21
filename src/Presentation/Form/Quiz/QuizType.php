@@ -39,6 +39,12 @@ class QuizType extends AbstractType
         $resolver->setDefaults([
             'data_class' => CreateDTO::class,
             'hiddenToken' => 0,
+            'csrf_protection' => false,
         ]);
+    }
+
+    public function getBlockPrefix(): string
+    {
+        return '';
     }
 }

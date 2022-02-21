@@ -11,6 +11,7 @@ use App\Infrastructure\Service\AuthService;
 use App\Presentation\DTO\Quiz\QuestionAnswerRequestDTO;
 use App\Presentation\Form\Quiz\QuizType;
 use App\Presentation\Service\MainQuizService;
+use App\Presentation\Transformers\TransformJsonToRequest;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -148,21 +149,38 @@ class QuizController extends AbstractController
         }
 
         $secretToken = $this->getParameter('app.secretToken');
-        $form = $this->createForm(QuizType::class, options: ['hiddenToken' => $secretToken]);
+        return $this->render('quiz/create/index.html.twig', ['token' => $secretToken]);
+    }
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && (! $form->has('token') || $form->get('token')->getData() !== $secretToken)) {
-            return $this->redirectToRoute('quiz_new');
+    #[Route('/quiz/create', name: 'quiz_create', methods: ["POST"])]
+    public function createNewQuiz(Request $request, AuthService $authService, TransformJsonToRequest $jsonToRequest, MainQuizService $mainQuizService): Response
+    {
+        if (! $authService->isCustomerAuthorizedForCreatingQuiz()) {
+            return new Response(json_encode(['message' => 'You have to authorize']), 403);
         }
+        $secretToken = $this->getParameter('app.secretToken');
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        $request = $jsonToRequest->transform($request);
+        $token = $request->request->get('token');
+        $csrfToken = $request->request->get('csrfToken');
+        $request->request->remove('csrfToken');
+        $form = $this->createForm(QuizType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            if ($secretToken !== $token || ! $this->isCsrfTokenValid('item', $csrfToken)) {
+                return new Response(json_encode(['message' => 'You don\'t have access to this page']), 403);
+            }
+
+            if (! $form->isValid()) {
+                return new Response(json_encode(['message' => (string) $form->getErrors(true, false)]), 403);
+            }
+
             $task = $form->getData();
             $mainQuizService->createQuiz($task);
-            return $this->redirectToRoute('quiz_success');
+            return new Response(json_encode(['message' => 'OK']), 200);
         }
 
-        return $this->renderForm('quiz/create/index.html.twig', ['formQuiz' => $form]);
+        return new Response(json_encode(['message' => 'Something wrong']), 404);
     }
 
     #[Route('/quiz/created', name: 'quiz_success')]

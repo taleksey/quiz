@@ -21,6 +21,12 @@ class QuizControllerTest extends WebTestCase
     private const USER_NICK_NAME = 'test';
     private const USER_EMAIL = 'test@example.com';
     private const USER_PASSWORD = 'TestPassword';
+    /**
+     * @var array<string, string>
+     */
+    private array $quiz = [
+        'name' => 'Test Quiz',
+    ];
 
     public function testHomepage(): void
     {
@@ -87,25 +93,22 @@ class QuizControllerTest extends WebTestCase
         $this->assertGreaterThan(0, $messageWithTextThatTokenIsWrong->count());
     }
 
-    /**
-     * @return void
-     * @throws DOMException
-     */
     public function testCreateNewQuizWithMissingAnswers(): void
     {
         $client = static::createClient();
+
         $client = $this->loggedIn($client);
         $this->authorize($client);
-        $crawler = $client->request('GET', '/quiz/new');
-        $buttonCrawlerNode = $crawler->selectButton('Save');
-        $form = $buttonCrawlerNode->form([
-            'quiz[name]' => 'Test Quiz',
-        ]);
-        $dom = new DOMDocument('1.0', 'utf-8');
-        $form->set(new InputFormField($this->createInputElement($dom, 'quiz[questions][0][text]', 'First Question')));
-        $client->submit($form);
+        $quiz = $this->getQuizWithoutQuestions($client);
+        $client = $client->jsonRequest('POST', '/quiz/create', $quiz);
 
-        $this->assertResponseIsUnprocessable();
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+
+        $result = array_filter($client->filter('html > body > p')->extract(['_text']), static function($pHtmlElement) {
+            return str_contains($pHtmlElement, 'ERROR: Set questions');
+        });
+
+        $this->assertCount(1, $result);
     }
 
     /**
@@ -117,23 +120,15 @@ class QuizControllerTest extends WebTestCase
         $client = static::createClient();
         $client = $this->loggedIn($client);
         $this->authorize($client);
-        $crawler = $client->request('GET', '/quiz/new');
-        $buttonCrawlerNode = $crawler->selectButton('Save');
-        $form = $buttonCrawlerNode->form([
-            'quiz[name]' => 'Test Quiz',
-        ]);
-        $dom = new DOMDocument('1.0', 'utf-8');
-        $form->set(new InputFormField($this->createInputElement($dom, 'quiz[questions][0][text]', 'First Question')));
+        $quiz = $this->getQuizWithMissingAnswersValue($client);
+        $client = $client->jsonRequest('POST', '/quiz/create', $quiz);
 
-        $form->set(new ChoiceFormField($this->createRadioInputElement($dom, 'quiz[questions][0][answers][0][correct]', '0', false)));
-        $form->set(new InputFormField($this->createInputElement($dom, 'quiz[questions][0][answers][0][text]', 'First Answer')));
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+        $result = array_filter($client->filter('html > body > p')->extract(['_text']), static function($pHtmlElement) {
+            return str_contains($pHtmlElement, 'answers:') && str_contains($pHtmlElement, 'ERROR: This value should not be blank');
+        });
 
-        $form->set(new ChoiceFormField($this->createRadioInputElement($dom, 'quiz[questions][0][answers][1][correct]', '1', false)));
-        $form->set(new InputFormField($this->createInputElement($dom, 'quiz[questions][0][answers][1][text]', '')));
-
-        $client->submit($form);
-
-        $this->assertResponseIsUnprocessable();
+        $this->assertCount(1, $result);
     }
 
     /**
@@ -145,86 +140,32 @@ class QuizControllerTest extends WebTestCase
         $client = static::createClient();
         $client = $this->loggedIn($client);
         $this->authorize($client);
-        $crawler = $client->request('GET', '/quiz/new');
-        $buttonCrawlerNode = $crawler->selectButton('Save');
-        $form = $buttonCrawlerNode->form([
-            'quiz[name]' => 'Test Quiz',
-        ]);
-        $dom = new DOMDocument('1.0', 'utf-8');
-        $form->set(new InputFormField($this->createInputElement($dom, 'quiz[questions][0][text]', 'First Question')));
+        $quiz = $this->quizWithMissingSetCorrectAnswer($client);
+        $client = $client->jsonRequest('POST', '/quiz/create', $quiz);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        $form->set(new ChoiceFormField($this->createRadioInputElement($dom, 'quiz[questions][0][answers][0][correct]', '0', false)));
-        $form->set(new InputFormField($this->createInputElement($dom, 'quiz[questions][0][answers][0][text]', 'First Answer')));
+        $result = array_filter($client->filter('html > body > p')->extract(['_text']), static function($pHtmlElement) {
+            return str_contains($pHtmlElement, 'ERROR: You have to select correct answer');
+        });
 
-        $form->set(new ChoiceFormField($this->createRadioInputElement($dom, 'quiz[questions][0][answers][1][correct]', '1', false)));
-        $form->set(new InputFormField($this->createInputElement($dom, 'quiz[questions][0][answers][1][text]', 'Second Answer')));
-        $client->submit($form);
-
-        $this->assertResponseIsUnprocessable();
+        $this->assertCount(1, $result);
     }
 
-    /**
-     * @return void
-     * @throws DOMException
-     */
     public function testCreateNewQuizGood(): void
     {
         $client = static::createClient();
         $client = $this->loggedIn($client);
         $this->authorize($client);
-        $crawler = $client->request('GET', '/quiz/new');
-        $buttonCrawlerNode = $crawler->selectButton('Save');
-        $form = $buttonCrawlerNode->form([
-            'quiz[name]' => 'Test Quiz',
-        ]);
-        $dom = new DOMDocument('1.0', 'utf-8');
-        $form->set(new InputFormField($this->createInputElement($dom, 'quiz[questions][0][text]', 'First Question')));
 
-        $form->set(new ChoiceFormField($this->createRadioInputElement($dom, 'quiz[questions][0][answers][0][correct]', '0', false)));
-        $form->set(new InputFormField($this->createInputElement($dom, 'quiz[questions][0][answers][0][text]', 'First Answer')));
+        $quiz = $this->getGoodQuizValues($client);
+        $client = $client->jsonRequest('POST', '/quiz/create', $quiz);
 
-        $form->set(new ChoiceFormField($this->createRadioInputElement($dom, 'quiz[questions][0][answers][1][correct]', '1', true)));
-        $form->set(new InputFormField($this->createInputElement($dom, 'quiz[questions][0][answers][1][text]', 'Second Answer')));
-        $client->submit($form);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $result = array_filter($client->filter('html > body > p')->extract(['_text']), static function($pHtmlElement) {
+            return str_contains($pHtmlElement, 'OK');
+        });
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
-        $this->assertResponseRedirects('/quiz/created');
-    }
-
-    /**
-     * @param DOMDocument $dom
-     * @param string $name
-     * @param string $value
-     * @return DOMElement
-     * @throws DOMException
-     */
-    private function createInputElement(DOMDocument $dom, string $name, string $value=''): DOMElement
-    {
-        $inputElement = $dom->createElement('input');
-        $inputElement->setAttribute('name', $name);
-        $inputElement->setAttribute('value', $value);
-
-        return $inputElement;
-    }
-
-    /**
-     * @param DOMDocument $dom
-     * @param string $name
-     * @param string $value
-     * @param bool $checked
-     * @return DOMElement
-     * @throws DOMException
-     */
-    private function createRadioInputElement(DOMDocument $dom, string $name, string $value, bool $checked): DOMElement
-    {
-        $inputElement = $dom->createElement('input');
-        $inputElement->setAttribute('type', 'radio');
-        $inputElement->setAttribute('name', $name);
-        $inputElement->setAttribute('value', $value);
-        if ($checked) {
-            $inputElement->setAttribute('checked', 'checked');
-        }
-        return $inputElement;
+        $this->assertCount(1, $result);
     }
 
     private function authorize(KernelBrowser $client): Crawler
@@ -253,5 +194,89 @@ class QuizControllerTest extends WebTestCase
         $testUser = $customerRepository->getCustomerByEmail($email);
 
         return $client->loginUser($testUser);
+    }
+
+    private function getCsrfToken(KernelBrowser $client): string
+    {
+        $crawler = $client->request('GET', '/quiz/new');
+        $scripts = array_values(array_filter($crawler->filterXPath('//script')->extract(['_text'])));
+        foreach ($scripts as $script) {
+            if(str_contains($script, 'window.csrfToken')) {
+                $lines = array_values(array_filter(explode(PHP_EOL, $script)));
+                foreach ($lines as $line) {
+                    if (! str_contains($line, 'window.csrfToken')) {
+                        continue;
+                    }
+                    $csrfToken = trim(explode('=', $line)[1]);
+                    return trim($csrfToken, '";');
+                }
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * @param KernelBrowser $client
+     * @return array<string, string>
+     */
+    private function getQuizWithoutQuestions(KernelBrowser $client): array
+    {
+        $secretToken= $this->getContainer()->getParameter('app.secretToken');
+        $quiz = $this->quiz;
+        $quiz['token'] = $secretToken;
+        $quiz['csrfToken'] = $this->getCsrfToken($client);
+
+        return $quiz;
+    }
+
+    /**
+     * @param KernelBrowser $client
+     * @return array <string, string|array<string, string|array<int, array<string, string|bool>>>>
+     */
+    private function getQuizWithMissingAnswersValue(KernelBrowser $client): array
+    {
+        $quiz = $this->getGoodQuizValues($client);
+        $quiz['questions'][0]['answers'][1]['text'] = '';
+
+        return $quiz;
+    }
+
+    /**
+     * @param KernelBrowser $client
+     * @return array <string, string|array<string, string|array<int, array<string, string|bool>>>>
+     */
+    private function quizWithMissingSetCorrectAnswer(KernelBrowser $client): array
+    {
+        $quiz = $this->getGoodQuizValues($client);
+        $quiz['questions'][0]['answers'][0]['correct'] = false;
+
+        return $quiz;
+    }
+
+    /**
+     * @param KernelBrowser $client
+     * @return array <string, string|array<string, string|array<int, array<string, string|bool>>>>
+     */
+    private function getGoodQuizValues(KernelBrowser $client): array
+    {
+        $quiz = $this->getQuizWithoutQuestions($client);
+
+        $quiz['questions'] = [
+            [
+                'text' => 'First Question',
+                'answers' => [
+                [
+                    'text' => 'First Answer',
+                    'correct' => true
+                ],
+                [
+                    'text' => 'Second Answer',
+                    'correct' => false
+                ]]
+            ]
+        ];
+
+        return $quiz;
     }
 }
