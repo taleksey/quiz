@@ -2,7 +2,9 @@
 
 namespace App\Tests\Functional\Controller;
 
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Crawler;
 
 class RegistrationAndLoginControllerTest extends WebTestCase
 {
@@ -31,28 +33,61 @@ class RegistrationAndLoginControllerTest extends WebTestCase
     public function testRegistrationCustomer(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/registration');
-        $buttonCrawlerNode = $crawler->selectButton('Register');
-        $form = $buttonCrawlerNode->form([
-            'registration_form[nickName]' => self::USER_NICKNAME,
-            'registration_form[firstName]' => 'First',
-            'registration_form[lastName]' => 'Last',
-            'registration_form[email]' => self::USER_EMAIL,
-            'registration_form[plainPassword]' => self::USER_PASSWORD,
-            'registration_form[agreeTerms]' => 1
-
+        $this->registration($client, [
+            'nickName' => self::USER_NICKNAME,
+            'firstName' => 'First',
+            'lastName' => 'Last',
+            'email' => self::USER_EMAIL,
+            'plainPassword' => self::USER_PASSWORD,
         ]);
-        $client->submit($form);
         $crawler = $client->followRedirect();
         $this->assertStringContainsString('/login', $crawler->getUri());
-        $buttonCrawlerNode = $crawler->selectButton('Login');
-        $form = $buttonCrawlerNode->form([
+
+        $this->login($client, $crawler, [
             'email' => self::USER_EMAIL,
             'password' => self::USER_PASSWORD
         ]);
-        $client->submit($form);
         $crawler = $client->request('GET', '/quiz/new');
+
+        $headerLinks = $crawler->filter('.nav-link')->each(function (Crawler $crawler){
+            return $crawler->attr('href');
+        });
+        $this->assertContains('/logout', $headerLinks);
+    }
+
+    /**
+     * @param KernelBrowser $client
+     * @param array<string, string> $rawCustomers
+     * @return void
+     */
+    public function registration(KernelBrowser $client, array $rawCustomers): void
+    {
+        $crawler = $client->request('GET', '/registration');
+        $buttonCrawlerNode = $crawler->selectButton('Register');
+        $form = $buttonCrawlerNode->form([
+            'registration_form[nickName]' => $rawCustomers['nickName'],
+            'registration_form[firstName]' => $rawCustomers['firstName'],
+            'registration_form[lastName]' => $rawCustomers['lastName'],
+            'registration_form[email]' => $rawCustomers['email'],
+            'registration_form[plainPassword]' => $rawCustomers['plainPassword'],
+            'registration_form[agreeTerms]' => 1
+        ]);
+        $client->submit($form);
+    }
+
+    /**
+     * @param KernelBrowser $client
+     * @param Crawler $crawler
+     * @param array<string, string> $rawCustomer
+     * @return void
+     */
+    public function login(KernelBrowser $client, Crawler $crawler, array $rawCustomer): void
+    {
         $buttonCrawlerNode = $crawler->selectButton('Login');
-        $this->assertEquals(0, $buttonCrawlerNode->count());
+        $form = $buttonCrawlerNode->form([
+            'email' => $rawCustomer['email'],
+            'password' => $rawCustomer['password']
+        ]);
+        $client->submit($form);
     }
 }

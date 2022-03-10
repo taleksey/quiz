@@ -22,3 +22,19 @@ services:
            $authToken: '%app.authorizationKey%'
     domen_customer.oauth.user.provider: 
         class: App\Presentation\Provider\CustomerEntityProvider
+    App\Presentation\EventListener\CustomLogoutListener:
+        tags:
+            -   name: 'kernel.event_listener'
+                event: 'Symfony\Component\Security\Http\Event\LogoutEvent'
+                dispatcher: security.event_dispatcher.main
+                method: onLogoutEvent
+        arguments:
+            $quizSessionService: '@App\Domain\QuizSession\Service\QuizSessionService'
+    App\Presentation\EventListener\CustomLoginListener:
+        tags:
+            -   name: 'kernel.event_listener'
+                event: 'Symfony\Component\Security\Http\Event\LoginSuccessEvent'
+                dispatcher: security.event_dispatcher.main
+                method: onLoginEvent        
+        arguments:
+            $quizSessionService: '@App\Domain\QuizSession\Service\QuizSessionService'

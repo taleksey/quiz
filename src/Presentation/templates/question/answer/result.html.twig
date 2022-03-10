@@ -17,6 +17,36 @@
                                 <p>You've  answered on total {{ totalQuestions }}. Total correct answers <b>{{ totalCorrectAnswers }}</b>.</p>
                             </div>
                         </div>
+                        <div>
+                            <table class="table table-result">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Position</th>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Last Name</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for statistic in top3Statistics %}
+                                    <tr>
+                                        <th scope="row">{{ loop.index }}</th>
+                                        <td>{{ statistic.firstName }}</td>
+                                        <td>{{ statistic.lastName }}</td>
+                                    </tr>
+                                {% endfor %}
+                                {% if statisticPosition > 3 %}
+                                    <tr>
+                                        <th colspan="3">Your Position</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{{ statisticPosition }}</th>
+                                        <td>{{ currentCustomer.firstName }}</td>
+                                        <td>{{ currentCustomer.lastName }}</td>
+                                    </tr>
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="d-flex flex-row justify-content-between align-items-center p-3 bg-white">
                             <a href="{{ path('homepage') }}">
                                 <button class="btn btn-primary border-success align-items-center btn-success" type="button">
