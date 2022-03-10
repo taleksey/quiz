@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller;
 
+use App\Domain\Customer\Entity\Customer;
 use App\Domain\Quiz\Service\QuizQuestionAnswersService;
 use App\Domain\Quiz\Service\QuizQuestionsService;
 use App\Domain\Quiz\Service\QuizService;
+use App\Domain\Statistics\Service\QuizStatisticService;
 use App\Infrastructure\Service\AuthService;
 use App\Presentation\DTO\Quiz\QuestionAnswerRequestDTO;
 use App\Presentation\Form\Quiz\QuizType;
 use App\Presentation\Service\MainQuizService;
+use App\Presentation\Transformers\Statistic\StatisticTransformer;
+use App\Presentation\Transformers\Statistic\StatisticViewTransformer;
 use App\Presentation\Transformers\TransformJsonToRequest;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,7 +34,7 @@ class QuizController extends AbstractController
     }
 
     #[Route('/quiz/{id}', name: 'quiz_show', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function showQuiz(QuizService $quizService, int $id): Response
+    public function showQuiz(QuizService $quizService, QuizQuestionAnswersService $quizQuestionAnswersService, int $id): Response
     {
         $quiz = $quizService->getQuizById($id);
         if (! $quiz) {
@@ -38,6 +42,14 @@ class QuizController extends AbstractController
                 'No quiz found for id ' . $id
             );
         }
+        $totalQuestions = $quiz->getQuestions()->count();
+        $passedQuestion = $quizQuestionAnswersService->getLastPassedQuestion($id);
+
+        if ($passedQuestion && $totalQuestions > $passedQuestion) {
+            $nextCorrectStep = $passedQuestion + 1;
+            return $this->redirectToRoute('quiz_questions', ['id' => $id, 'step' => $nextCorrectStep]);
+        }
+
         return $this->render('quiz/index.html.twig', ['quiz' => $quiz]);
     }
 
@@ -120,9 +132,12 @@ class QuizController extends AbstractController
     #[Route('/quiz/{id}/result', name: 'quiz_result', methods: ["GET"])]
     public function quizResult(
         QuizQuestionAnswersService $quizQuestionAnswersService,
-        QuizQuestionsService $quizQuestionsService,
-        QuizService $quizService,
-        int $id
+        QuizQuestionsService       $quizQuestionsService,
+        QuizService                $quizService,
+        QuizStatisticService       $quizStatisticService,
+        StatisticTransformer       $customerTransformer,
+        StatisticViewTransformer   $statisticViewTransformer,
+        int                        $id
     ): Response {
         $quiz = $quizService->getQuizById($id);
         if (! $quiz) {
@@ -130,13 +145,30 @@ class QuizController extends AbstractController
                 'No quiz found for id ' . $id
             );
         }
+        /** @var Customer $customer */
+        $customer = $this->getUser();
+
+        $statisticDTO = $customerTransformer->transform($id, $customer->getId());
+        $quizResult = $quizQuestionAnswersService->getQuizResult($id);
+        if (! $quizResult->isAnswers()) {
+            $totalCorrectAnswers = $quizStatisticService->getTotalCorrectAnswersByCustomer($statisticDTO->getCustomer(), $id);
+        } else {
+            $quizStatisticService->saveResultQuiz($statisticDTO);
+            $totalCorrectAnswers = $quizQuestionAnswersService->getTotalCorrectAnswers($id);
+            $quizQuestionAnswersService->cleanQuizAnswers($id);
+        }
+        $top3Statistics = $quizStatisticService->getQuizStatistics($id);
+        $statisticPosition = $quizStatisticService->getPositionCurrentCustomer($statisticDTO->getCustomer(), $id);
 
         return $this->render(
             'question/answer/result.html.twig',
             [
-                'totalCorrectAnswers' => $quizQuestionAnswersService->getTotalCorrectAnswers($id),
+                'totalCorrectAnswers' => $totalCorrectAnswers,
                 'totalQuestions' => $quizQuestionsService->getTotalQuestions($id),
-                'quiz' => $quizService->getQuizById($id)
+                'quiz' => $quizService->getQuizById($id),
+                'top3Statistics' => $statisticViewTransformer->transform($top3Statistics),
+                'statisticPosition' => $statisticPosition,
+                'currentCustomer' => $statisticViewTransformer->transformCustomer($customer)
             ]
         );
     }

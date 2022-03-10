@@ -14,6 +14,16 @@
                             <a class="nav-link{% if isAuthorizePage is defined %} active {% endif %}" href="{{ path('authorize') }}">Authorization</a>
                         </li>
                     </ul>
+                    <ul class="navbar-nav log-actions">
+                        <li>
+                            {% if app.user %}
+                                <a class="nav-link" href="{{ path('app_logout') }}">Logout({{ app.user.getNickName }})</a>
+                            {% else %}
+                                <a class="nav-link" href="{{ path('app_login') }}">Login</a>
+                            {% endif %}
+
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>

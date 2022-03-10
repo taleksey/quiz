@@ -39,10 +39,10 @@ class Customer extends CustomerDomain implements UserInterface, PasswordAuthenti
     #[ORM\Column(type: 'string')]
     private string $password;
 
-    #[ORM\Column(name:"first_name", type: 'string', length: 150)]
+    #[ORM\Column(name:"first_name", type: 'string', length: 150, nullable: true)]
     private string $firstName;
 
-    #[ORM\Column(name:"last_name", type: 'string', length: 150)]
+    #[ORM\Column(name:"last_name", type: 'string', length: 150, nullable: true)]
     private string $lastName;
 
     #[ORM\Column(name:"is_verified", type: 'boolean', options: [

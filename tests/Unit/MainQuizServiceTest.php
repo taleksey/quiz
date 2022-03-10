@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit;
 
 use App\Domain\Quiz\Service\QuizService;
+use App\Infrastructure\DB\Customer\Customer;
 use App\Infrastructure\DB\Quiz\Answer;
 use App\Infrastructure\DB\Quiz\Question;
 use App\Infrastructure\DB\Quiz\Quiz;
@@ -54,6 +55,8 @@ class MainQuizServiceTest extends TestCase
 
     private const TOTAL_QUIZZES = 2;
 
+    private const CUSTOMER_EMAIL = 'test@example.com';
+
     /**
      * @dataProvider getQuizzesAndLinkedQuizDTO
      *
@@ -71,16 +74,21 @@ class MainQuizServiceTest extends TestCase
         $quizzesRepository->method('save')
             ->with($quiz);
 
+        $customer = $this->createMock(Customer::class);
+        $customer->expects($this->any())
+        ->method('getEmail')
+        ->willReturn(self::CUSTOMER_EMAIL);
+
         $quizService = new QuizService($quizzesRepository);
         $DTOHydrator = new DTOHydrator();
         $mainQuiz = new MainQuizService($DTOHydrator, $quizService);
 
-        $mainQuiz->createQuiz($quizDTO);
+        $mainQuiz->createQuiz($quizDTO, $customer);
         $this->assertNotEquals($quizDTO, $quiz);
     }
 
     /**
-     * @return array<int, array<string, Quiz|CreateDTO>>
+     * @return array <int, array<string, Quiz|CreateDTO>>
      */
     public function getQuizzesAndLinkedQuizDTO(): array
     {
@@ -91,6 +99,7 @@ class MainQuizServiceTest extends TestCase
             $quiz->setName($quizName);
             $quiz->setActive(true);
             $quiz->setQueue(self::TOTAL_QUIZZES + $currentQuizOrderNumber);
+            $quiz->setEmail(self::CUSTOMER_EMAIL);
             $questions = $dataForCreatingQuiz['questions'] ?? [];
             foreach ($questions as $questionIndex => $questionData) {
                 $question = new Question();
