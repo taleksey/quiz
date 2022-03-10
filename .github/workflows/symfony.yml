@@ -49,12 +49,6 @@ jobs:
         with:
           node-version: '14'
           check-latest: true
-      - name: Install Node.js Dependencies
-        run: npm install
-      - name: Create Node.js build
-        run: npm run build
-      - name: Test Node.js
-        run: npm test
       - name: Cache dependencies Node.js
         uses: actions/cache@v2
         env:
@@ -66,6 +60,12 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+      - name: Install Node.js Dependencies
+        run: npm install
+      - name: Create Node.js build
+        run: npm run build
+      - name: Test Node.js
+        run: npm test
   symfony-tests:
     runs-on: ubuntu-latest
     services:
