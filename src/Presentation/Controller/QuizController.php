@@ -208,7 +208,9 @@ class QuizController extends AbstractController
             }
 
             $task = $form->getData();
-            $mainQuizService->createQuiz($task);
+            /** @var \App\Infrastructure\DB\Customer\Customer $customer */
+            $customer = $this->getUser();
+            $mainQuizService->createQuiz($task, $customer);
             return new Response(json_encode(['message' => 'OK']), 200);
         }
 
