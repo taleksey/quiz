@@ -19,29 +19,6 @@ use Doctrine\ORM\NoResultException;
  */
 class StatisticRepository extends DbRepository implements StatisticRepositoryInterface
 {
-    public function saveOrUpdate(QuizStatisticDomain $statistic): void
-    {
-        $statisticEntity = $this->getQuizStatisticByCustomer($statistic->getQuiz()->getId(), $statistic->getCustomer());
-
-        if (null === $statisticEntity) {
-            $quiz = $this->entityManager->find(Quiz::class, $statistic->getQuiz()->getId());
-            $statistic->setQuiz($quiz);
-            $customer = $this->entityManager->find(Customer::class, $statistic->getCustomer()->getId());
-            $statistic->setCustomer($customer);
-        }
-
-        if (null !== $statisticEntity) {
-            $statisticEntity->setTotalQuestions($statistic->getTotalQuestions());
-            $statisticEntity->setTotalCorrectAnswers($statistic->getTotalCorrectAnswers());
-            $statisticEntity->setRawAnswers($statistic->getRawAnswers());
-            $statisticEntity->setSpendSecondsQuiz($statistic->getSpendSecondsQuiz());
-            $statistic = $statisticEntity;
-        }
-
-        $this->entityManager->persist($statistic);
-        $this->entityManager->flush();
-    }
-
     public function getStatistics(int $quizId): array
     {
         return $this->manager->findBy([
@@ -55,7 +32,7 @@ class StatisticRepository extends DbRepository implements StatisticRepositoryInt
     public function getPositionCurrentCustomer(CustomerDomain $customer, int $quizId): int
     {
         $statistic = $this->getQuizStatisticByCustomer($quizId, $customer);
-        if (null === $statistic) {
+        if ($statistic->isEmpty()) {
             return  0;
         }
         try {
@@ -82,19 +59,25 @@ class StatisticRepository extends DbRepository implements StatisticRepositoryInt
     public function getTotalCorrectAnswersByCustomer(CustomerDomain $customer, int $quizId): int
     {
         $statistic = $this->getQuizStatisticByCustomer($quizId, $customer);
-        if (null !== $statistic) {
+        if (! $statistic->isEmpty()) {
             return $statistic->getTotalCorrectAnswers();
         }
 
         return 0;
     }
 
-    protected function getQuizStatisticByCustomer(int $quizId, CustomerDomain $customer): QuizStatistic|null
+    public function getQuizStatisticByCustomer(int $quizId, CustomerDomain $customer): QuizStatistic
     {
-        return $this->manager->findOneBy([
+        $quizStatistic = $this->manager->findOneBy([
             'customer' => $customer->getId(),
             'quiz' => $quizId
         ]);
+
+        if (! empty($quizStatistic)) {
+            return $quizStatistic;
+        }
+
+        return new QuizStatistic();
     }
 
     protected function getFullEntityName(): string

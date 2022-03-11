@@ -6,7 +6,7 @@ namespace App\Domain\Statistics\Entity;
 
 class QuizStatistic
 {
-    private int $id;
+    protected int $id;
 
     protected Customer $customer;
 
@@ -104,5 +104,10 @@ class QuizStatistic
     public function setSpendSecondsQuiz(int $spendSecondsQuiz): void
     {
         $this->spendSecondsQuiz = $spendSecondsQuiz;
+    }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->id);
     }
 }

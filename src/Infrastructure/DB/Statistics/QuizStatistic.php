@@ -19,7 +19,7 @@ class QuizStatistic extends QuizStatisticDomain
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $id;
+    protected int $id;
 
     #[ORM\ManyToOne(targetEntity: Customer::class, cascade: ["merge"])]
     #[ORM\JoinColumn(name: "customer_id", referencedColumnName: "id")]

@@ -7,21 +7,21 @@ namespace App\Domain\Statistics\Service;
 use App\Domain\Statistics\Entity\Customer;
 use App\Domain\Statistics\Entity\QuizStatistic;
 use App\Domain\Statistics\Hydrator\StatisticHydratorInterface;
-use App\Domain\Statistics\Repository\StatisticRepositoryInterface;
+use App\Domain\Statistics\Manager\StatisticManagerInterface;
 use App\Presentation\DTO\Statistic\StatisticDTO;
 
 class QuizStatisticService
 {
-    private StatisticRepositoryInterface $statisticRepository;
-
     private StatisticHydratorInterface $statisticHydrator;
 
+    private StatisticManagerInterface $manager;
+
     public function __construct(
-        StatisticRepositoryInterface $statisticRepository,
-        StatisticHydratorInterface $statisticHydrator
+        StatisticHydratorInterface $statisticHydrator,
+        StatisticManagerInterface $manager
     ) {
-        $this->statisticRepository = $statisticRepository;
         $this->statisticHydrator = $statisticHydrator;
+        $this->manager = $manager;
     }
 
     public function saveResultQuiz(StatisticDTO $statisticDTO): void
@@ -33,7 +33,12 @@ class QuizStatisticService
         $spendSecondsOnQuiz = $this->convertToSeconds($dateTimeResult);
 
         $statistic = $this->statisticHydrator->hydrate($statisticDTO, $spendSecondsOnQuiz);
-        $this->statisticRepository->saveOrUpdate($statistic);
+        $quizStatistic = $this->manager->getQuizStatisticByCustomer($statistic->getQuiz()->getId(), $statistic->getCustomer());
+        if ($quizStatistic->isEmpty()) {
+            $this->manager->save($statistic);
+        } else {
+            $this->manager->update($statistic, $quizStatistic);
+        }
     }
 
     /**
@@ -42,17 +47,17 @@ class QuizStatisticService
      */
     public function getQuizStatistics(int $quizId): array
     {
-        return $this->statisticRepository->getStatistics($quizId);
+        return $this->manager->getStatistics($quizId);
     }
 
     public function getPositionCurrentCustomer(Customer $customer, int $quizId): int
     {
-        return $this->statisticRepository->getPositionCurrentCustomer($customer, $quizId);
+        return $this->manager->getPositionCurrentCustomer($customer, $quizId);
     }
 
     public function getTotalCorrectAnswersByCustomer(Customer $customer, int $quizId): int
     {
-        return $this->statisticRepository->getTotalCorrectAnswersByCustomer($customer, $quizId);
+        return $this->manager->getTotalCorrectAnswersByCustomer($customer, $quizId);
     }
 
     private function convertToSeconds(\DateInterval $dateInterval): int
