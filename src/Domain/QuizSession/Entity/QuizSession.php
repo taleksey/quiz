@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain\QuizSession\Entity;
 
-class QuizSession
+use App\Domain\Entity\EntityInterface;
+
+class QuizSession implements EntityInterface
 {
     protected int $id;
 
@@ -79,5 +81,10 @@ class QuizSession
     public function setSession(array $session): void
     {
         $this->session = $session;
+    }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->id);
     }
 }

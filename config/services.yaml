@@ -46,3 +46,9 @@ services:
         arguments:
             $statisticHydrator: '@App\Presentation\Hydrator\Statistic\StatisticHydrator'
             $manager: '@App\Infrastructure\Manager\Statistic\StatisticManager'
+    App\Infrastructure\Manager\QuizSession\QuizSessionManager:
+        arguments:
+            $objectManager: '@doctrine.orm.default_entity_manager'
+            $quizSessionRepository: '@App\Infrastructure\Repository\QuizSession\QuizSessionRepository'
+            $quizRepository: '@App\Infrastructure\Repository\QuizSession\QuizRepository'
+            $customerRepository: '@App\Infrastructure\Repository\QuizSession\CustomerRepository'
