@@ -12,17 +12,10 @@ use App\Presentation\DTO\Statistic\StatisticDTO;
 
 class QuizStatisticService
 {
-    private StatisticHydratorInterface $statisticHydrator;
-
-    private StatisticManagerInterface $manager;
-
     public function __construct(
-        StatisticHydratorInterface $statisticHydrator,
-        StatisticManagerInterface $manager
-    ) {
-        $this->statisticHydrator = $statisticHydrator;
-        $this->manager = $manager;
-    }
+        private StatisticHydratorInterface $statisticHydrator,
+        private StatisticManagerInterface $manager
+    ) {}
 
     public function saveResultQuiz(StatisticDTO $statisticDTO): void
     {

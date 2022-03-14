@@ -14,25 +14,12 @@ use Doctrine\Persistence\ObjectManager;
 /** @template T */
 class QuizSessionManager implements QuizSessionManagerInterface
 {
-    private QuizSessionRepositoryInterface $quizSessionRepository;
-
-    private ObjectManager $objectManager;
-
-    private QuizRepositoryInterface $quizRepository;
-
-    private CustomerRepositoryInterface $customerRepository;
-
     public function __construct(
-        ObjectManager $objectManager,
-        QuizSessionRepositoryInterface $quizSessionRepository,
-        QuizRepositoryInterface $quizRepository,
-        CustomerRepositoryInterface $customerRepository
-    ) {
-        $this->objectManager = $objectManager;
-        $this->quizSessionRepository = $quizSessionRepository;
-        $this->quizRepository = $quizRepository;
-        $this->customerRepository = $customerRepository;
-    }
+        private ObjectManager $objectManager,
+        private QuizSessionRepositoryInterface $quizSessionRepository,
+        private QuizRepositoryInterface $quizRepository,
+        private CustomerRepositoryInterface $customerRepository
+    ) {}
 
     /**
      * @param array<int, QuizSession> $sessions

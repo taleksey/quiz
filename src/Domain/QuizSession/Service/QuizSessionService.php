@@ -10,21 +10,11 @@ use App\Domain\QuizSession\Manager\QuizSessionManagerInterface;
 
 class QuizSessionService
 {
-    private ResultRepositoryInterface $resultRepository;
-
-    private QuizSessionHydratorInterface $quizSessionHydrator;
-
-    private QuizSessionManagerInterface $quizSessionManager;
-
     public function __construct(
-        ResultRepositoryInterface $resultRepository,
-        QuizSessionHydratorInterface $quizSessionHydrator,
-        QuizSessionManagerInterface $quizSessionManager
-    ) {
-        $this->resultRepository = $resultRepository;
-        $this->quizSessionHydrator = $quizSessionHydrator;
-        $this->quizSessionManager = $quizSessionManager;
-    }
+        private ResultRepositoryInterface $resultRepository,
+        private QuizSessionHydratorInterface $quizSessionHydrator,
+        private QuizSessionManagerInterface $quizSessionManager
+    ) {}
 
     /**
      * @param array<int|string, array<int|string, int|string>> $sessions

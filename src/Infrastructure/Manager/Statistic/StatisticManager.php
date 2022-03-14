@@ -16,15 +16,10 @@ use Doctrine\Persistence\ObjectManager;
 
 class StatisticManager implements StatisticManagerInterface
 {
-    private ObjectManager $objectManager;
-
-    private StatisticRepositoryInterface $statisticRepository;
-
-    public function __construct(ObjectManager $objectManager, StatisticRepositoryInterface $statisticRepository)
-    {
-        $this->objectManager = $objectManager;
-        $this->statisticRepository = $statisticRepository;
-    }
+    public function __construct(
+        private ObjectManager $objectManager,
+        private StatisticRepositoryInterface $statisticRepository
+    ) {}
 
     public function save(QuizStatistic $entity): void
     {
