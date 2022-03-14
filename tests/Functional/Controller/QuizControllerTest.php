@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Controller;
 
 use App\Infrastructure\DB\Customer\Customer;
+use App\Infrastructure\Manager\Customer\CustomerManager;
 use App\Infrastructure\Repository\Registration\CustomerRepository;
 use DOMDocument;
 use DOMElement;
@@ -246,11 +247,9 @@ class QuizControllerTest extends WebTestCase
         $customer->setLastName(self::USER_LASTNAME);
         $customer->setEmail($email);
         $customer->setPassword(self::USER_PASSWORD);
-
-        /** @var CustomerRepository $customerRepository */
-        $customerRepository = static::getContainer()->get(CustomerRepository::class);
-        $customerRepository->create($customer);
-        $testUser = $customerRepository->getCustomerByEmail($email);
+        $customerManager = static::getContainer()->get(CustomerManager::class);
+        $customerManager->create($customer);
+        $testUser = $customerManager->getCustomerByEmail($email);
 
         return $client->loginUser($testUser);
     }

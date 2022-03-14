@@ -55,3 +55,7 @@ services:
     App\Infrastructure\Manager\Quiz\QuizManager:
         arguments:
             $objectManager: '@doctrine.orm.default_entity_manager'
+    App\Infrastructure\Manager\Customer\CustomerManager:
+        arguments:
+            $objectManager: '@doctrine.orm.default_entity_manager'
+            $customerRepository: '@App\Infrastructure\Repository\Registration\CustomerRepository'
