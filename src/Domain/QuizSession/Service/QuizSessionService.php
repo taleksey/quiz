@@ -14,7 +14,8 @@ class QuizSessionService
         private ResultRepositoryInterface $resultRepository,
         private QuizSessionHydratorInterface $quizSessionHydrator,
         private QuizSessionManagerInterface $quizSessionManager
-    ) {}
+    ) {
+    }
 
     /**
      * @param array<int|string, array<int|string, int|string>> $sessions

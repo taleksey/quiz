@@ -19,7 +19,8 @@ class QuizSessionManager implements QuizSessionManagerInterface
         private QuizSessionRepositoryInterface $quizSessionRepository,
         private QuizRepositoryInterface $quizRepository,
         private CustomerRepositoryInterface $customerRepository
-    ) {}
+    ) {
+    }
 
     /**
      * @param array<int, QuizSession> $sessions

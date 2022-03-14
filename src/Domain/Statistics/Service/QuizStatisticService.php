@@ -15,7 +15,8 @@ class QuizStatisticService
     public function __construct(
         private StatisticHydratorInterface $statisticHydrator,
         private StatisticManagerInterface $manager
-    ) {}
+    ) {
+    }
 
     public function saveResultQuiz(StatisticDTO $statisticDTO): void
     {

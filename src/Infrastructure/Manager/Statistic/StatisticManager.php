@@ -19,7 +19,8 @@ class StatisticManager implements StatisticManagerInterface
     public function __construct(
         private ObjectManager $objectManager,
         private StatisticRepositoryInterface $statisticRepository
-    ) {}
+    ) {
+    }
 
     public function save(QuizStatistic $entity): void
     {
