@@ -6,16 +6,15 @@ namespace App\Domain\Quiz\Service;
 
 use App\Domain\Quiz\Repository\Interfaces\ResultRepositoryInterface;
 use App\Domain\Quiz\ValueObject\QuizResult;
+use App\Infrastructure\Manager\QuizSession\QuizQuestionAnswersManager;
 use App\Presentation\DTO\Quiz\QuestionAnswerRequestDTO;
 use DateTime;
 
 class QuizQuestionAnswersService
 {
-    /**
-     * @param ResultRepositoryInterface $quizResultRepository
-     */
     public function __construct(
-        private ResultRepositoryInterface $quizResultRepository
+        private ResultRepositoryInterface $quizResultRepository,
+        private QuizQuestionAnswersManager $quizQuestionAnswersManager
     ) {
     }
 
@@ -27,11 +26,11 @@ class QuizQuestionAnswersService
     public function save(QuestionAnswerRequestDTO $quizQuestionAnswerDTO, bool$resultAnswer): void
     {
         if ($quizQuestionAnswerDTO->getQuestionStep()->isFirstStep()) {
-            $this->quizResultRepository->clean($quizQuestionAnswerDTO->getQuizId());
-            $this->quizResultRepository->saveQuizStartDate($quizQuestionAnswerDTO->getQuizId(), new DateTime('NOW'));
+            $this->quizQuestionAnswersManager->clean($quizQuestionAnswerDTO->getQuizId());
+            $this->quizQuestionAnswersManager->saveQuizStartDate($quizQuestionAnswerDTO->getQuizId(), new DateTime('NOW'));
         }
 
-        $this->quizResultRepository->save($quizQuestionAnswerDTO->getQuizId(), $quizQuestionAnswerDTO->getQuestionStep()->getStepId(), $resultAnswer);
+        $this->quizQuestionAnswersManager->save($quizQuestionAnswerDTO->getQuizId(), $quizQuestionAnswerDTO->getQuestionStep()->getStepId(), $resultAnswer);
     }
 
     /**
@@ -62,6 +61,6 @@ class QuizQuestionAnswersService
 
     public function cleanQuizAnswers(int $quizId): void
     {
-        $this->quizResultRepository->clean($quizId);
+        $this->quizQuestionAnswersManager->clean($quizId);
     }
 }

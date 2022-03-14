@@ -6,6 +6,7 @@ namespace App\Domain\QuizSession\Service;
 
 use App\Domain\Quiz\Repository\Interfaces\ResultRepositoryInterface;
 use App\Domain\QuizSession\Hydrator\QuizSessionHydratorInterface;
+use App\Domain\QuizSession\Manager\QuizQuestionAnswersManagerInterface;
 use App\Domain\QuizSession\Manager\QuizSessionManagerInterface;
 
 class QuizSessionService
@@ -13,7 +14,8 @@ class QuizSessionService
     public function __construct(
         private ResultRepositoryInterface $resultRepository,
         private QuizSessionHydratorInterface $quizSessionHydrator,
-        private QuizSessionManagerInterface $quizSessionManager
+        private QuizSessionManagerInterface $quizSessionManager,
+        private QuizQuestionAnswersManagerInterface $quizQuestionAnswersManager
     ) {
     }
 
@@ -43,7 +45,7 @@ class QuizSessionService
         $quizSessions = $this->quizSessionManager->getQuizSessions($customerId);
 
         foreach ($quizSessions as $quizSession) {
-            $this->resultRepository->saveAnswers($quizSession);
+            $this->quizQuestionAnswersManager->saveAnswers($quizSession);
         }
     }
 }

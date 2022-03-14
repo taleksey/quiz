@@ -35,12 +35,6 @@ class QuizRepository extends DbRepository implements RepositoryInterface
         return $this->manager->count([]);
     }
 
-    public function save(QuizDomain $quiz): void
-    {
-        $this->entityManager->persist($quiz);
-        $this->entityManager->flush();
-    }
-
     /**
      * @return class-string<QuizDomain>
      */

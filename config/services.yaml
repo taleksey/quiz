@@ -52,3 +52,6 @@ services:
             $quizSessionRepository: '@App\Infrastructure\Repository\QuizSession\QuizSessionRepository'
             $quizRepository: '@App\Infrastructure\Repository\QuizSession\QuizRepository'
             $customerRepository: '@App\Infrastructure\Repository\QuizSession\CustomerRepository'
+    App\Infrastructure\Manager\Quiz\QuizManager:
+        arguments:
+            $objectManager: '@doctrine.orm.default_entity_manager'
