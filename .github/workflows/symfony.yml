@@ -49,23 +49,23 @@ jobs:
         with:
           node-version: '14'
           check-latest: true
-      - name: Install Node.js Dependencies
-        run: npm install
-      - name: Create Node.js build
-        run: npm run build
-      - name: Test Node.js
-        run: npm test
       - name: Cache dependencies Node.js
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
           path: ./public/build
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/webpack.config.js') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+      - name: Install Node.js Dependencies
+        run: npm install
+      - name: Create Node.js build
+        run: npm run build
+      - name: Test Node.js
+        run: npm test
   symfony-tests:
     runs-on: ubuntu-latest
     services:
@@ -91,7 +91,7 @@ jobs:
           cache-name: cache-node-modules
         with:
           path: ./public/build
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/webpack.config.js') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-

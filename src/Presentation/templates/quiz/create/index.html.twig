@@ -14,54 +14,17 @@
                                 answers, and we have to set one correct answer. </b></p>
                         </div>
                     </div>
-                    {{ form_start(formQuiz) }}
-
-                        <div class="row">
-                            <div class="col">
-                                {{ form_label(formQuiz.name) }}
-                                {{ form_widget(formQuiz.name) }}
-                            </div>
-                        </div>
-                    <div class="my-custom-class-for-errors">
-                        {{ form_errors(formQuiz) }}
-                    </div>
-                        <div class="row pt-2">
-                            <div class="col-8">
-                                {{ form_label(formQuiz.questions) }}
-                            </div>
-                            <div class="col-2">
-                                <button type="button" class="add_item_link"
-                                    data-collection-holder-class="questions"
-                                    data-question-selector="#quiz_questions"
-                                    data-widget-question="{{ '<li/>'|e }}"
-                                >Add a question</button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div id="quiz_questions" class="ms-md-4"
-                                    data-prototype="{{ form_widget(formQuiz.questions.vars.prototype)|e }}"
-                                    data-widget-counter="{{ formQuiz.questions|length }}">
-                                    {% for questions in formQuiz.questions %}
-                                        {{ form_widget(questions) }}
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    {{ form_end(formQuiz) }}
+                    <div id="new-quiz"></div>
                 </div>
             </div>
         </div>
     </main>
-    <template id="AnswerButton">
-        <div class="row pt-2">
-            <div class="col-8">
-                <div class="col-form-label required">Answers</div>
-            </div>
-            <div class="col-2">
-                <button type="button" class="add_item_answer" data-collection-holder-class="answers"
-                    data-question-id="0" data-widget-answer="<li/>">Add a answer</button>
-            </div>
-        </div>
-    </template>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        window.token = "{{ token }}";
+        window.csrfToken = "{{ csrf_token('item') }}";
+    </script>
+    {{ encore_entry_script_tags('new_quiz') }}
 {% endblock %}

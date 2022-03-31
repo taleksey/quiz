@@ -10,6 +10,9 @@ services:
         SKELETON: ${SKELETON:-symfony/skeleton}
         STABILITY: ${STABILITY:-stable}
     restart: unless-stopped
+    expose:
+      - 9003
+      - 9000
     volumes:
       - php_socket:/var/run/php
     healthcheck:
