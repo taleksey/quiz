@@ -3,7 +3,7 @@
 namespace App\Tests\Unit;
 
 use App\Domain\Statistics\Service\QuizStatisticService;
-use App\Infrastructure\Repository\Statistic\StatisticRepository;
+use App\Infrastructure\Manager\Statistic\StatisticManager;
 use App\Presentation\Hydrator\Statistic\StatisticHydrator;
 use PHPUnit\Framework\TestCase;
 
@@ -42,11 +42,10 @@ class QuizStatisticServiceTest extends TestCase
 
     public function testConvertToSeconds(): void
     {
-        $statisticRepository = $this->createMock(StatisticRepository::class);
-
         $statisticHydrator = $this->createMock(StatisticHydrator::class);
 
-        $quizStatisticService = new QuizStatisticService($statisticRepository, $statisticHydrator);
+        $manager = $this->createMock(StatisticManager::class);
+        $quizStatisticService = new QuizStatisticService($statisticHydrator, $manager);
 
         $quizStatisticServiceReflection = new \ReflectionClass(QuizStatisticService::class);
         $method = $quizStatisticServiceReflection->getMethod('convertToSeconds');

@@ -7,6 +7,7 @@ use App\Infrastructure\DB\Customer\Customer;
 use App\Infrastructure\DB\Quiz\Answer;
 use App\Infrastructure\DB\Quiz\Question;
 use App\Infrastructure\DB\Quiz\Quiz;
+use App\Infrastructure\Manager\Quiz\QuizManager;
 use App\Infrastructure\Repository\QuizRepository;
 use App\Presentation\DTO\Quiz\CreateDTO;
 use App\Presentation\DTO\Quiz\QuestionAnswerCreateDTO;
@@ -67,11 +68,13 @@ class MainQuizServiceTest extends TestCase
     public function testCreateNewQuiz(Quiz $quiz, CreateDTO $quizDTO): void
     {
         $quizzesRepository = $this->createMock(QuizRepository::class);
+        $quizManager = $this->createMock(QuizManager::class);
         $quizzesRepository->expects($this->any())
             ->method('getTotalQuizzes')
             ->willReturn(self::TOTAL_QUIZZES)
            ;
-        $quizzesRepository->method('save')
+
+        $quizManager->method('save')
             ->with($quiz);
 
         $customer = $this->createMock(Customer::class);
@@ -79,7 +82,7 @@ class MainQuizServiceTest extends TestCase
         ->method('getEmail')
         ->willReturn(self::CUSTOMER_EMAIL);
 
-        $quizService = new QuizService($quizzesRepository);
+        $quizService = new QuizService($quizzesRepository, $quizManager);
         $DTOHydrator = new DTOHydrator();
         $mainQuiz = new MainQuizService($DTOHydrator, $quizService);
 

@@ -16,6 +16,4 @@ interface RepositoryInterface
     public function getQuizById(int $id): ?Quiz;
 
     public function getTotalQuizzes(): int;
-
-    public function save(Quiz $quiz): void;
 }

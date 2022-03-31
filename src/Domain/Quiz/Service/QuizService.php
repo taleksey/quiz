@@ -6,14 +6,13 @@ namespace App\Domain\Quiz\Service;
 
 use App\Domain\Quiz\Entity\Quiz;
 use App\Domain\Quiz\Repository\Interfaces\RepositoryInterface;
+use App\Infrastructure\Manager\Quiz\QuizManager;
 
 class QuizService
 {
-    /**
-     * @param RepositoryInterface $quizRepository
-     */
     public function __construct(
-        private RepositoryInterface $quizRepository
+        private RepositoryInterface $quizRepository,
+        private QuizManager $quizManager
     ) {
     }
 
@@ -48,6 +47,6 @@ class QuizService
      */
     public function save(Quiz $quiz): void
     {
-        $this->quizRepository->save($quiz);
+        $this->quizManager->save($quiz);
     }
 }

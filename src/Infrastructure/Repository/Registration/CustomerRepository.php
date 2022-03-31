@@ -14,12 +14,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class CustomerRepository extends DbRepository implements CustomerRepositoryInterface
 {
-    public function create(Customer $customer): void
-    {
-        $this->entityManager->persist($customer);
-        $this->entityManager->flush();
-    }
-
     public function getCustomerByEmail(string $email): ?UserInterface
     {
         return $this->manager->findOneBy([

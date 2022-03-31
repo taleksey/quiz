@@ -6,24 +6,17 @@ namespace App\Domain\QuizSession\Service;
 
 use App\Domain\Quiz\Repository\Interfaces\ResultRepositoryInterface;
 use App\Domain\QuizSession\Hydrator\QuizSessionHydratorInterface;
-use App\Domain\QuizSession\Repository\QuizSessionRepositoryInterface;
+use App\Domain\QuizSession\Manager\QuizQuestionAnswersManagerInterface;
+use App\Domain\QuizSession\Manager\QuizSessionManagerInterface;
 
 class QuizSessionService
 {
-    private ResultRepositoryInterface $resultRepository;
-
-    private QuizSessionRepositoryInterface $quizSessionRepository;
-
-    private QuizSessionHydratorInterface $quizSessionHydrator;
-
     public function __construct(
-        ResultRepositoryInterface $resultRepository,
-        QuizSessionRepositoryInterface $quizSessionRepository,
-        QuizSessionHydratorInterface $quizSessionHydrator
+        private ResultRepositoryInterface $resultRepository,
+        private QuizSessionHydratorInterface $quizSessionHydrator,
+        private QuizSessionManagerInterface $quizSessionManager,
+        private QuizQuestionAnswersManagerInterface $quizQuestionAnswersManager
     ) {
-        $this->resultRepository = $resultRepository;
-        $this->quizSessionRepository = $quizSessionRepository;
-        $this->quizSessionHydrator = $quizSessionHydrator;
     }
 
     /**
@@ -43,16 +36,16 @@ class QuizSessionService
 
             $quizSessions[] = $this->quizSessionHydrator->hydrate($session, $quizId, $customerId);
         }
-        $this->quizSessionRepository->removeQuizSessionsByCustomerId($customerId);
-        $this->quizSessionRepository->save($quizSessions);
+        $this->quizSessionManager->removeQuizSessionsByCustomerId($customerId);
+        $this->quizSessionManager->save($quizSessions);
     }
 
     public function restoreNotFinishedQuizzes(int $customerId): void
     {
-        $quizSessions = $this->quizSessionRepository->getQuizSessions($customerId);
+        $quizSessions = $this->quizSessionManager->getQuizSessions($customerId);
 
         foreach ($quizSessions as $quizSession) {
-            $this->resultRepository->saveAnswers($quizSession);
+            $this->quizQuestionAnswersManager->saveAnswers($quizSession);
         }
     }
 }

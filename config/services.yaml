@@ -38,3 +38,24 @@ services:
                 method: onLoginEvent        
         arguments:
             $quizSessionService: '@App\Domain\QuizSession\Service\QuizSessionService'
+    App\Infrastructure\Manager\Statistic\StatisticManager:
+        arguments:
+            $objectManager: '@doctrine.orm.default_entity_manager'
+            $statisticRepository: '@App\Infrastructure\Repository\Statistic\StatisticRepository'
+    App\Domain\Statistics\Service\QuizStatisticService:
+        arguments:
+            $statisticHydrator: '@App\Presentation\Hydrator\Statistic\StatisticHydrator'
+            $manager: '@App\Infrastructure\Manager\Statistic\StatisticManager'
+    App\Infrastructure\Manager\QuizSession\QuizSessionManager:
+        arguments:
+            $objectManager: '@doctrine.orm.default_entity_manager'
+            $quizSessionRepository: '@App\Infrastructure\Repository\QuizSession\QuizSessionRepository'
+            $quizRepository: '@App\Infrastructure\Repository\QuizSession\QuizRepository'
+            $customerRepository: '@App\Infrastructure\Repository\QuizSession\CustomerRepository'
+    App\Infrastructure\Manager\Quiz\QuizManager:
+        arguments:
+            $objectManager: '@doctrine.orm.default_entity_manager'
+    App\Infrastructure\Manager\Customer\CustomerManager:
+        arguments:
+            $objectManager: '@doctrine.orm.default_entity_manager'
+            $customerRepository: '@App\Infrastructure\Repository\Registration\CustomerRepository'
